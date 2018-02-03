@@ -28,4 +28,8 @@ export class MenuPage {
     this.nav.push("ProfilePage");
   }  
 
+  goToProfileUpdate(){
+    this.nav.push("UserInitialDetailPage"); 
+  }
+
 }

@@ -39,7 +39,7 @@ export class LoginPage {
   }
 
   goToSignup(): void {
-    this.navCtrl.push('SignupPage');
+    this.navCtrl.setRoot('SignupPage');
   }
 
   goToResetPassword(): void {

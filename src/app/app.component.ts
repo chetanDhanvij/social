@@ -19,20 +19,21 @@ export class MyApp {
     if(!this.general.isIntroDone()){
       this.rootPage = "IntroPage"; 
     }
-
+    this.rootPage = 'LoginPage';
     firebase.initializeApp(firebaseConfig);
     const unsubscribe: Unsubscribe = firebase
     .auth()
     .onAuthStateChanged(user => {
       console.log(user);
+
       if(this.general.isIntroDone()){
-        if (!user) {
-          this.rootPage = 'LoginPage';
-          unsubscribe();
-        } else {
-          this.rootPage = 'MenuPage';
-          unsubscribe();
-        }
+        // if (!user) {
+        //   this.rootPage = 'LoginPage';
+        //   unsubscribe();
+        // } else {
+        //   this.rootPage = 'MenuPage';
+        //   unsubscribe();
+        // }
       }
     });
     platform.ready().then(() => {

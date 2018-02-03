@@ -9,6 +9,8 @@ import { AuthProvider } from '../providers/auth/auth';
 import { ProfileProvider } from '../providers/profile/profile';
 import { FeedProvider } from '../providers/feed/feed';
 import { GeneralProvider } from '../providers/general/general';
+import { Camera } from '@ionic-native/camera';
+
 
 
 @NgModule({
@@ -31,7 +33,8 @@ import { GeneralProvider } from '../providers/general/general';
     AuthProvider,
     ProfileProvider,
     FeedProvider,
-    GeneralProvider
+    GeneralProvider,
+    Camera
   ]
 })
 export class AppModule {}

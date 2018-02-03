@@ -1,35 +1,45 @@
-<ion-header>
-    <ion-navbar>
-      <ion-title>Signup</ion-title>
-    </ion-navbar>
-  </ion-header>
-  
-  <ion-content padding>
-    <form [formGroup]="signupForm" (submit)="signupUser()" novalidate>
-      <ion-item>
-        <ion-label stacked>Email</ion-label>
-        <ion-input formControlName="email" type="email" placeholder="Your email address"
-          [class.invalid]="!signupForm.controls.email.valid && blur">
+<ion-content background-gradient>
+  <img src="assets/imgs/logo/SampleLogo.png" logo-center>
+  <section>
+    <form [formGroup]="signupForm" (submit)="goToNextStep()" novalidate>
+      <ion-item background-transparent>
+        <ion-label floating>Email</ion-label>
+        <ion-input formControlName="email" type="email" [class.invalid]="!signupForm.controls.email.valid && blur">
         </ion-input>
       </ion-item>
-      <ion-item class="error-message" *ngIf="!signupForm.controls.email.valid
-      && signupForm.controls.email.touched">
-        <p>Please enter a valid email.</p>
-      </ion-item>
-  
-      <ion-item>
-        <ion-label stacked>Password</ion-label>
-        <ion-input formControlName="password" type="password" placeholder="Your password"
-          [class.invalid]="!signupForm.controls.password.valid && blur">
+      <p class="err-msg">
+        <span *ngIf="!signupForm.controls.email.valid
+        && signupForm.controls.email.touched">Please enter a valid email address.</span>
+      </p>
+
+      <ion-item background-transparent>
+        <ion-label floating>Password</ion-label>
+        <ion-input formControlName="password" type="password" [class.invalid]="!signupForm.controls.password.valid && blur">
         </ion-input>
       </ion-item>
-      <ion-item class="error-message" *ngIf="!signupForm.controls.password.valid  &&
-      signupForm.controls.password.touched">
-        <p>Your password needs more than 6 characters.</p>
+      <p class="err-msg">
+        <span *ngIf="!signupForm.controls.password.valid  &&
+        signupForm.controls.password.touched">Your password needs more than 6 characters.</span>
+      </p>
+
+      <ion-item background-transparent>
+        <ion-label floating>Confirm Password</ion-label>
+        <ion-input formControlName="confirmPassword" type="password" [class.invalid]="!signupForm.controls.password.valid && blur">
+        </ion-input>
       </ion-item>
-  
-      <button ion-button block type="submit" [disabled]="!signupForm.valid">
-        Create an Account
+      <p class="err-msg">
+        <span *ngIf="!signupForm.controls.confirmPassword.valid  &&
+        signupForm.controls.confirmPassword.touched">Your password needs more than 6 characters.</span>
+        <span *ngIf="signupForm.controls.confirmPassword.valid && signupForm.controls.confirmPassword.touched && (signupForm.controls.confirmPassword.value != signupForm.controls.password.value)">Password didn't match.</span>
+      </p>
+
+      <button ion-button block type="submit" [disabled]="!signupForm.valid || (signupForm.controls.confirmPassword.value != signupForm.controls.password.value)" button-center color="dark">
+        Create an Account (1/2)
+      </button>
+
+      <button ion-button block clear (click)="goToLogin()">
+        Already have account? Login here
       </button>
     </form>
-  </ion-content>
+  </section>
+</ion-content>

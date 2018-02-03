@@ -14,3 +14,50 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+[background-gradient]{
+    // background: linear-gradient(#00b894,#81ecec) !important; 
+    background: linear-gradient(to bottom left,  #F4B350 ,#F9690E 60vh ); 
+}
+
+[background-transparent]{
+    background:transparent;  
+}
+
+.err-msg {
+    text-align: center;
+    color: color($colors,danger);
+    padding: 0px;
+    margin: 0px;
+    white-space: normal;
+    span {
+        text-align: left !important;
+        background: white;
+    }
+}
+
+[button-center]{
+    width: 70vw;
+    margin: auto !important;
+    margin-top: 25px !important;
+}
+
+[logo-center]{
+    max-width: 53vw;
+    border: 0;
+    margin: auto;
+    display: block;
+    margin-top: 19px;
+}
+
+.select-icon-inner{
+    color: white !important;
+}
+
+.text-white{
+    color: white;
+}
+
+ion-label{
+    color: black !important;
+}

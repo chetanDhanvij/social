@@ -1,59 +1,37 @@
 <ion-header>
-    <ion-navbar color="primary">
-      <ion-title>Profile</ion-title>
-      <ion-buttons end>
-        <button ion-button icon-only (click)="logOut()">
-          <ion-icon name="log-out"></ion-icon>
-        </button>
-      </ion-buttons>
-    </ion-navbar>
-  </ion-header>
-  
-  <ion-content padding>
-    <ion-list>
-      <ion-list-header>
-        Personal Information
-      </ion-list-header>
-      <ion-item (click)="updateName()">
-        <ion-grid>
-          <ion-row>
-            <ion-col col-6> Name </ion-col>
-            <ion-col col-6 *ngIf="userProfile?.firstName || userProfile?.lastName">
-              {{userProfile?.firstName}} {{userProfile?.lastName}}
-            </ion-col>
-            <ion-col col-6 class="placeholder-profile" *ngIf="!userProfile?.firstName">
-              <span> Tap here to edit. </span>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-item>
-      <ion-item>
-        <ion-label class="dob-label">Date of Birth</ion-label>
-        <ion-datetime displayFormat="MMM D, YYYY" pickerFormat="D MMM YYYY" [(ngModel)]="birthDate" (ionChange)="updateDOB(birthDate)"></ion-datetime>
-      </ion-item>
-      <ion-item (click)="updateEmail()">
-        <ion-grid>
-          <ion-row>
-            <ion-col col-6> Email </ion-col>
-            <ion-col col-6 *ngIf="userProfile?.email">
-              {{userProfile?.email}}
-            </ion-col>
-            <ion-col col-6 class="placeholder-profile" *ngIf="!userProfile?.email">
-              <span> Tap here to edit. </span>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-item>
-  
-      <ion-item (click)="updatePassword()">
-        <ion-grid>
-          <ion-row>
-            <ion-col col-6> Password </ion-col>
-            <ion-col col-6 class="placeholder-profile">
-              <span> Tap here to edit. </span>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-item>
-    </ion-list>
-  </ion-content>
+  <ion-navbar color="primary">
+    <ion-title>Profile</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <section class="profile-image" (click)="updateImg()">
+      <img [src]="profileImgURL || 'assets/imgs/logo/profile.png'" />
+  </section>
+
+  <ion-item>
+    <h2>Name</h2>
+    <p> {{userProfile?.firstName}} {{userProfile?.lastName}} </p>
+    <button ion-button clear item-end (click)="updateName()">Edit</button>
+  </ion-item>
+  <ion-item>
+      <h2>Email</h2>
+      <p> {{userProfile?.email}} </p>
+      <button ion-button clear item-end (click)="updateEmail()">Edit</button>
+    </ion-item>
+  <ion-item>
+    <ion-label class="dob-label">Date of Birth</ion-label>
+    <ion-datetime displayFormat="DD MMMM, YYYY"  [(ngModel)]="dob" (ionChange)="updateDOB(dob)"></ion-datetime>
+  </ion-item>
+  <ion-item >
+    <ion-label>Gender</ion-label>
+    <ion-select [(ngModel)]="gender">
+      <ion-option value="MALE">Male</ion-option>
+      <ion-option value="FEMALE">Female</ion-option>
+      <ion-option value="OTHER">Other</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <button full clear ion-button (click)="updatePassword()">Change Password</button>
+  <button full clear ion-button (click)="logOut()">Logout</button>
+</ion-content>

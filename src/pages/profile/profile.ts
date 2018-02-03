@@ -3,7 +3,7 @@ import {
   Alert,
   AlertController,
   IonicPage,
-  NavController
+  NavController,LoadingController, Loading
 } from 'ionic-angular';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { AuthProvider } from '../../providers/auth/auth';
@@ -15,19 +15,34 @@ import { AuthProvider } from '../../providers/auth/auth';
 })
 export class ProfilePage {
   public userProfile: any;
-  public birthDate: string;
+  public dob: string;
+  public profileImgURL: string;
+  private loading: Loading;
+  public gender: string;
 
   constructor(
     public navCtrl: NavController,
     public alertCtrl: AlertController,
     public authProvider: AuthProvider,
-    public profileProvider: ProfileProvider
+    public profileProvider: ProfileProvider,
+    private loadingCtrl: LoadingController,
   ) {}
 
   ionViewDidLoad() {
+    this.loading = this.loadingCtrl.create();
+    this.loading.present();
     this.profileProvider.getUserProfile().on('value', userProfileSnapshot => {
       this.userProfile = userProfileSnapshot.val();
-      this.birthDate = userProfileSnapshot.val().birthDate;
+      this.dob = userProfileSnapshot.val().dob;
+      this.profileImgURL = userProfileSnapshot.val().profileImgURL; 
+      this.gender = userProfileSnapshot.val().gender; 
+      console.log( "this.userProfile", this.userProfile);
+      try{
+        this.loading.dismiss();
+      }catch(e){
+        console.log(e)
+      }
+
     });
   }
 
@@ -65,8 +80,8 @@ export class ProfilePage {
     alert.present();
   }
 
-  updateDOB(birthDate: string): void {
-    this.profileProvider.updateDOB(birthDate);
+  updateDOB(dob: string): void {
+    this.profileProvider.updateDOB(dob);
   }
 
   updateEmail(): void {
@@ -115,5 +130,15 @@ export class ProfilePage {
       ]
     });
     alert.present();
+  }
+
+  updateImg(){
+    this.loading = this.loadingCtrl.create();
+    this.loading.present();
+    this.profileProvider.updateImg().then((isSuccessfull)=>{
+
+        console.log(this.userProfile);
+
+    })
   }
 }

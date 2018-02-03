@@ -1,0 +1,53 @@
+<ion-content background-gradient>
+  <img src="assets/imgs/logo/SampleLogo.png" logo-center>
+  <section>
+    <form [formGroup]="userForm" (submit)="signupUser()" novalidate>
+      <ion-item background-transparent>
+        <ion-label floating>First Name</ion-label>
+        <ion-input formControlName="firstName" type="text" [class.invalid]="!userForm.controls.firstName.valid && blur">
+        </ion-input>
+      </ion-item>
+      <p class="err-msg">
+        <span *ngIf="!userForm.controls.firstName.valid
+          && userForm.controls.firstName.touched">Your first name needs atleast 2 characters.</span>
+      </p>
+
+      <ion-item background-transparent>
+          <ion-label floating>Last Name</ion-label>
+          <ion-input formControlName="lastName" type="text" [class.invalid]="!userForm.controls.lastName.valid && blur">
+          </ion-input>
+        </ion-item>
+        <p class="err-msg">
+          <span *ngIf="!userForm.controls.lastName.valid
+            && userForm.controls.lastName.touched">Your last name needs atleast 2 characters.</span>
+        </p>
+
+      <ion-item  background-transparent class="text-white">
+        <ion-label>Gender</ion-label>
+        <ion-select formControlName="gender">
+          <ion-option value="MALE">Male</ion-option>
+          <ion-option value="FEMALE">Female</ion-option>
+          <ion-option value="OTHER">Other</ion-option>
+        </ion-select>
+      </ion-item>
+      <p class="err-msg">
+        <span *ngIf="!userForm.controls.gender.valid
+          && userForm.controls.gender.touched">Select 1 from the list</span>
+      </p>
+
+      <ion-item background-transparent class="text-white">
+        <ion-label>Date Of Birth</ion-label>
+        <ion-datetime displayFormat="DD MMMM, YYYY" formControlName="dob"></ion-datetime>
+      </ion-item>
+      <p class="err-msg">
+        <span *ngIf="!userForm.controls.dob.valid
+          && userForm.controls.dob.touched">Select a valid date</span>
+      </p>
+
+      <button ion-button block type="submit" [disabled]="!userForm.valid"
+        button-center color="dark">
+        Create an Account (2/2)
+      </button>
+    </form>
+  </section>
+</ion-content>

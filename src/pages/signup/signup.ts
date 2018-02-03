@@ -35,37 +35,18 @@ export class SignupPage {
       password: [
         '',
         Validators.compose([Validators.minLength(6), Validators.required])
+      ],
+      confirmPassword: [
+        '',
+        Validators.compose([Validators.minLength(6), Validators.required])
       ]
     });
   }
+  goToLogin(): void {
+    this.navCtrl.setRoot('LoginPage');
+  }
 
-  signupUser(): void {
-    if (!this.signupForm.valid) {
-      console.log(
-        `Need to complete the form, current value: ${this.signupForm.value}`
-      );
-    } else {
-      const email: string = this.signupForm.value.email;
-      const password: string = this.signupForm.value.password;
-
-      this.authProvider.signupUser(email, password).then(
-        user => {
-          this.loading.dismiss().then(() => {
-            this.navCtrl.setRoot('MenuPage');
-          });
-        },
-        error => {
-          this.loading.dismiss().then(() => {
-            const alert: Alert = this.alertCtrl.create({
-              message: error.message,
-              buttons: [{ text: 'Ok', role: 'cancel' }]
-            });
-            alert.present();
-          });
-        }
-      );
-      this.loading = this.loadingCtrl.create();
-      this.loading.present();
-    }
+  goToNextStep(){
+    this.navCtrl.push("UserInitialDetailPage", {email: this.signupForm.value.email, password: this.signupForm.value.password})
   }
 }
