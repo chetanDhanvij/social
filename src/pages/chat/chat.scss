@@ -1,0 +1,39 @@
+page-chat {
+    div{
+        .other{
+            padding: 10px;
+            span{
+                display: block;
+                color: color($colors,primary);
+                border: 1px solid color($colors,primary);
+                padding: 12px;
+                border-radius: 0px 20px 20px 20px;
+            }
+           
+        }
+        .self{
+            text-align: right;
+            padding: 10px;
+            span{
+                color: white;
+                background-color: color($colors,primary);                
+                padding: 12px;
+                border-radius: 20px 20px 0px 20px;
+            }
+            
+        }
+    }
+
+    ion-footer{
+        ion-item{
+            padding-left: 0px !important;
+            .item-inner{
+                border: 1px solid color($colors,primary) !important;
+                border-radius: 20px 20px 0px 20px;
+                padding-left: 10px;
+                margin: 5px;
+            }
+        }
+
+    }
+}

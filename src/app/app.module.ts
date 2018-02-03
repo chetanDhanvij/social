@@ -10,6 +10,9 @@ import { ProfileProvider } from '../providers/profile/profile';
 import { FeedProvider } from '../providers/feed/feed';
 import { GeneralProvider } from '../providers/general/general';
 import { Camera } from '@ionic-native/camera';
+import { IonicStorageModule } from '@ionic/storage';
+import { DataStoreProvider } from '../providers/data-store/data-store';
+import { UserDataProvider } from '../providers/user-data/user-data';
 
 
 
@@ -20,7 +23,8 @@ import { Camera } from '@ionic-native/camera';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -34,7 +38,9 @@ import { Camera } from '@ionic-native/camera';
     ProfileProvider,
     FeedProvider,
     GeneralProvider,
-    Camera
+    Camera,
+    DataStoreProvider,
+    UserDataProvider
   ]
 })
 export class AppModule {}

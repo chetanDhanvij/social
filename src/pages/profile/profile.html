@@ -6,7 +6,7 @@
 
 <ion-content>
   <section class="profile-image" (click)="updateImg()">
-      <img [src]="profileImgURL || 'assets/imgs/logo/profile.png'" />
+    <img [src]="profileImgURL || 'assets/imgs/logo/profile.png'" />
   </section>
 
   <ion-item>
@@ -15,15 +15,15 @@
     <button ion-button clear item-end (click)="updateName()">Edit</button>
   </ion-item>
   <ion-item>
-      <h2>Email</h2>
-      <p> {{userProfile?.email}} </p>
-      <button ion-button clear item-end (click)="updateEmail()">Edit</button>
-    </ion-item>
+    <h2>Email</h2>
+    <p> {{userProfile?.email}} </p>
+    <button ion-button clear item-end (click)="updateEmail()">Edit</button>
+  </ion-item>
   <ion-item>
     <ion-label class="dob-label">Date of Birth</ion-label>
-    <ion-datetime displayFormat="DD MMMM, YYYY"  [(ngModel)]="dob" (ionChange)="updateDOB(dob)"></ion-datetime>
+    <ion-datetime displayFormat="DD MMMM, YYYY" [(ngModel)]="dob" (ionChange)="updateDOB(dob)"></ion-datetime>
   </ion-item>
-  <ion-item >
+  <ion-item>
     <ion-label>Gender</ion-label>
     <ion-select [(ngModel)]="gender">
       <ion-option value="MALE">Male</ion-option>

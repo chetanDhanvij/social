@@ -1,0 +1,19 @@
+page-user-detail {
+    .profile-image{
+        padding-top: 41px;
+        // background: radial-gradient(#F4B350 100px ,#F9690E 150px );
+        img{
+            height: 200px;
+            width: 200px;
+            display: block;
+            margin: auto;
+            border-radius: 50%;
+        }
+        p{
+            text-align: center;
+            font-size: 35px;
+            color: color($colors,secondary);
+        }
+    }
+
+}

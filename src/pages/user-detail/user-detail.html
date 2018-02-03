@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>User Detail</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <section class="profile-image" (click)="updateImg()">
+    <img [src]="user.profileImgURL || 'assets/imgs/logo/profile.png'" />
+    <p>{{user.fullName}}</p>
+  </section>
+  <ion-item-divider sticky no-lines>
+    <ion-label class="align-center">
+      <ion-segment [(ngModel)]="view">
+        <ion-segment-button value="PROFILE">
+          Profile
+        </ion-segment-button>
+        <ion-segment-button value="POSTS">
+          Posts
+        </ion-segment-button>
+        <ion-segment-button (click)="goToChat()">
+          Chat
+        </ion-segment-button>
+      </ion-segment>
+    </ion-label>
+  </ion-item-divider>
+  <div [ngSwitch]="view">
+    <ion-list *ngSwitchCase="'PROFILE'">
+      <ion-item>
+        <h2>First Name</h2>
+        <p> {{user.firstName}}</p>
+      </ion-item>
+      <ion-item>
+        <h2>Last Name</h2>
+        <p> {{user.lastName}}</p>
+      </ion-item>
+      <ion-item>
+        <h2>Email</h2>
+        <p> {{user.email}}</p>
+      </ion-item>
+      <ion-item>
+        <h2>Gender</h2>
+        <p> {{user.gender}}</p>
+      </ion-item>
+    </ion-list>
+    <ion-list *ngSwitchCase="'POSTS'">
+      POSTS
+    </ion-list>
+  </div>
+
+
+</ion-content>

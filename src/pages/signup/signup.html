@@ -36,10 +36,9 @@
       <button ion-button block type="submit" [disabled]="!signupForm.valid || (signupForm.controls.confirmPassword.value != signupForm.controls.password.value)" button-center color="dark">
         Create an Account (1/2)
       </button>
-
-      <button ion-button block clear (click)="goToLogin()">
-        Already have account? Login here
-      </button>
     </form>
+    <button ion-button block clear (click)="goToLogin()">
+      Already have account? Login here
+    </button>
   </section>
 </ion-content>

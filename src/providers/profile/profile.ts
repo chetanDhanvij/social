@@ -4,6 +4,7 @@ import { User, AuthCredential } from '@firebase/auth-types';
 import { Reference } from '@firebase/database-types';
 import { ActionSheetController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { DataStoreProvider } from '../data-store/data-store'
 
 
 @Injectable()
@@ -12,7 +13,8 @@ export class ProfileProvider {
   currentUser: User;
 
   constructor(public actionSheetCtrl: ActionSheetController,
-    private camera: Camera) {
+              private camera: Camera,
+              private dataStore: DataStoreProvider) {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.currentUser = user;

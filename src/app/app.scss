@@ -16,12 +16,16 @@
 // automatically applied to the <body> element in the app.
 
 [background-gradient]{
-    // background: linear-gradient(#00b894,#81ecec) !important; 
-    background: linear-gradient(to bottom left,  #F4B350 ,#F9690E 60vh ); 
+    // background: linear-gradient(to bottom left,  #F4B350 ,#F9690E 60vh );
+    background: url(../assets/imgs/background.jpg);
+    background-size: cover;  
 }
 
 [background-transparent]{
-    background:transparent;  
+    background:transparent; 
+    ion-label{
+        color: white !important;
+    } 
 }
 
 .err-msg {
