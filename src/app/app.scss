@@ -40,6 +40,8 @@
     }
 }
 
+
+
 [button-center]{
     width: 70vw;
     margin: auto !important;
@@ -65,3 +67,17 @@
 ion-label{
     color: black !important;
 }
+
+$colr : #ff0;
+
+
+@mixin test($colour) {
+    background: $colour
+}
+
+
+[post-theme="primary"]{
+    background: color($posts-themes,secondary)
+}
+// @mixin test($v)
+
