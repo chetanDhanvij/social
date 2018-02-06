@@ -23,14 +23,12 @@ export class MyApp {
     const unsubscribe: Unsubscribe = firebase
     .auth()
     .onAuthStateChanged(user => {
-      console.log(user);
-      this.rootPage = 'LoginPage';
       if(this.general.isIntroDone()){
         if (!user) {
           this.rootPage = 'LoginPage';
           unsubscribe();
         } else {
-          this.rootPage = 'MenuPage';
+          this.rootPage = 'TabsPage';
           unsubscribe();
         }
       }

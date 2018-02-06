@@ -1,0 +1,14 @@
+page-new-post {
+    ion-textarea {
+        padding: 1rem;
+        height: calc( 100vh - 56px - 56px ) !important;
+
+        font-size: 15vw;
+        text-align: center;
+        vertical-align: middle;
+        textarea{
+            height: 100%;
+            line-height: 60px;
+        }
+      }
+}

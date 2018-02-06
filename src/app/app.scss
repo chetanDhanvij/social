@@ -77,7 +77,8 @@ $colr : #ff0;
 
 
 [post-theme="primary"]{
-    background: color($posts-themes,secondary)
+    background: color($posts-themes,secondary);
+    color: white;
 }
 // @mixin test($v)
 
