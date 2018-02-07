@@ -7,7 +7,14 @@ export class AuthProvider {
   constructor() {}
 
   loginUser(email: string, password: string): Promise<User> {
-    return firebase.auth().signInWithEmailAndPassword(email, password);
+    return new Promise((resolve,reject)=>{
+      firebase.auth().signInWithEmailAndPassword(email, password).then((data)=>{
+        resolve(data);
+      }).catch((err)=>{
+        reject(err);
+      })
+    })
+
   }
 
   signupUser(email: string, password: string): Promise<void> {

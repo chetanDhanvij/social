@@ -13,6 +13,7 @@ import { Camera } from '@ionic-native/camera';
 import { IonicStorageModule } from '@ionic/storage';
 import { DataStoreProvider } from '../providers/data-store/data-store';
 import { UserDataProvider } from '../providers/user-data/user-data';
+import { ImageSelectorProvider } from '../providers/image-selector/image-selector';
 
 
 
@@ -40,7 +41,8 @@ import { UserDataProvider } from '../providers/user-data/user-data';
     GeneralProvider,
     Camera,
     DataStoreProvider,
-    UserDataProvider
+    UserDataProvider,
+    ImageSelectorProvider
   ]
 })
 export class AppModule {}

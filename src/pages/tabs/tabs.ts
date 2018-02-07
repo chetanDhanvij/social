@@ -16,7 +16,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 export class TabsPage {
 
   tab1Root = "FeedPage";
-  tab2Root = "ChatPage";
+  tab2Root = "UserListPage";
   tab3Root = "ProfilePage";
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }

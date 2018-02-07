@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, FabContainer, LoadingController, Loading } from 'ionic-angular';
+import { FeedProvider } from '../../providers/feed/feed';
+import { UserDataProvider } from '../../providers/user-data/user-data'
 
 /**
  * Generated class for the FeedPage page.
@@ -14,16 +16,50 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'feed.html',
 })
 export class FeedPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  posts: any= [];
+  loading: Loading;
+  constructor(public navCtrl: NavController, 
+              public navParams: NavParams,
+              private feedProvider: FeedProvider,
+              private userDataProvider: UserDataProvider,
+              private loadingController: LoadingController) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad FeedPage');
+    this.getPost();
+    this.loading = this.loadingController.create();
+    this.loading.present();
   }
 
-  goToPost(type){
+  goToPost(type, fab: FabContainer){
+    fab.close();
     this.navCtrl.push("NewPostPage",{type: type})
+  }
+
+  getPost(){
+    this.feedProvider.getPost().on("child_added",(snapshot)=>{
+      let postData = snapshot.val();
+      console.log(postData);
+      this.userDataProvider.getUserDetail(postData.uid).then((userData: any)=>{
+        let userDataVal = userData.val()
+        console.log(userDataVal);
+        postData.userName = userDataVal.firstName + " " + userDataVal.lastName;
+        postData.profileImgURL = userDataVal.profileImgURL;
+        this.posts.push(postData);
+        this.posts;
+        try{
+          this.loading.dismiss();
+        }catch(e){
+          console.log(e);
+        }
+
+      }).catch((err)=>{
+        console.log("Error")
+      })
+
+
+    })
   }
 
 }

@@ -3,7 +3,7 @@ import {
   Alert,
   AlertController,
   IonicPage,
-  NavController,LoadingController, Loading
+  NavController,LoadingController, Loading, App
 } from 'ionic-angular';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { AuthProvider } from '../../providers/auth/auth';
@@ -26,6 +26,7 @@ export class ProfilePage {
     public authProvider: AuthProvider,
     public profileProvider: ProfileProvider,
     private loadingCtrl: LoadingController,
+    private app: App
   ) {}
 
   ionViewDidLoad() {
@@ -48,7 +49,7 @@ export class ProfilePage {
 
   logOut(): void {
     this.authProvider.logoutUser().then(() => {
-      this.navCtrl.setRoot('LoginPage');
+      this.app.getRootNav().setRoot('LoginPage');
     });
   }
 

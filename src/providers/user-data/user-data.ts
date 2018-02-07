@@ -20,4 +20,8 @@ export class UserDataProvider {
   getUserList(){
     return firebase.database().ref(`/userProfile/`).once('value')
   }
+
+  getUserDetail(uid){
+     return firebase.database().ref(`/userProfile/${uid}`).once('value')
+  }
 }

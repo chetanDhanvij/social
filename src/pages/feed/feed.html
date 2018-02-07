@@ -14,31 +14,63 @@
 
 
 <ion-content>
-  <ion-card>
-
-    <ion-item >
+  <section class="status-card" *ngFor="let post of posts | soReverse">
+    <ion-item-divider sticky no-lines (click)="getPost()">
+      <ion-avatar item-start>
+        <img [src]="post.profileImgURL">
+      </ion-avatar>
+      <h2>{{post.userName}}</h2>
+      <p>{{post.content.createdAt | formatDate}}</p>
+    </ion-item-divider>
+    <div class="post-content" [ngStyle]="{'background': post.content.color}">
+      <p>{{post.content.text}}</p>
+    </div>
+  </section>
+  <!-- <section class="image-card">
+    <ion-item-divider sticky no-lines>
       <ion-avatar item-start>
         <img src="assets/demo/profile.png">
       </ion-avatar>
       <h2>Marty McFly</h2>
       <p>November 5, 1955</p>
-    </ion-item>
+    </ion-item-divider>
+    <ion-card>
+      <ion-card-content>
+        <img [src]="'assets/imgs/logo/profile.png'" />
+      </ion-card-content>
+    </ion-card>
+  </section>
+  <section class="video-card">
+    <ion-item-divider sticky no-lines>
+      <ion-avatar item-start>
+        <img src="assets/demo/profile.png">
+      </ion-avatar>
+      <h2>Marty McFly</h2>
+      <p>November 5, 1955</p>
+    </ion-item-divider>
+    <ion-card>
+      <ion-card-content>
+        <iframe width="auto" height="auto" src="https://www.youtube.com/embed/tgbNymZ7vqY">
+        </iframe>
+      </ion-card-content>
+    </ion-card>
+  </section> -->
+  <!-- Real floating action button, fixed. It will not scroll with the content -->
+  <ion-fab top right edge #fab>
+    <button ion-fab color="secondary">
+      <ion-icon name="add"></ion-icon>
+    </button>
+    <ion-fab-list>
+      <button ion-fab color="light" (click)="goToPost('text',fab)">
+        <ion-icon name="list"></ion-icon>
+      </button>
+      <button ion-fab color="dark" (click)="goToPost('image', fab)">
+        <ion-icon name="camera"></ion-icon>
+      </button>
+      <button ion-fab color="danger" (click)="goToPost('video', fab)">
+        <ion-icon name="logo-youtube"></ion-icon>
+      </button>
+    </ion-fab-list>
+  </ion-fab>
 
-  
-    <ion-card-content post-theme="primary" >
-      <p>Wait a minute. Wait a minute, Doc. Uhhh... Are you telling me that you built a time machine... out of a DeLorean?! Whoa. This is heavy.</p>
-    </ion-card-content>
- 
-  </ion-card>
-
-    <!-- Real floating action button, fixed. It will not scroll with the content -->
-    <ion-fab top right edge >
-      <button ion-fab color="secondary"><ion-icon name="add"></ion-icon></button>
-      <ion-fab-list>
-        <button ion-fab color="light" (click)="goToPost('text')"><ion-icon name="list"></ion-icon></button>
-        <button ion-fab color="dark"  (click)="goToPost('image')"><ion-icon name="camera"></ion-icon></button>
-        <button ion-fab color="danger"  (click)="goToPost('video')"> <ion-icon name="logo-youtube"></ion-icon></button>
-      </ion-fab-list>
-    </ion-fab>
-  
 </ion-content>

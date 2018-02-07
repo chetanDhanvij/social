@@ -5,7 +5,8 @@ import {
   IonicPage,
   Loading,
   LoadingController,
-  NavController
+  NavController,
+  App
 } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmailValidator } from '../../validators/email';
@@ -24,7 +25,8 @@ export class LoginPage {
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
     public authProvider: AuthProvider,
-    formBuilder: FormBuilder
+    formBuilder: FormBuilder,
+    public app: App
   ) {
     this.loginForm = formBuilder.group({
       email: [
@@ -59,7 +61,7 @@ export class LoginPage {
         authData => {
           console.log(authData);
           this.loading.dismiss().then(() => {
-            this.navCtrl.setRoot('MenuPage');
+            this.navCtrl.setRoot('TabsPage');
           });
         },
         error => {
