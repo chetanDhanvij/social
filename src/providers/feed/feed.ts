@@ -67,4 +67,47 @@ export class FeedProvider {
     return this.postRef.orderByChild('createdAt');
   }
 
+  likePost(postKey, postLikeCount: number = 0, shouldLike){
+    console.log(postKey);
+    if (this.currentUser) {
+      if(shouldLike){
+        postLikeCount = postLikeCount + 1;
+      }else{
+        postLikeCount = postLikeCount - 1;
+      }
+
+
+      firebase.database().ref(`/publicPostLikedList/${postKey}/${this.currentUser.uid}`).set(shouldLike)
+      firebase.database().ref(`/publicPost/${postKey}/likeCount`).set(postLikeCount);
+      firebase.database().ref(`/userProfile/${this.currentUser.uid}/postLiked/${postKey}`).set(shouldLike);
+    }
+  }
+
+  getUserWhoLikedPost(postKey){
+    return new Promise((resolve, reject)=>{
+      firebase.database().ref(`/publicPostLikedList/${postKey}`).once('value',(userList)=>{
+        let userWhoLike = userList.val();
+        console.log(userWhoLike);
+        resolve(userWhoLike);
+      })
+    })
+  }
+
+
+  getUserLikedPost(){
+    return new Promise((resolve, reject)=>{
+      if (this.currentUser) {
+        firebase.database().ref(`/userProfile/${this.currentUser.uid}/postLiked/`).once("value",(likedPost)=>{
+          console.log("likedPostlikedPostlikedPost");
+          console.log(likedPost.val());
+          resolve(likedPost.val());
+        })
+      }
+    })
+  }
+
+  listenUserLikedPost(){
+    return firebase.database().ref(`/userProfile/${this.currentUser.uid}/postLiked/`)
+  }
+
 }
