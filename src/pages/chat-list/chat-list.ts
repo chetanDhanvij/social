@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
- * Generated class for the TabsPage page.
+ * Generated class for the ChatListPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -10,19 +10,20 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-tabs',
-  templateUrl: 'tabs.html',
+  selector: 'page-chat-list',
+  templateUrl: 'chat-list.html',
 })
-export class TabsPage {
+export class ChatListPage {
 
-  tab1Root = "FeedPage";
-  tab2Root = "ChatListPage";
-  tab3Root = "ProfilePage";
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad TabsPage');
+    console.log('ionViewDidLoad ChatListPage');
+  }
+
+  goToUserList(){
+    this.navCtrl.push("UserListPage")
   }
 
 }

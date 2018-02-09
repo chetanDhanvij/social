@@ -25,6 +25,12 @@
     <div class="post-content" [ngStyle]="{'background': post.content.color}">
       <p>{{post.content.text}}</p>
     </div>
+    <button ion-button icon-only round large 
+            [color]="(userLikedPost[post.key] === true?'primary':'light')" 
+            (click)="likePost(post.key,post.likeCount, userLikedPost[post.key] != true)"
+            (press)="showLiks(post.key)">
+        <ion-icon name="thumbs-up"></ion-icon>
+    </button>    
   </section>
   <!-- <section class="image-card">
     <ion-item-divider sticky no-lines>
