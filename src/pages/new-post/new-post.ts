@@ -35,6 +35,14 @@ export class NewPostPage {
     console.log('ionViewDidLoad NewPostPage');
     this.postType = this.navParams.get('type');
     console.log(this.postType);
+
+    if(this.postType == 'image'){
+      this.imageSelectorProvider.imageSelection().then((img)=>{
+        console.log(img);
+      }).catch((err)=>{
+        console.log(err);
+      })
+    }
     this.colors = [ "#f6e58d", "#ffbe76","#ff7979","#badc58","#dff9fb","#f9ca24","#f0932b","#eb4d4b","#eb4d4b","#6ab04c","#c7ecee","#7ed6df"];
     this.selectedColor = this.colors[Math.floor(this.colors.length*Math.random())]
   }
@@ -72,10 +80,6 @@ export class NewPostPage {
     console.log(post);
     this.feedProvider.newPost(post);
     this.navCtrl.pop();
-  }
-
-  takePicture(openCamera){
-    this.imageSelectorProvider.takeImg(openCamera);
   }
 
 
