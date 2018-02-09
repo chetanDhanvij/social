@@ -2,7 +2,11 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, FabContainer, LoadingController, Loading } from 'ionic-angular';
 import { FeedProvider } from '../../providers/feed/feed';
 import { UserDataProvider } from '../../providers/user-data/user-data'
+
+import { ImageSelectorProvider } from '../../providers/image-selector/image-selector'
+
 import { DataSnapshot } from '@firebase/database';
+
 
 /**
  * Generated class for the FeedPage page.
@@ -24,7 +28,8 @@ export class FeedPage {
               public navParams: NavParams,
               private feedProvider: FeedProvider,
               private userDataProvider: UserDataProvider,
-              private loadingController: LoadingController) {
+              private loadingController: LoadingController,
+              private imageSelectorProvider: ImageSelectorProvider) {
   }
 
   ionViewDidLoad() {

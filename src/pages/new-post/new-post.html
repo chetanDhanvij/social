@@ -24,8 +24,6 @@
   </section>
 
   <section *ngIf="postType == 'image'">
-    <button ion-button (click)="takePicture(true)">Camera</button>
-    <button ion-button (click)="takePicture(false)">Gallary</button>
     <ion-textarea text-center type="text" placeholder='Photo discription' [(ngModel)]="imgText" ></ion-textarea>
   </section>
 

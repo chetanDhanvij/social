@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import firebase from 'firebase';
 import { User, AuthCredential } from '@firebase/auth-types';
+import { ActionSheetController } from 'ionic-angular';
 
 /*
   Generated class for the ImageSelectorProvider provider.
@@ -13,7 +14,8 @@ import { User, AuthCredential } from '@firebase/auth-types';
 @Injectable()
 export class ImageSelectorProvider {
   currentUser: User;
-  constructor(public camera: Camera) {
+  constructor(public camera: Camera,
+    public actionSheetCtrl: ActionSheetController) {
     console.log('Hello ImageSelectorProvider Provider');
     firebase.auth().onAuthStateChanged(user => {
       this.currentUser = user;
@@ -23,12 +25,12 @@ export class ImageSelectorProvider {
   public takeImg(openCamera: boolean) {
     return new Promise((resolve, reject) => {
       let options: CameraOptions = {
-        quality: 100,
+        quality: 50,
         destinationType: this.camera.DestinationType.DATA_URL,
         encodingType: this.camera.EncodingType.JPEG,
         mediaType: this.camera.MediaType.PICTURE,
         sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-        allowEdit: true,
+        allowEdit: false,
         targetWidth: 500,
         targetHeight: 500,
       }
@@ -37,12 +39,7 @@ export class ImageSelectorProvider {
       }
 
       this.camera.getPicture(options).then((imageData) => {
-        let base64Image = 'data:image/jpeg;base64,' + imageData;
-        this.uploadToCloud(imageData).then((data)=>{
-          resolve(true);
-        }).catch((err)=>{
-          reject(err);
-        })
+        resolve(imageData);
       }, (err) => {
         reject(err);
       });
@@ -61,6 +58,41 @@ export class ImageSelectorProvider {
         let imgURL = savedPicture.downloadURL
       });
     })
+  }
+
+  public   imageSelection() {
+    return new Promise((resolve, reject)=>{
+      let actionSheet = this.actionSheetCtrl.create({
+        title: 'Select one',
+        buttons: [
+          {
+            text: 'Take a Picture',
+            handler: () => {
+              console.log('Take a Picture clicked');
+              this.takeImg(true).then((img)=>{
+                resolve(img);
+              }).catch(err => reject(err))
+            }
+          }, {
+            text: 'Open Gallery',
+            handler: () => {
+              console.log('Open Gallery clicked');
+              this.takeImg(false).then((img)=>{
+                resolve(img);
+              }).catch(err => reject(err))
+            }
+          }, {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          }
+        ]
+      });
+      actionSheet.present();
+    })
+
   }
 
   
