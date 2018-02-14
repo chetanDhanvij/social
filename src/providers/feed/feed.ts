@@ -45,24 +45,7 @@ export class FeedProvider {
         this.postRef.push(postObj);
       }
     }else if(postData.type == 'image'){
-      post ={
-        type: postData.type,
-        text: postData.text,
-        image: ''
-      }
-      post.createdAt = firebase.database.ServerValue.TIMESTAMP;
-      if (this.currentUser) {
-        let postObj: any = {
-          uid: this.currentUser.uid,
-          content: post
-        }
-        let postRefData: any = this.postRef.push(postObj);
-        console.log(postRefData.key);
-        this.uploadToCloud(postData.image,postRefData.key).then((url)=>{
-          console.log(url);
-          this.postRef.child(postRefData.key).child('content').update({image: url});
-        })
-      }
+      this.postImage(postData)
     }else if(postData.type == 'video'){
       post ={
         type: postData.type,
@@ -118,6 +101,28 @@ export class FeedProvider {
 
   listenUserLikedPost(){
     return firebase.database().ref(`/userProfile/${this.currentUser.uid}/postLiked/`)
+  }
+
+  private postImage(postData){
+    let post: any = {};
+    post ={
+      type: postData.type,
+      text: postData.text,
+      image: ''
+    }
+    post.createdAt = firebase.database.ServerValue.TIMESTAMP;
+    if (this.currentUser) {
+      let postObj: any = {
+        uid: this.currentUser.uid,
+        content: post
+      }
+      let postRefData: any = this.postRef.push(postObj);
+      console.log(postRefData.key);
+      this.uploadToCloud(postData.image,postRefData.key).then((url)=>{
+        console.log(url);
+        this.postRef.child(postRefData.key).child('content').update({image: url});
+      })
+    }
   }
 
   private uploadToCloud(img,key) {
