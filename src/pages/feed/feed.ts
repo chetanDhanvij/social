@@ -94,4 +94,8 @@ export class FeedPage {
     })
   }
 
+  showPostDetail(post){
+    this.navCtrl.push("PostDetailPage",{post: post});
+  }
+
 }

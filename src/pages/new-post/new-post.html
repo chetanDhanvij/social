@@ -7,9 +7,9 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <ion-title>Post a Status</ion-title>
+    <ion-title>Post a Status {{statusText}} {{imageDisplay}} {{imageDisplay == ''}}</ion-title>
     <ion-buttons end>
-      <button ion-button [disabled]="statusText == '' " (click)="submitPost()">
+      <button ion-button [disabled]="!(statusText != '' || imageDisplay != '')" (click)="submitPost()">
         Post
       </button>
     </ion-buttons>
@@ -20,10 +20,12 @@
 
 <ion-content no-bounce>
   <section *ngIf="postType == 'text'">
-    <ion-textarea text-center type="text" placeholder='Type in here' [(ngModel)]="statusText" [ngStyle]="{'background':selectedColor}"></ion-textarea>
+    <ion-textarea class="post" text-center type="text" placeholder='Type in here' [(ngModel)]="statusText" [ngStyle]="{'background':selectedColor}"></ion-textarea>
   </section>
 
-  <section *ngIf="postType == 'image'">
+  <section class="image-selection" *ngIf="postType == 'image'">
+    <img *ngIf="imageDisplay != ''" [src]="imageDisplay" class="selected-image">
+    <span *ngIf="imageDisplay == ''"> Please select an image </span>
     <ion-textarea text-center type="text" placeholder='Photo discription' [(ngModel)]="imgText" ></ion-textarea>
   </section>
 

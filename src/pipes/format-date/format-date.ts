@@ -14,6 +14,11 @@ export class FormatDatePipe implements PipeTransform {
    * Takes a value and makes it lowercase.
    */
   transform(value: string, ...args) {
-    return moment(value).format("MMMM DD, YYYY");
+    if(value){
+      return moment(value).format("MMMM DD, YYYY");
+    }else{
+      return value;
+    }
+
   }
 }

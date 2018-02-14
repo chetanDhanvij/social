@@ -21,7 +21,8 @@ export class NewPostPage {
   statusText: string = '';
   colors: string[];
   selectedColor: string;
-  image: any;
+  image: string = '';
+  imageDisplay: string = '';
   imgText: string = '';
   video: string = '';
   videoText: string = '';
@@ -37,8 +38,10 @@ export class NewPostPage {
     console.log(this.postType);
 
     if(this.postType == 'image'){
-      this.imageSelectorProvider.imageSelection().then((img)=>{
+      this.imageSelectorProvider.imageSelection().then((img: any)=>{
         console.log(img);
+       this.imageDisplay = "data:image/jpeg;base64," + img;
+       this.image = img;
       }).catch((err)=>{
         console.log(err);
       })

@@ -14,23 +14,41 @@
 
 
 <ion-content>
-  <section class="status-card" *ngFor="let post of posts | soReverse">
-    <ion-item-divider sticky no-lines (click)="getPost()">
-      <ion-avatar item-start>
-        <img [src]="post.profileImgURL">
-      </ion-avatar>
-      <h2>{{post.userName}}</h2>
-      <p>{{post.content.createdAt | formatDate}}</p>
-    </ion-item-divider>
-    <div class="post-content" [ngStyle]="{'background': post.content.color}">
-      <p>{{post.content.text}}</p>
-    </div>
-    <button ion-button icon-only round large 
-            [color]="(userLikedPost[post.key] === true?'primary':'light')" 
-            (click)="likePost(post.key,post.likeCount, userLikedPost[post.key] != true)"
-            (press)="showLiks(post.key)">
-        <ion-icon name="thumbs-up"></ion-icon>
-    </button>    
+  <section class="status-card" *ngFor="let post of posts">
+    <div *ngIf="post.content.type == 'text'">
+      <ion-item-divider sticky no-lines (click)="getPost()">
+          <ion-avatar item-start>
+            <img [src]="post.profileImgURL">
+          </ion-avatar>
+          <h2>{{post.userName}}</h2>
+          <p>{{post.content.createdAt | formatDate}}</p>
+        </ion-item-divider>
+        <div class="post-content" [ngStyle]="{'background': post.content.color}"  (click)="showPostDetail(post)">
+          <p>{{post.content.text}}</p>
+        </div>
+        <button ion-button icon-only round small 
+                [color]="(userLikedPost[post.key] === true?'primary':'light')" 
+                (click)="likePost(post.key,post.likeCount, userLikedPost[post.key] != true)">
+            <ion-icon name="thumbs-up"></ion-icon>
+        </button> 
+    </div> 
+    <div *ngIf="post.content.type == 'image'">
+        <ion-item-divider sticky no-lines (click)="getPost()">
+            <ion-avatar item-start>
+              <img [src]="post.profileImgURL">
+            </ion-avatar>
+            <h2>{{post.userName}}</h2>
+            <p>{{post.content.createdAt | formatDate}}</p>
+          </ion-item-divider>
+          <div class="post-content" (click)="showPostDetail(post)">
+            <img class="post-img" [src]=" post.content.image">
+          </div>
+          <button ion-button icon-only round small 
+                  [color]="(userLikedPost[post.key] === true?'primary':'light')" 
+                  (click)="likePost(post.key,post.likeCount, userLikedPost[post.key] != true)">
+              <ion-icon name="thumbs-up"></ion-icon>
+          </button> 
+      </div>   
   </section>
   <!-- <section class="image-card">
     <ion-item-divider sticky no-lines>

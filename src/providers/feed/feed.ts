@@ -35,11 +35,33 @@ export class FeedProvider {
         text: postData.text,
         color: postData.color
       }
+      post.createdAt = firebase.database.ServerValue.TIMESTAMP;
+      if (this.currentUser) {
+        let postObj: any = {
+          uid: this.currentUser.uid,
+          content: post
+        }
+        console.log(postObj)
+        this.postRef.push(postObj);
+      }
     }else if(postData.type == 'image'){
       post ={
         type: postData.type,
         text: postData.text,
-        image: postData.image
+        image: ''
+      }
+      post.createdAt = firebase.database.ServerValue.TIMESTAMP;
+      if (this.currentUser) {
+        let postObj: any = {
+          uid: this.currentUser.uid,
+          content: post
+        }
+        let postRefData: any = this.postRef.push(postObj);
+        console.log(postRefData.key);
+        this.uploadToCloud(postData.image,postRefData.key).then((url)=>{
+          console.log(url);
+          this.postRef.child(postRefData.key).child('content').update({image: url});
+        })
       }
     }else if(postData.type == 'video'){
       post ={
@@ -48,18 +70,6 @@ export class FeedProvider {
         videoLink: postData.videoLink
       }
     }
-
-    post.createdAt = firebase.database.ServerValue.TIMESTAMP
-      if (this.currentUser) {
-        let postObj: any = {
-          uid: this.currentUser.uid,
-          content: post
-        }
-
-        console.log(postObj)
-        this.postRef.push(postObj);
-
-      }
   }
 
   getPost(){
@@ -108,6 +118,19 @@ export class FeedProvider {
 
   listenUserLikedPost(){
     return firebase.database().ref(`/userProfile/${this.currentUser.uid}/postLiked/`)
+  }
+
+  private uploadToCloud(img,key) {
+    return new Promise((resolve, reject)=>{
+      firebase
+      .storage()
+      .ref(`/posts/${this.currentUser.uid}/${key}/image.jpeg`)
+      .putString(img, 'base64', { contentType: 'image/jpeg' })
+      .then((savedPicture) => {
+        console.log(savedPicture);
+        resolve(savedPicture.downloadURL);
+      });
+    })
   }
 
 }

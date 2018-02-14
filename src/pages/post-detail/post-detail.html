@@ -1,0 +1,50 @@
+<!--
+  Generated template for the PostDetailPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Post Detail</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <section class="status-card">
+    <div *ngIf="post.content?.type == 'text'">
+      <ion-item-divider sticky no-lines >
+        <ion-avatar item-start>
+          <img [src]="post.profileImgURL">
+        </ion-avatar>
+        <h2>{{post.userName}}</h2>
+        <p>{{post.content?.createdAt | formatDate}}</p>
+      </ion-item-divider>
+      <div class="post-content" [ngStyle]="{'background': post.content?.color}" (click)="showPostDetail(post)">
+        <p>{{post.content?.text}}</p>
+      </div>
+    </div>
+    <div *ngIf="post.content?.type == 'image'">
+        <ion-item-divider sticky no-lines>
+          <ion-avatar item-start>
+            <img [src]="post.profileImgURL">
+          </ion-avatar>
+          <h2>{{post.userName}}</h2>
+          <p>{{post.content?.createdAt | formatDate}}</p>
+        </ion-item-divider>
+        <div class="post-content">
+            <img class="post-img" [src]=" post.content?.image">
+        </div>
+      </div>
+  </section>
+  <ion-list>
+    <ion-list-header>
+      Likes
+    </ion-list-header>
+    <p>{{userLiked | json}}</p>
+  </ion-list>
+
+</ion-content>

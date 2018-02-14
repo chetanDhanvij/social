@@ -1,5 +1,5 @@
 page-new-post {
-    ion-textarea {
+    ion-textarea.post {
         padding: 1rem;
         height: calc( 100vh - 56px - 56px ) !important;
 
@@ -21,6 +21,29 @@ page-new-post {
       iframe{
         margin: auto;
         display: block;
+      }
+
+      .image-selection{
+        ion-textarea{
+          padding: 1rem;
+          height: 200px;
+          text-align: center;
+          vertical-align: middle;
+          textarea{
+              height: 100%;
+          }
+          
+        }
+        span{
+          text-align: center;
+          display: block;
+          margin-top: 12px;
+        }
+        img{
+          width: 100%;
+          height: auto;
+        }
+
       }
 
 }
