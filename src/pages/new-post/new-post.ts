@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
 import { FeedProvider } from '../../providers/feed/feed'
-import { ImageSelectorProvider } from '../../providers/image-selector/image-selector'
+import { ImageSelectorProvider } from '../../providers/image-selector/image-selector';
+
 
 /**
  * Generated class for the NewPostPage page.
@@ -24,8 +25,9 @@ export class NewPostPage {
   image: string = '';
   imageDisplay: string = '';
   imgText: string = '';
-  video: string = '';
-  videoText: string = '';
+  // video: string = '';
+  // videoSanitized;
+  // videoText: string = '';
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               public feedProvider: FeedProvider,
@@ -72,11 +74,11 @@ export class NewPostPage {
         image: this.image
       }
     }else if(this.postType == 'video'){
-      post ={
-        type: this.postType,
-        text: this.videoText,
-        videoLink: this.video
-      }
+      // post ={
+      //   type: this.postType,
+      //   text: this.videoText,
+      //   videoLink: this.video
+      // }
     }
 
 

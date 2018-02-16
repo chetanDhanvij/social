@@ -56,27 +56,29 @@ export class FeedPage {
   }
 
   getPost(){
-    this.feedProvider.getPost().on("child_added",(snapshot)=>{
-      let postData = snapshot.val();
-      postData.key = snapshot.key;
-      console.log(snapshot.key);
-      this.userDataProvider.getUserDetail(postData.uid).then((userData: any)=>{
-        let userDataVal = userData.val()
-        console.log(userDataVal);
-        postData.userName = userDataVal.firstName + " " + userDataVal.lastName;
-        postData.profileImgURL = userDataVal.profileImgURL;
-        this.posts.push(postData);
-        console.log(postData);
-        this.posts;
-        try{
-          this.loading.dismiss();
-        }catch(e){
-          console.log(e);
-        }
+    this.feedProvider.getPost().then((data: any)=>{
 
-      }).catch((err)=>{
-        console.log("Error")
-      })
+      let postData = data;
+      console.log(data);
+      for(let d of postData){
+        this.userDataProvider.getUserDetail(d.uid).then((userData: any)=>{
+          let userDataVal = userData.val()
+          console.log(userDataVal);
+          d.userName = userDataVal.firstName + " " + userDataVal.lastName;
+          d.profileImgURL = userDataVal.profileImgURL;
+          this.posts.push(d);
+          console.log(d);
+          try{
+            this.loading.dismiss();
+          }catch(e){
+            console.log(e);
+          }
+  
+        }).catch((err)=>{
+          console.log("Error")
+        })
+      }
+
 
 
     })

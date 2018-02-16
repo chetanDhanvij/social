@@ -18,7 +18,7 @@
     <div *ngIf="post.content?.type == 'text'">
       <ion-item-divider sticky no-lines >
         <ion-avatar item-start>
-          <img [src]="post.profileImgURL">
+          <img class="no-resize" [src]="post.profileImgURL">
         </ion-avatar>
         <h2>{{post.userName}}</h2>
         <p>{{post.content?.createdAt | formatDate}}</p>
@@ -30,7 +30,7 @@
     <div *ngIf="post.content?.type == 'image'">
         <ion-item-divider sticky no-lines>
           <ion-avatar item-start>
-            <img [src]="post.profileImgURL">
+            <img class="no-resize" [src]="post.profileImgURL">
           </ion-avatar>
           <h2>{{post.userName}}</h2>
           <p>{{post.content?.createdAt | formatDate}}</p>
@@ -44,7 +44,7 @@
     <ion-list-header>
       Likes
     </ion-list-header>
-    <p>{{userLiked | json}}</p>
+    <ion-item *ngFor="let user of userLiked" (click)="gotoUser(user.uid)">{{user.name}}</ion-item>
   </ion-list>
 
 </ion-content>

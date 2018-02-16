@@ -24,4 +24,13 @@ export class UserDataProvider {
   getUserDetail(uid){
      return firebase.database().ref(`/userProfile/${uid}`).once('value')
   }
+
+  getUsernameList(uids){
+    let promises = []
+    for(let uid of uids){
+      promises.push(firebase.database().ref(`/userProfile/${uid}/firstName`).once('value'))
+    }
+    return Promise.all(promises)
+
+ }
 }

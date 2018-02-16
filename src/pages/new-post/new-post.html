@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <ion-title>Post a Status {{statusText}} {{imageDisplay}} {{imageDisplay == ''}}</ion-title>
+    <ion-title>Post a Status</ion-title>
     <ion-buttons end>
       <button ion-button [disabled]="!(statusText != '' || imageDisplay != '')" (click)="submitPost()">
         Post
@@ -29,18 +29,20 @@
     <ion-textarea text-center type="text" placeholder='Photo discription' [(ngModel)]="imgText" ></ion-textarea>
   </section>
 
-  <section *ngIf="postType == 'video'">
+  <!-- <section *ngIf="postType == 'video'">
       <ion-item>
-        <ion-label floating>Paste Youtube video link here</ion-label>
+        <ion-label stacked>Paste Youtube video link here</ion-label>
         <ion-input type="text" [(ngModel)]="video"></ion-input>
+        <ion-icon name="search" item-end (click)="sanitizeURL()"></ion-icon>
       </ion-item>
+
    <div *ngIf="video != ''">
       <iframe width="auto" height="auto"
-      src="https://www.youtube.com/embed/tgbNymZ7vqY">
+      [src]="videoSanitized">
     </iframe>
    </div>
 
-  </section>
+  </section> -->
 
 </ion-content>
 

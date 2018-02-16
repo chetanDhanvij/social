@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FeedProvider } from '../../providers/feed/feed';
-import { UserDataProvider } from '../../providers/user-data/user-data'
+import { UserDataProvider } from '../../providers/user-data/user-data';
+
 
 /**
  * Generated class for the PostDetailPage page.
@@ -32,6 +33,15 @@ export class PostDetailPage {
       console.log(user);
       this.userLiked = user
     })
+  }
+
+  gotoUser(uid){
+    console.log(uid);
+    this.userDataProvider.getUserDetail(uid).then((user)=>{
+      console.log(user.val());
+      this.navCtrl.push("UserDetailPage",{ user: user.val()})
+    })
+
   }
 
 }

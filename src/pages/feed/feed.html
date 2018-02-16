@@ -18,29 +18,30 @@
     <div *ngIf="post.content.type == 'text'">
       <ion-item-divider sticky no-lines (click)="getPost()">
           <ion-avatar item-start>
-            <img [src]="post.profileImgURL">
+            <img class="no-resize" [src]="post.profileImgURL">
           </ion-avatar>
           <h2>{{post.userName}}</h2>
           <p>{{post.content.createdAt | formatDate}}</p>
         </ion-item-divider>
         <div class="post-content" [ngStyle]="{'background': post.content.color}"  (click)="showPostDetail(post)">
-          <p>{{post.content.text}}</p>
+          <p class="text">{{post.content.text}}</p>
         </div>
         <button ion-button icon-only round small 
                 [color]="(userLikedPost[post.key] === true?'primary':'light')" 
                 (click)="likePost(post.key,post.likeCount, userLikedPost[post.key] != true)">
-            <ion-icon name="thumbs-up"></ion-icon>
+        <ion-icon name="thumbs-up"></ion-icon>
         </button> 
     </div> 
     <div *ngIf="post.content.type == 'image'">
         <ion-item-divider sticky no-lines (click)="getPost()">
             <ion-avatar item-start>
-              <img [src]="post.profileImgURL">
+              <img class="no-resize" [src]="post.profileImgURL">
             </ion-avatar>
             <h2>{{post.userName}}</h2>
             <p>{{post.content.createdAt | formatDate}}</p>
           </ion-item-divider>
           <div class="post-content" (click)="showPostDetail(post)">
+            <p>{{post.content.text}}</p>
             <img class="post-img" [src]=" post.content.image">
           </div>
           <button ion-button icon-only round small 
@@ -91,9 +92,9 @@
       <button ion-fab color="dark" (click)="goToPost('image', fab)">
         <ion-icon name="camera"></ion-icon>
       </button>
-      <button ion-fab color="danger" (click)="goToPost('video', fab)">
+      <!-- <button ion-fab color="danger" (click)="goToPost('video', fab)">
         <ion-icon name="logo-youtube"></ion-icon>
-      </button>
+      </button> -->
     </ion-fab-list>
   </ion-fab>
 

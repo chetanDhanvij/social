@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import firebase from 'firebase';
 import { User } from '@firebase/auth-types';
 import { Reference, ThenableReference } from '@firebase/database-types';
+import * as moment from 'moment';
+import { UserDataProvider } from '../user-data/user-data';
 
 /*
   Generated class for the FeedProvider provider.
@@ -15,7 +17,7 @@ export class FeedProvider {
 
   currentUser:any;
   postRef: Reference
-  constructor() {
+  constructor(private userDataProvider: UserDataProvider) {
     console.log('Hello FeedProvider Provider');
     firebase.auth().onAuthStateChanged(user => {
       this.currentUser = user;
@@ -57,7 +59,26 @@ export class FeedProvider {
 
   getPost(){
     console.log(this.postRef);
-    return this.postRef.orderByChild('createdAt');
+    return new Promise((resolve, reject)=>{
+    
+      this.postRef.orderByChild('createdAt').limitToLast(2).once("value").then((data)=>{
+        console.log(data.val())
+        console.log(Object.keys(data.val()))
+        let dataVal = data.val();
+        let dataKey = Object.keys(data.val());
+        let returnValue = []
+        returnValue = dataKey.map((d)=>{
+          let rV = dataVal[d]
+          rV.key = d
+          return rV
+        })
+        console.log(returnValue);
+        resolve(returnValue);
+      }).catch((err)=>{
+        reject(err);
+      })
+    })
+
   }
 
   likePost(postKey, postLikeCount: number = 0, shouldLike){
@@ -80,8 +101,25 @@ export class FeedProvider {
     return new Promise((resolve, reject)=>{
       firebase.database().ref(`/publicPostLikedList/${postKey}`).once('value',(userList)=>{
         let userWhoLike = userList.val();
-        console.log(userWhoLike);
-        resolve(userWhoLike);
+        let userWhoLikeArray =  Object.keys(userWhoLike);
+        let returnValue = []
+        console.log(userWhoLike,userWhoLikeArray);
+        userWhoLikeArray = userWhoLikeArray.filter((d)=>{
+          return userWhoLike[d]
+        })
+        this.userDataProvider.getUsernameList(userWhoLikeArray).then((data)=>{
+          for(let d of data){
+            console.log(d.val());
+          }
+          returnValue = data.map((d,i)=>{
+            return {name: d.val(), uid: userWhoLikeArray[i]}
+          })
+          console.log(userWhoLike,userWhoLikeArray);
+
+          resolve(returnValue);
+
+        })
+
       })
     })
   }
@@ -104,23 +142,21 @@ export class FeedProvider {
   }
 
   private postImage(postData){
-    let post: any = {};
-    post ={
-      type: postData.type,
-      text: postData.text,
-      image: ''
-    }
-    post.createdAt = firebase.database.ServerValue.TIMESTAMP;
     if (this.currentUser) {
-      let postObj: any = {
-        uid: this.currentUser.uid,
-        content: post
-      }
-      let postRefData: any = this.postRef.push(postObj);
-      console.log(postRefData.key);
-      this.uploadToCloud(postData.image,postRefData.key).then((url)=>{
+      this.uploadToCloud(postData.image,moment().unix()).then((url)=>{
         console.log(url);
-        this.postRef.child(postRefData.key).child('content').update({image: url});
+        let post: any = {};
+        post ={
+          type: postData.type,
+          text: postData.text,
+          image: url
+        }
+        let postObj: any = {
+          uid: this.currentUser.uid,
+          content: post
+        }
+        post.createdAt = firebase.database.ServerValue.TIMESTAMP;
+        let postRefData: any = this.postRef.push(postObj);
       })
     }
   }
