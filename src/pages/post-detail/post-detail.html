@@ -21,7 +21,7 @@
           <img class="no-resize" [src]="post.profileImgURL">
         </ion-avatar>
         <h2>{{post.userName}}</h2>
-        <p>{{post.content?.createdAt | formatDate}}</p>
+        <p>{{post.createdAt | formatDate}}</p>
       </ion-item-divider>
       <div class="post-content" [ngStyle]="{'background': post.content?.color}" (click)="showPostDetail(post)">
         <p>{{post.content?.text}}</p>
@@ -33,18 +33,26 @@
             <img class="no-resize" [src]="post.profileImgURL">
           </ion-avatar>
           <h2>{{post.userName}}</h2>
-          <p>{{post.content?.createdAt | formatDate}}</p>
+          <p>{{post.createdAt | formatDate}}</p>
         </ion-item-divider>
-        <div class="post-content">
+        <div>
+            <p class="text-padding-left">{{post.content?.text}}</p>
             <img class="post-img" [src]=" post.content?.image">
         </div>
       </div>
   </section>
   <ion-list>
     <ion-list-header>
-      Likes
+      People who liked the post:
     </ion-list-header>
-    <ion-item *ngFor="let user of userLiked" (click)="gotoUser(user.uid)">{{user.name}}</ion-item>
+    <ion-item-divider *ngFor="let user of userLiked" (click)="gotoUser(user.uid)">
+      <button  item-start class="button-like" ion-button icon-only round small [color]="'primary'">
+        <ion-icon name="thumbs-up"></ion-icon>
+      </button>
+      <h2 class="post-username">
+        {{user.name}}
+      </h2>
+    </ion-item-divider>
   </ion-list>
 
 </ion-content>

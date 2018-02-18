@@ -1,5 +1,5 @@
-<ion-tabs>
-  <ion-tab tabsHideOnSubPages="true" [root]="tab1Root" tabTitle="Home" tabIcon="md-home"></ion-tab>
-  <ion-tab tabsHideOnSubPages="true" [root]="tab2Root" tabTitle="Messages" tabIcon="md-chatbubbles"></ion-tab>
-  <ion-tab tabsHideOnSubPages="true" [root]="tab3Root" tabTitle="Profile" tabIcon="md-person"></ion-tab>
+<ion-tabs (ionChange)="tabSelected($event)">
+  <ion-tab tabsHideOnSubPages="true" [root]="tab1Root" [tabTitle]="(index == 0 || index == 4) ?'Home':''" tabIcon="md-home"></ion-tab>
+  <ion-tab tabsHideOnSubPages="true" [root]="tab2Root" [tabTitle]="(index == 1 || index == 4) ?'Messages':''" tabIcon="md-chatbubbles"></ion-tab>
+  <ion-tab tabsHideOnSubPages="true" [root]="tab3Root" [tabTitle]="(index == 2  || index == 4)?'Profile':''" tabIcon="md-person"></ion-tab>
 </ion-tabs>

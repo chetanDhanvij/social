@@ -86,7 +86,7 @@ export class UserInitialDetailPage {
                                       this.userForm.value.dob,
                                       this.userForm.value.gender).then(()=>{
                                         this.loading.dismiss().then(()=>{
-                                          this.navCtrl.setRoot("MenuPage");
+                                          this.navCtrl.setRoot("TabsPage");
                                         })
                                       }).catch((err)=>{
                                         console.log(err);

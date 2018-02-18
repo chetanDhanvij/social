@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, FabContainer, LoadingController, Loading } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, FabContainer, LoadingController, Loading, AlertController, Events, Content   } from 'ionic-angular';
 import { FeedProvider } from '../../providers/feed/feed';
 import { UserDataProvider } from '../../providers/user-data/user-data'
 
@@ -23,20 +23,22 @@ import { DataSnapshot } from '@firebase/database';
 export class FeedPage {
   posts: any= [];
   loading: Loading;
-  userLikedPost: any[];
+  userLikedPost: any[] = [];
+  @ViewChild(Content) content: Content;
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private feedProvider: FeedProvider,
               private userDataProvider: UserDataProvider,
               private loadingController: LoadingController,
-              private imageSelectorProvider: ImageSelectorProvider) {
+              private imageSelectorProvider: ImageSelectorProvider,
+              private alertCtrl: AlertController,
+              public events: Events) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad FeedPage');
     this.getPost();
-    // this.loading = this.loadingController.create();
-    // this.loading.present();
+
     this.feedProvider.listenUserLikedPost().on("value",(likedPost: any)=>{
       console.log("likedPostlikedPostlikedPostlikedPostlikedPostlikedPost")
       console.log(likedPost.val())
@@ -47,6 +49,13 @@ export class FeedPage {
       }
 
     })
+
+    // second page (listen for the user created event)
+    this.events.subscribe('post:created', () => {
+      // userEventData is an array of parameters, so grab our first and only arg
+      console.log('post Created');
+      this.getPost();
+    });
     
   }
 
@@ -56,9 +65,12 @@ export class FeedPage {
   }
 
   getPost(){
+    this.loading = this.loadingController.create();
+    this.loading.present();
     this.feedProvider.getPost().then((data: any)=>{
 
       let postData = data;
+      this.posts = postData;
       console.log(data);
       for(let d of postData){
         this.userDataProvider.getUserDetail(d.uid).then((userData: any)=>{
@@ -66,13 +78,15 @@ export class FeedPage {
           console.log(userDataVal);
           d.userName = userDataVal.firstName + " " + userDataVal.lastName;
           d.profileImgURL = userDataVal.profileImgURL;
-          this.posts.push(d);
+          // this.posts.push(d);
           console.log(d);
+          
           try{
             this.loading.dismiss();
           }catch(e){
             console.log(e);
           }
+          this.content.scrollToTop();
   
         }).catch((err)=>{
           console.log("Error")
@@ -98,6 +112,66 @@ export class FeedPage {
 
   showPostDetail(post){
     this.navCtrl.push("PostDetailPage",{post: post});
+  }
+  
+  sharePost(post){
+    console.log(post);
+    let confirm = this.alertCtrl.create({
+      title: 'Share',
+      message: 'Would you like to share this post with your name?',
+      buttons: [
+        {
+          text: 'No',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            console.log('Agree clicked');
+            this.submitPost(post)
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
+  private   submitPost(postToshare){
+    let post: any;
+    if(postToshare.content.type == 'text'){
+      post ={
+        isShared: true,
+        type: postToshare.content.type,
+        text: postToshare.content.text,
+        color: postToshare.content.color,
+        originalUid: postToshare.uid,
+        originalKey: postToshare.key,
+        originalUserName: postToshare.userName
+      }
+    }else if(postToshare.content.type == 'image'){
+      post ={
+        isShared: true,
+        type: postToshare.content.type,
+        text: postToshare.content.text,
+        image: postToshare.content.image,
+        originalUid: postToshare.uid,
+        originalKey: postToshare.key,
+        originalUserName: postToshare.userName
+      }
+    }
+
+    console.log(postToshare);
+    console.log(post);
+    this.feedProvider.newPost(post).then(()=>{
+      this.getPost();
+    })
+  }
+
+
+  loadMore(){
+    console.log("load more")
   }
 
 }

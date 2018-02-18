@@ -15,7 +15,13 @@ export class FormatDatePipe implements PipeTransform {
    */
   transform(value: string, ...args) {
     if(value){
-      return moment(value).format("MMMM DD, YYYY");
+      console.log(moment(parseInt(value) * -1).startOf("day").isSame(moment().startOf("day")))
+      if(moment(parseInt(value) * -1).startOf("day").isSame(moment().startOf("day"))){
+        return "Today at " + moment(parseInt(value) * -1).format("h:m a");
+      }else{
+        return moment(parseInt(value) * -1).format("MMMM DD, YYYY");
+      }
+
     }else{
       return value;
     }

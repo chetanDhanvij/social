@@ -12,15 +12,24 @@ page-feed {
                 text-align: center;
             }
         }
-        margin-bottom: 25px;
-        padding-bottom: 1px;
+        position: relative;
+        margin-bottom: 5px;
+        padding-bottom: 25px;
         background: white;
-        button{
-            right: 9px;
+        button.button-like{
+            right: 59px;
             position: absolute;
-            bottom: -18px;
+            bottom: 7px;
             width: 40px;
             height: 40px;
+        }
+        button.button-share{
+            right: 9px;
+            position: absolute;
+            bottom: 7px;
+            width: 40px;
+            height: 40px;
+            background: white;
         }
     }
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Tab } from 'ionic-angular';
 
 /**
  * Generated class for the TabsPage page.
@@ -18,11 +18,16 @@ export class TabsPage {
   tab1Root = "FeedPage";
   tab2Root = "ChatListPage";
   tab3Root = "ProfilePage";
+  index = 4;
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad TabsPage');
+  }
+  tabSelected(tab: Tab) {
+    this.index = tab.index;
   }
 
 }

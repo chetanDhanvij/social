@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Slides, Events  } from 'ionic-angular';
 import { FeedProvider } from '../../providers/feed/feed'
 import { ImageSelectorProvider } from '../../providers/image-selector/image-selector';
 
@@ -31,7 +31,8 @@ export class NewPostPage {
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               public feedProvider: FeedProvider,
-              public imageSelectorProvider: ImageSelectorProvider) {
+              public imageSelectorProvider: ImageSelectorProvider,
+              public events: Events) {
   }
 
   ionViewDidLoad() {
@@ -83,7 +84,9 @@ export class NewPostPage {
 
 
     console.log(post);
-    this.feedProvider.newPost(post);
+    this.feedProvider.newPost(post).then(()=>{
+      this.events.publish('post:created');
+    })
     this.navCtrl.pop();
   }
 

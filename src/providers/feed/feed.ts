@@ -29,46 +29,79 @@ export class FeedProvider {
 
 
   newPost(postData){
-    let post: any = {};
-    console.log(postData)
-    if(postData.type == 'text'){
-      post ={
-        type: postData.type,
-        text: postData.text,
-        color: postData.color
+    return new Promise((resolve,reject)=>{
+      let post: any = {};
+      console.log("postData")
+      console.log(postData)
+      if(postData.type == 'text'){
+        post ={
+          type: postData.type,
+          text: postData.text,
+          color: postData.color
+        }
+      }else if(postData.type == 'image'){
+        post ={
+          type: postData.type,
+          text: postData.text,
+          image: postData.image
+        }
       }
-      post.createdAt = firebase.database.ServerValue.TIMESTAMP;
+  
+  
+  
       if (this.currentUser) {
+        let timestamp = firebase.database.ServerValue.TIMESTAMP
         let postObj: any = {
           uid: this.currentUser.uid,
-          content: post
+          content: post,
+          createdAt: timestamp
         }
-        console.log(postObj)
-        this.postRef.push(postObj);
+        if(postData.isShared){
+          postObj.isShared = true;
+          postObj.originalUid = postData.originalUid;
+          postObj.originalKey = postData.originalKey;
+          postObj.originalUserName = postData.originalUserName;
+        }else{
+          postObj.isShared = false;
+        }
+        console.log(postObj);
+        const promise = this.postRef.push(postObj);
+        const key = promise.key
+  
+        promise.then(() => {
+          const postRef = this.postRef.child(`/${key}`)
+          postRef.once('value').then((snapshot) => {
+            console.log(" snapshot.val()",  snapshot.val())
+            timestamp = snapshot.val().createdAt * -1
+            postRef.update({ createdAt: timestamp  }).then(()=>{
+              resolve();
+            })
+          });
+        })
       }
-    }else if(postData.type == 'image'){
-      this.postImage(postData)
-    }else if(postData.type == 'video'){
-      post ={
-        type: postData.type,
-        text: postData.text,
-        videoLink: postData.videoLink
-      }
-    }
+    })
+
+
   }
 
   getPost(){
     console.log(this.postRef);
     return new Promise((resolve, reject)=>{
     
-      this.postRef.orderByChild('createdAt').limitToLast(2).once("value").then((data)=>{
+      this.postRef.orderByChild('createdAt').once("value").then((data)=>{
         console.log(data.val())
-        console.log(Object.keys(data.val()))
-        let dataVal = data.val();
-        let dataKey = Object.keys(data.val());
+        console.log("ASDFSDFSAGAFSDGFGDFFDGDFSGSDFGSDFGDFGFSDGSDFSFDGSFDGDFGDFSDFD")
+        let dataVal = [];
+        let dataKey = [];
+        data.forEach((child)=> {
+            console.log(child.val()) // NOW THE CHILDREN PRINT IN ORDER
+            dataVal.push(child.val())
+            dataKey.push(child.key)
+        });
+        console.log(dataVal, dataKey)
         let returnValue = []
-        returnValue = dataKey.map((d)=>{
-          let rV = dataVal[d]
+        returnValue = dataKey.map((d,i)=>{
+          let rV = dataVal[i]
           rV.key = d
           return rV
         })
