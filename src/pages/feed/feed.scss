@@ -4,6 +4,9 @@ page-feed {
     }
     .status-card{
         position: relative;
+        ion-item-divider{
+            // background: #D2D7D3 !important;
+        }
         div.post-content{
             padding: 10px !important;
             margin: 5px;

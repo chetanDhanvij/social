@@ -42,7 +42,7 @@
       </div>
   </section>
   <ion-list>
-    <ion-list-header>
+    <ion-list-header *ngIf="userLiked.length>0">
       People who liked the post:
     </ion-list-header>
     <ion-item-divider *ngFor="let user of userLiked" (click)="gotoUser(user.uid)">

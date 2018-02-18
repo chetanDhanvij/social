@@ -33,52 +33,115 @@ export class FeedProvider {
       let post: any = {};
       console.log("postData")
       console.log(postData)
-      if(postData.type == 'text'){
-        post ={
-          type: postData.type,
-          text: postData.text,
-          color: postData.color
+      if(postData.isShared){
+        if(postData.type == 'text'){
+          post ={
+            type: postData.type,
+            text: postData.text,
+            color: postData.color
+          }
+        }else if(postData.type == 'image'){
+          post ={
+            type: postData.type,
+            text: postData.text,
+            image: postData.image
+          }
+        }    
+        if (this.currentUser) {
+          let timestamp = firebase.database.ServerValue.TIMESTAMP
+          let postObj: any = {
+            uid: this.currentUser.uid,
+            content: post,
+            createdAt: timestamp
+          }
+            postObj.isShared = true;
+            postObj.originalUid = postData.originalUid;
+            postObj.originalKey = postData.originalKey;
+            postObj.originalUserName = postData.originalUserName;
+          console.log(postObj);
+          const promise = this.postRef.push(postObj);
+          const key = promise.key
+    
+          promise.then(() => {
+            const postRef = this.postRef.child(`/${key}`)
+            postRef.once('value').then((snapshot) => {
+              console.log(" snapshot.val()",  snapshot.val())
+              timestamp = snapshot.val().createdAt * -1
+              postRef.update({ createdAt: timestamp  }).then(()=>{
+                resolve();
+              })
+            });
+          })
         }
-      }else if(postData.type == 'image'){
-        post ={
-          type: postData.type,
-          text: postData.text,
-          image: postData.image
-        }
-      }
-  
-  
-  
-      if (this.currentUser) {
-        let timestamp = firebase.database.ServerValue.TIMESTAMP
-        let postObj: any = {
-          uid: this.currentUser.uid,
-          content: post,
-          createdAt: timestamp
-        }
-        if(postData.isShared){
-          postObj.isShared = true;
-          postObj.originalUid = postData.originalUid;
-          postObj.originalKey = postData.originalKey;
-          postObj.originalUserName = postData.originalUserName;
-        }else{
-          postObj.isShared = false;
-        }
-        console.log(postObj);
-        const promise = this.postRef.push(postObj);
-        const key = promise.key
-  
-        promise.then(() => {
-          const postRef = this.postRef.child(`/${key}`)
-          postRef.once('value').then((snapshot) => {
-            console.log(" snapshot.val()",  snapshot.val())
-            timestamp = snapshot.val().createdAt * -1
-            postRef.update({ createdAt: timestamp  }).then(()=>{
-              resolve();
+
+      }else{
+        if(postData.type == 'text'){
+          post ={
+            type: postData.type,
+            text: postData.text,
+            color: postData.color
+          }
+
+          if (this.currentUser) {
+            let timestamp = firebase.database.ServerValue.TIMESTAMP
+            let postObj: any = {
+              uid: this.currentUser.uid,
+              content: post,
+              createdAt: timestamp
+            }
+              postObj.isShared = false;
+            console.log(postObj);
+            const promise = this.postRef.push(postObj);
+            const key = promise.key
+      
+            promise.then(() => {
+              const postRef = this.postRef.child(`/${key}`)
+              postRef.once('value').then((snapshot) => {
+                console.log(" snapshot.val()",  snapshot.val())
+                timestamp = snapshot.val().createdAt * -1
+                postRef.update({ createdAt: timestamp  }).then(()=>{
+                  resolve();
+                })
+              });
             })
-          });
-        })
+          }
+        }else if(postData.type == 'image'){
+          if (this.currentUser) {
+            let timestamp = firebase.database.ServerValue.TIMESTAMP
+            this.uploadToCloud(postData.image,moment().unix()).then((url)=>{
+              console.log(url);
+              let post: any = {};
+              post ={
+                type: postData.type,
+                text: postData.text,
+                image: url
+              }
+              let postObj: any = {
+                uid: this.currentUser.uid,
+                content: post,
+                createdAt: timestamp
+              }
+              postObj.isShared = false;
+              console.log(postObj);
+              const promise = this.postRef.push(postObj);
+              const key = promise.key
+        
+              promise.then(() => {
+                const postRef = this.postRef.child(`/${key}`)
+                postRef.once('value').then((snapshot) => {
+                  console.log(" snapshot.val()",  snapshot.val())
+                  timestamp = snapshot.val().createdAt * -1
+                  postRef.update({ createdAt: timestamp  }).then(()=>{
+                    resolve();
+                  })
+                });
+              })
+            })
+          }
+        }
+        
       }
+      
     })
 
 
@@ -205,6 +268,11 @@ export class FeedProvider {
         resolve(savedPicture.downloadURL);
       });
     })
+  }
+
+
+  deletePost(postKey){
+    return firebase.database().ref(`/publicPost/${postKey}`).remove()
   }
 
 }

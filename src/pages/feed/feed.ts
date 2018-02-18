@@ -6,6 +6,7 @@ import { UserDataProvider } from '../../providers/user-data/user-data'
 import { ImageSelectorProvider } from '../../providers/image-selector/image-selector'
 
 import { DataSnapshot } from '@firebase/database';
+import { ProfileProvider } from '../../providers/profile/profile'
 
 
 /**
@@ -24,6 +25,7 @@ export class FeedPage {
   posts: any= [];
   loading: Loading;
   userLikedPost: any[] = [];
+  currentUid: string;
   @ViewChild(Content) content: Content;
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -32,7 +34,8 @@ export class FeedPage {
               private loadingController: LoadingController,
               private imageSelectorProvider: ImageSelectorProvider,
               private alertCtrl: AlertController,
-              public events: Events) {
+              public events: Events,
+              private profileProvider: ProfileProvider) {
   }
 
   ionViewDidLoad() {
@@ -56,7 +59,9 @@ export class FeedPage {
       console.log('post Created');
       this.getPost();
     });
-    
+
+    console.log("this.profileProvider.getCurrentUser()",this.profileProvider.getCurrentUser())
+    this.currentUid = this.profileProvider.getCurrentUser();
   }
 
   goToPost(type, fab: FabContainer){
@@ -75,23 +80,18 @@ export class FeedPage {
       for(let d of postData){
         this.userDataProvider.getUserDetail(d.uid).then((userData: any)=>{
           let userDataVal = userData.val()
-          console.log(userDataVal);
           d.userName = userDataVal.firstName + " " + userDataVal.lastName;
           d.profileImgURL = userDataVal.profileImgURL;
           // this.posts.push(d);
-          console.log(d);
-          
-          try{
-            this.loading.dismiss();
-          }catch(e){
-            console.log(e);
-          }
           this.content.scrollToTop();
   
         }).catch((err)=>{
           console.log("Error")
         })
       }
+      setTimeout(()=>{
+          this.loading.dismiss();
+      },500)
 
 
 
@@ -172,6 +172,37 @@ export class FeedPage {
 
   loadMore(){
     console.log("load more")
+  }
+
+  deletePost(post){
+    if(this.currentUid == post.uid){
+      console.log(post.key);
+      console.log(post);
+      let confirm = this.alertCtrl.create({
+        title: 'Delete',
+        message: 'Do you want to delete the post?',
+        buttons: [
+          {
+            text: 'No',
+            handler: () => {
+              console.log('Disagree clicked');
+            }
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              console.log('Agree clicked');
+              console.log("delete")
+              this.feedProvider.deletePost(post.key).then(()=>{
+                this.getPost();
+              })
+            }
+          }
+        ]
+      });
+      confirm.present();
+    }
+
   }
 
 }

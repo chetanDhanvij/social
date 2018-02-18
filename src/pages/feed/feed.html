@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-  <ion-navbar color="primary">
+  <ion-navbar color="primary" (click)="getPost()">
     <ion-title>Feed</ion-title>
   </ion-navbar>
 
@@ -16,16 +16,20 @@
 <ion-content>
   <section class="status-card" *ngFor="let post of posts">
     <div *ngIf="post.content.type == 'text'">
-      <ion-item-divider sticky no-lines (click)="getPost()">
+      <ion-item-divider sticky no-lines>
         <ion-avatar item-start>
           <img class="no-resize" [src]="post.profileImgURL || 'assets/imgs/logo/profile.png'">
         </ion-avatar>
         <h2 class="post-username">{{post.userName}}
           <span *ngIf="post.isShared"> shared 
             <span *ngIf="post.originalUid == post.uid">his own post </span>
-            <span *ngIf="post.originalUid != post.uid">{{post.originalUserName}}'s post </span> </span>
+            <span *ngIf="post.originalUid != post.uid">{{post.originalUserName}}'s post </span> 
+          </span>
         </h2>
         <p>{{post.createdAt | formatDate}}</p>
+        <button ion-button clear item-end icon-only color="dark" *ngIf="currentUid == post.uid" (click)="deletePost(post)">
+            <ion-icon name="trash"></ion-icon>
+        </button>
       </ion-item-divider>
       <div class="post-content" [ngStyle]="{'background': post.content.color}" (click)="showPostDetail(post)">
         <p class="text">{{post.content.text}}</p>
@@ -39,16 +43,24 @@
       </button>
     </div>
     <div *ngIf="post.content.type == 'image'">
-      <ion-item-divider sticky no-lines (click)="getPost()">
+      <ion-item-divider sticky no-lines>
         <ion-avatar item-start>
-          <img class="no-resize" [src]="post.profileImgURL">
+          <img class="no-resize" [src]="post.profileImgURL || 'assets/imgs/logo/profile.png'">
         </ion-avatar>
-        <h2 class="post-username">{{post.userName}}</h2>
-        <p>{{post.content.createdAt | formatDate}}</p>
+        <h2 class="post-username">{{post.userName}}
+            <span *ngIf="post.isShared"> shared 
+                <span *ngIf="post.originalUid == post.uid">his own post </span>
+                <span *ngIf="post.originalUid != post.uid">{{post.originalUserName}}'s post </span> 
+              </span>
+        </h2>
+        <p>{{post.createdAt | formatDate}}</p>
+        <button ion-button clear item-end icon-only color="dark" *ngIf="currentUid == post.uid" (click)="deletePost(post)">
+            <ion-icon name="trash"></ion-icon>
+        </button>
       </ion-item-divider>
       <div (click)="showPostDetail(post)">
         <p class="text-padding-left">{{post.content.text}}</p>
-        <img class="post-img" [src]=" post.content.image">
+        <img class="post-img" [src]=" post.content.image || 'assets/imgs/logo/placeholder.png'">
       </div>
       <button class="button-like" ion-button icon-only round small [color]="(userLikedPost[post.key] === true?'primary':'light')"
         (click)="likePost(post.key,post.likeCount, userLikedPost[post.key] != true)">

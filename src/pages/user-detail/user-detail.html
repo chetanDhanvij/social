@@ -9,7 +9,7 @@
     <img [src]="user.profileImgURL || 'assets/imgs/logo/profile.png'" />
     <p>{{user.fullName}}</p>
   </section>
-  <ion-item-divider sticky no-lines>
+  <!-- <ion-item-divider sticky no-lines>
     <ion-label class="align-center">
       <ion-segment [(ngModel)]="view">
         <ion-segment-button value="PROFILE">
@@ -23,7 +23,7 @@
         </ion-segment-button>
       </ion-segment>
     </ion-label>
-  </ion-item-divider>
+  </ion-item-divider> -->
   <div [ngSwitch]="view">
     <ion-list *ngSwitchCase="'PROFILE'">
       <ion-item>

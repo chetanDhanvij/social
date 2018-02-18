@@ -18,7 +18,7 @@ import { UserDataProvider } from '../../providers/user-data/user-data';
 })
 export class PostDetailPage {
   post: any = {};
-  userLiked: any;
+  userLiked: any = [];
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               public feedProvider: FeedProvider,
