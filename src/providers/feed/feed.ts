@@ -197,7 +197,11 @@ export class FeedProvider {
     return new Promise((resolve, reject)=>{
       firebase.database().ref(`/publicPostLikedList/${postKey}`).once('value',(userList)=>{
         let userWhoLike = userList.val();
-        let userWhoLikeArray =  Object.keys(userWhoLike);
+        let userWhoLikeArray = [];
+        try{
+          userWhoLikeArray = Object.keys(userWhoLike)
+        }catch(e){ console.log(e)}
+        
         let returnValue = []
         console.log(userWhoLike,userWhoLikeArray);
         userWhoLikeArray = userWhoLikeArray.filter((d)=>{

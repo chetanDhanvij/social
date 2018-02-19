@@ -98,11 +98,6 @@ export class FeedPage {
     })
   }
 
-  likePost(postKey, postLikeCount, shouldLike){
-    this.feedProvider.likePost(postKey, postLikeCount, shouldLike)
-    console.log(postKey);
-  }
-
   showLiks(postKey){
     console.log("postKey", postKey );
     this.feedProvider.getUserWhoLikedPost(postKey).then((userList)=>{
