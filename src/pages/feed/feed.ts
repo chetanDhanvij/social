@@ -200,4 +200,9 @@ export class FeedPage {
 
   }
 
+
+  gotoAdvertise(){
+    this.navCtrl.push("AdvertisementPage");
+  }
+
 }

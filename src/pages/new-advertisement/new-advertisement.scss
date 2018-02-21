@@ -1,0 +1,28 @@
+page-new-advertisement {
+    .image-selection{
+        ion-textarea{
+          padding: 1rem;
+          height: 200px;
+          text-align: center;
+          vertical-align: middle;
+          textarea{
+              height: 100%;
+          }
+          
+        }
+        span{
+          text-align: center;
+          display: block;
+          margin-top: 12px;
+        }
+        img{
+          width: 100%;
+          height: auto;
+        }
+
+      }
+
+      p{
+          padding-left:20px;
+      }
+}

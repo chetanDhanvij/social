@@ -1,0 +1,28 @@
+<!--
+  Generated template for the AdvertisementPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Advertisement</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <button ion-button  (click)="gotoNewAdd()">Post a new advertisement</button>
+    <ion-item  *ngFor="let add of advertisements">
+      <ion-thumbnail item-start>
+        <img [src]="add.image">
+      </ion-thumbnail>
+      <h2>{{add.text}}</h2>
+      <p>{{add.link}}</p>
+      <button ion-button clear item-end (click)="delete(add.id)">Delete</button>
+    </ion-item>
+  </ion-list>
+</ion-content>
