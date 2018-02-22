@@ -6,8 +6,8 @@
 
 <ion-content>
   <section class="profile-image" (click)="updateImg()">
-    <img [src]="user.profileImgURL || 'assets/imgs/logo/profile.png'" />
-    <p>{{user.fullName}}</p>
+    <img [src]="user?.profileImgURL || 'assets/imgs/logo/profile.png'" />
+    <p>{{user?.fullName}}</p>
   </section>
   <!-- <ion-item-divider sticky no-lines>
     <ion-label class="align-center">
@@ -28,25 +28,31 @@
     <ion-list *ngSwitchCase="'PROFILE'">
       <ion-item>
         <h2>First Name</h2>
-        <p> {{user.firstName}}</p>
+        <p> {{user?.firstName}}</p>
       </ion-item>
       <ion-item>
         <h2>Last Name</h2>
-        <p> {{user.lastName}}</p>
+        <p> {{user?.lastName}}</p>
       </ion-item>
       <ion-item>
         <h2>Email</h2>
-        <p> {{user.email}}</p>
+        <p> {{user?.email}}</p>
       </ion-item>
       <ion-item>
         <h2>Gender</h2>
-        <p> {{user.gender}}</p>
+        <p> {{user?.gender}}</p>
       </ion-item>
     </ion-list>
     <ion-list *ngSwitchCase="'POSTS'">
       POSTS
     </ion-list>
   </div>
+  <ion-list-header>
+    Posts
+  </ion-list-header>
+  <section class="status-card" *ngFor="let post of posts">
+      <post [post]="post" [showlikes]="false"></post>
+  </section>
 
 
 </ion-content>

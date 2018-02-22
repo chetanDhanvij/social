@@ -76,17 +76,19 @@ export class FeedPage {
 
       let postData = data;
       this.posts = postData;
-      console.log(data);
       for(let d of postData){
+        console.log(d.uid)
         this.userDataProvider.getUserDetail(d.uid).then((userData: any)=>{
-          let userDataVal = userData.val()
+          console.log("getUserDetailgetUserDetailgetUserDetailgetUserDetailgetUserDetail");
+          console.log(userData);
+          let userDataVal = userData;
           d.userName = userDataVal.firstName + " " + userDataVal.lastName;
           d.profileImgURL = userDataVal.profileImgURL;
           // this.posts.push(d);
           this.content.scrollToTop();
   
         }).catch((err)=>{
-          console.log("Error")
+          console.log(err)
         })
       }
       setTimeout(()=>{
@@ -98,15 +100,10 @@ export class FeedPage {
     })
   }
 
-  likePost(postKey, postLikeCount, shouldLike){
-    this.feedProvider.likePost(postKey, postLikeCount, shouldLike)
-    console.log(postKey);
-  }
-
   showLiks(postKey){
-    console.log("postKey", postKey );
+
     this.feedProvider.getUserWhoLikedPost(postKey).then((userList)=>{
-      console.log(userList);
+
     })
   }
 
@@ -115,7 +112,7 @@ export class FeedPage {
   }
   
   sharePost(post){
-    console.log(post);
+
     let confirm = this.alertCtrl.create({
       title: 'Share',
       message: 'Would you like to share this post with your name?',
@@ -162,8 +159,6 @@ export class FeedPage {
       }
     }
 
-    console.log(postToshare);
-    console.log(post);
     this.feedProvider.newPost(post).then(()=>{
       this.getPost();
     })
@@ -176,8 +171,6 @@ export class FeedPage {
 
   deletePost(post){
     if(this.currentUid == post.uid){
-      console.log(post.key);
-      console.log(post);
       let confirm = this.alertCtrl.create({
         title: 'Delete',
         message: 'Do you want to delete the post?',

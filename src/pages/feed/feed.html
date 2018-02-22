@@ -15,7 +15,8 @@
 
 <ion-content>
   <section class="status-card" *ngFor="let post of posts">
-    <div *ngIf="post.content.type == 'text'">
+    <post [post]="post" [showlikes]="false" (onShare)="getPost()"></post>
+    <!-- <div *ngIf="post.content.type == 'text'">
       <ion-item-divider sticky no-lines>
         <ion-avatar item-start>
           <img class="no-resize" [src]="post.profileImgURL || 'assets/imgs/logo/profile.png'">
@@ -69,14 +70,8 @@
       <button class="button-share" ion-button icon-only round small outline [color]="'primary'" (click)="sharePost(post)">
         <ion-icon name="share"></ion-icon>
       </button>
-    </div>
+    </div> -->
   </section>
-
-  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
-    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll> -->
-  <!-- <button ion-button block button-center (click)="loadMore()" color="light">Load more</button> -->
   <ion-fab top right edge #fab>
     <button ion-fab color="secondary">
       <ion-icon name="add"></ion-icon>
@@ -88,9 +83,6 @@
       <button ion-fab color="dark" (click)="goToPost('image', fab)">
         <ion-icon name="camera"></ion-icon>
       </button>
-      <!-- <button ion-fab color="danger" (click)="goToPost('video', fab)">
-        <ion-icon name="logo-youtube"></ion-icon>
-      </button> -->
     </ion-fab-list>
   </ion-fab>
 

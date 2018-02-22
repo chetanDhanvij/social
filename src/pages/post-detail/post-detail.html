@@ -14,45 +14,5 @@
 
 
 <ion-content>
-  <section class="status-card">
-    <div *ngIf="post.content?.type == 'text'">
-      <ion-item-divider sticky no-lines >
-        <ion-avatar item-start>
-          <img class="no-resize" [src]="post.profileImgURL">
-        </ion-avatar>
-        <h2>{{post.userName}}</h2>
-        <p>{{post.createdAt | formatDate}}</p>
-      </ion-item-divider>
-      <div class="post-content" [ngStyle]="{'background': post.content?.color}" (click)="showPostDetail(post)">
-        <p>{{post.content?.text}}</p>
-      </div>
-    </div>
-    <div *ngIf="post.content?.type == 'image'">
-        <ion-item-divider sticky no-lines>
-          <ion-avatar item-start>
-            <img class="no-resize" [src]="post.profileImgURL">
-          </ion-avatar>
-          <h2>{{post.userName}}</h2>
-          <p>{{post.createdAt | formatDate}}</p>
-        </ion-item-divider>
-        <div>
-            <p class="text-padding-left">{{post.content?.text}}</p>
-            <img class="post-img" [src]=" post.content?.image">
-        </div>
-      </div>
-  </section>
-  <ion-list>
-    <ion-list-header *ngIf="userLiked.length>0">
-      People who liked the post:
-    </ion-list-header>
-    <ion-item-divider *ngFor="let user of userLiked" (click)="gotoUser(user.uid)">
-      <button  item-start class="button-like" ion-button icon-only round small [color]="'primary'">
-        <ion-icon name="thumbs-up"></ion-icon>
-      </button>
-      <h2 class="post-username">
-        {{user.name}}
-      </h2>
-    </ion-item-divider>
-  </ion-list>
-
+    <post [post]="post" [showlikes]="true"></post>
 </ion-content>
