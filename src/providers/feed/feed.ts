@@ -18,7 +18,6 @@ export class FeedProvider {
   currentUser:any;
   postRef: Reference
   constructor(private userDataProvider: UserDataProvider) {
-    console.log('Hello FeedProvider Provider');
     firebase.auth().onAuthStateChanged(user => {
       this.currentUser = user;
       if(user){
@@ -31,8 +30,6 @@ export class FeedProvider {
   newPost(postData){
     return new Promise((resolve,reject)=>{
       let post: any = {};
-      console.log("postData")
-      console.log(postData)
       if(postData.isShared){
         if(postData.type == 'text'){
           post ={
@@ -58,14 +55,14 @@ export class FeedProvider {
             postObj.originalUid = postData.originalUid;
             postObj.originalKey = postData.originalKey;
             postObj.originalUserName = postData.originalUserName;
-          console.log(postObj);
+
           const promise = this.postRef.push(postObj);
           const key = promise.key
     
           promise.then(() => {
             const postRef = this.postRef.child(`/${key}`)
             postRef.once('value').then((snapshot) => {
-              console.log(" snapshot.val()",  snapshot.val())
+
               timestamp = snapshot.val().createdAt * -1
               postRef.update({ createdAt: timestamp  }).then(()=>{
                 resolve();
@@ -90,14 +87,14 @@ export class FeedProvider {
               createdAt: timestamp
             }
               postObj.isShared = false;
-            console.log(postObj);
+
             const promise = this.postRef.push(postObj);
             const key = promise.key
       
             promise.then(() => {
               const postRef = this.postRef.child(`/${key}`)
               postRef.once('value').then((snapshot) => {
-                console.log(" snapshot.val()",  snapshot.val())
+
                 timestamp = snapshot.val().createdAt * -1
                 postRef.update({ createdAt: timestamp  }).then(()=>{
                   resolve();
@@ -109,7 +106,7 @@ export class FeedProvider {
           if (this.currentUser) {
             let timestamp = firebase.database.ServerValue.TIMESTAMP
             this.uploadToCloud(postData.image,moment().unix()).then((url)=>{
-              console.log(url);
+
               let post: any = {};
               post ={
                 type: postData.type,
@@ -122,14 +119,14 @@ export class FeedProvider {
                 createdAt: timestamp
               }
               postObj.isShared = false;
-              console.log(postObj);
+
               const promise = this.postRef.push(postObj);
               const key = promise.key
         
               promise.then(() => {
                 const postRef = this.postRef.child(`/${key}`)
                 postRef.once('value').then((snapshot) => {
-                  console.log(" snapshot.val()",  snapshot.val())
+
                   timestamp = snapshot.val().createdAt * -1
                   postRef.update({ createdAt: timestamp  }).then(()=>{
                     resolve();
@@ -148,27 +145,56 @@ export class FeedProvider {
   }
 
   getPost(){
-    console.log(this.postRef);
+
     return new Promise((resolve, reject)=>{
     
       this.postRef.orderByChild('createdAt').once("value").then((data)=>{
-        console.log(data.val())
-        console.log("ASDFSDFSAGAFSDGFGDFFDGDFSGSDFGSDFGDFGFSDGSDFSFDGSFDGDFGDFSDFD")
+
+
         let dataVal = [];
         let dataKey = [];
         data.forEach((child)=> {
-            console.log(child.val()) // NOW THE CHILDREN PRINT IN ORDER
+
             dataVal.push(child.val())
             dataKey.push(child.key)
         });
-        console.log(dataVal, dataKey)
+
         let returnValue = []
         returnValue = dataKey.map((d,i)=>{
           let rV = dataVal[i]
           rV.key = d
           return rV
         })
-        console.log(returnValue);
+
+        resolve(returnValue);
+      }).catch((err)=>{
+        reject(err);
+      })
+    })
+
+  }
+
+  getPostForUser(uid){
+
+    return new Promise((resolve, reject)=>{
+    
+      this.postRef.orderByChild("uid").equalTo(uid).once("value").then((data)=>{
+
+        let dataVal = [];
+        let dataKey = [];
+        data.forEach((child)=> {
+
+            dataVal.push(child.val())
+            dataKey.push(child.key)
+        });
+
+        let returnValue = []
+        returnValue = dataKey.map((d,i)=>{
+          let rV = dataVal[i]
+          rV.key = d
+          return rV
+        })
+
         resolve(returnValue);
       }).catch((err)=>{
         reject(err);
@@ -178,7 +204,7 @@ export class FeedProvider {
   }
 
   likePost(postKey, postLikeCount: number = 0, shouldLike){
-    console.log(postKey);
+
     if (this.currentUser) {
       if(shouldLike){
         postLikeCount = postLikeCount + 1;
@@ -203,18 +229,18 @@ export class FeedProvider {
         }catch(e){ console.log(e)}
         
         let returnValue = []
-        console.log(userWhoLike,userWhoLikeArray);
+
         userWhoLikeArray = userWhoLikeArray.filter((d)=>{
           return userWhoLike[d]
         })
         this.userDataProvider.getUsernameList(userWhoLikeArray).then((data)=>{
           for(let d of data){
-            console.log(d.val());
+
           }
           returnValue = data.map((d,i)=>{
             return {name: d.val(), uid: userWhoLikeArray[i]}
           })
-          console.log(userWhoLike,userWhoLikeArray);
+
 
           resolve(returnValue);
 
@@ -229,8 +255,6 @@ export class FeedProvider {
     return new Promise((resolve, reject)=>{
       if (this.currentUser) {
         firebase.database().ref(`/userProfile/${this.currentUser.uid}/postLiked/`).once("value",(likedPost)=>{
-          console.log("likedPostlikedPostlikedPost");
-          console.log(likedPost.val());
           resolve(likedPost.val());
         })
       }
@@ -244,7 +268,6 @@ export class FeedProvider {
   private postImage(postData){
     if (this.currentUser) {
       this.uploadToCloud(postData.image,moment().unix()).then((url)=>{
-        console.log(url);
         let post: any = {};
         post ={
           type: postData.type,
@@ -268,7 +291,6 @@ export class FeedProvider {
       .ref(`/posts/${this.currentUser.uid}/${key}/image.jpeg`)
       .putString(img, 'base64', { contentType: 'image/jpeg' })
       .then((savedPicture) => {
-        console.log(savedPicture);
         resolve(savedPicture.downloadURL);
       });
     })

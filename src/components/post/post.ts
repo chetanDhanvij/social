@@ -1,6 +1,7 @@
 import { Component,  ElementRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { FeedProvider } from '../../providers/feed/feed';
-import {  NavController, NavParams, AlertController, ToastController   } from 'ionic-angular';
+import {  NavController, NavParams, AlertController, ToastController , LoadingController  } from 'ionic-angular';
+import { UserDataProvider } from '../../providers/user-data/user-data';
 
 /**
  * Generated class for the PostComponent component.
@@ -16,7 +17,6 @@ export class PostComponent {
 
   @Input('post') post;
   @Input('showlikes') showlikes: boolean;
-  _showlikes
   @Output() onShare = new EventEmitter();
 
   userLikedPost: any[] = [];
@@ -25,14 +25,14 @@ export class PostComponent {
   constructor(private feedProvider: FeedProvider,
               public navCtrl: NavController,
               private alertCtrl: AlertController,
-              private toastCtrl: ToastController ) {
-    console.log('Hello PostComponent Component');
+              private toastCtrl: ToastController,
+              public userDataProvider: UserDataProvider,
+              private loadingController: LoadingController ) {
+
   } 
 
   ngAfterViewInit() {
     this.feedProvider.listenUserLikedPost().on("value",(likedPost: any)=>{
-      console.log("likedPostlikedPostlikedPostlikedPostlikedPostlikedPost")
-      console.log(likedPost.val())
       if(likedPost.val() != undefined && likedPost.val() != null ){
         this.userLikedPost = likedPost.val();
       }else{
@@ -40,18 +40,15 @@ export class PostComponent {
       }
 
     })
-    this.getUserWhoLikedPost();
-    console.log(this.showlikes,"showlikes")
+
 
   }
   ngOnChanges(changes){
-    console.log("changes", changes);
-    this._showlikes = this.sharePost;
+    this.getUserWhoLikedPost();
   }
 
   likePost(postKey, postLikeCount, shouldLike){
     this.feedProvider.likePost(postKey, postLikeCount, shouldLike)
-    console.log(postKey);
     this.getUserWhoLikedPost();
   }
 
@@ -61,15 +58,13 @@ export class PostComponent {
 
   getUserWhoLikedPost(){
     this.feedProvider.getUserWhoLikedPost(this.post.key).then((user)=>{
-      console.log(user);
       this.userLiked = user;
-      console.log("this.userLiked", this.userLiked);
     })
   }
 
 
   sharePost(post){
-    console.log(post);
+
     let confirm = this.alertCtrl.create({
       title: 'Share',
       message: 'Would you like to share this post with your name?',
@@ -93,6 +88,8 @@ export class PostComponent {
   }
 
   private   submitPost(postToshare){
+    let loading = this.loadingController.create();
+    loading.present();
     let post: any;
     if(postToshare.content.type == 'text'){
       post ={
@@ -115,17 +112,23 @@ export class PostComponent {
         originalUserName: postToshare.userName
       }
     }
-
-    console.log(postToshare);
-    console.log(post);
     this.feedProvider.newPost(post).then(()=>{
       let toast = this.toastCtrl.create({
         message: 'Post shared successfully',
         duration: 2000
       });
       toast.present();
+      loading.dismiss();
       this.onShare.emit();
     })
+  }
+
+  gotoUser(uid){
+    this.userDataProvider.getUserDetail(uid).then((user)=>{
+      console.log(user);
+      this.navCtrl.push("UserDetailPage",{ user: user})
+    })
+
   }
 
 

@@ -1,16 +1,17 @@
 <!-- Generated template for the PostComponent component -->
+<div>
 <section class="status-card">
-    <ion-item-divider sticky no-lines>
+    <ion-item-divider sticky no-lines (click)="gotoUser(post.uid)">
         <ion-avatar item-start>
           <img class="no-resize" [src]="post.profileImgURL || 'assets/imgs/logo/profile.png'">
         </ion-avatar>
         <h2 class="post-username">{{post.userName}}
-          <span *ngIf="post.isShared"> shared 
+          <span *ngIf="post?.isShared"> shared 
             <span *ngIf="post.originalUid == post.uid">his own post </span>
             <span *ngIf="post.originalUid != post.uid">{{post.originalUserName}}'s post </span> 
           </span>
         </h2>
-        <p>{{post.createdAt | formatDate}} {{showlikes}}</p>
+        <p>{{post.createdAt | formatDate}}</p>
         <button ion-button clear item-end icon-only color="dark" *ngIf="currentUid == post.uid" (click)="deletePost(post)">
             <ion-icon name="trash"></ion-icon>
         </button>
@@ -36,16 +37,17 @@
   </button>
 
 </section>
-<ion-list *ngIf="showlikes == true">
-    <ion-list-header *ngIf="userLiked?.length>0">
-      People who liked the post:
-    </ion-list-header>
-    <ion-item-divider *ngFor="let user of userLiked" (click)="gotoUser(user.uid)">
-      <button  item-start class="button-like" ion-button icon-only round small [color]="'primary'">
-        <ion-icon name="thumbs-up"></ion-icon>
-      </button>
-      <h2 class="post-username">
-        {{user?.name}}
-      </h2>
-    </ion-item-divider>
-  </ion-list>
+<ion-list *ngIf="showlikes" >
+  <ion-list-header *ngIf="userLiked?.length>0">
+    People who liked the post:
+  </ion-list-header>
+  <ion-item-divider *ngFor="let user of userLiked" (click)="gotoUser(user.uid)">
+    <button  item-start class="button-like" ion-button icon-only round small [color]="'primary'">
+      <ion-icon name="thumbs-up"></ion-icon>
+    </button>
+    <h2 class="post-username">
+      {{user?.name}}
+    </h2>
+  </ion-item-divider>
+</ion-list>
+</div>

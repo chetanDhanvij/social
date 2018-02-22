@@ -25,16 +25,7 @@ export class UserListPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad UserListPage');
-    this.userData.getUserList().then((data)=>{
-      let dataVal = data.val() 
-      console.log(dataVal);
-      console.log(Object.keys(dataVal))
-      let dataArr = Object.keys(dataVal).map((key)=>{
-        let returnObj = dataVal[key];
-        returnObj.fullName = dataVal[key].firstName +" "+ dataVal[key].lastName;
-        returnObj.key = key;
-        return returnObj;
-      })
+    this.userData.getUserList().then((dataArr: any[])=>{
       this.users = dataArr;
       this.usersFiltered = this.users;
       console.log(dataArr);
@@ -54,7 +45,6 @@ export class UserListPage {
 
   gotoUser(user){
     console.log(user);
-    console.log({user})
     this.navCtrl.push("UserDetailPage",{ user: user})
   }
 

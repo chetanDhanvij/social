@@ -5,10 +5,10 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar color="primary">
+  <ion-navbar color="secondary">
     <ion-title>User List</ion-title>
   </ion-navbar>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="secondary">
     <ion-searchbar [(ngModel)]="searchKey"
                    animated="true"
                    (ionInput)="onInput($event)">
@@ -27,7 +27,7 @@
       </ion-avatar>
       <h2>{{user.fullName}}</h2>
       <p>{{user.gender}}</p>
-      <button ion-button outline item-end color="secondary">Connect</button>
+      <button ion-button outline item-end color="primary">Connect</button>
     </ion-item>
   </ion-list>
 </ion-content>

@@ -18,11 +18,41 @@ export class UserDataProvider {
   
 
   getUserList(){
-    return firebase.database().ref(`/userProfile/`).once('value')
+    return new Promise((resolve, reject)=>{
+       firebase.database().ref(`/userProfile/`).once('value').then((data)=>{
+        let dataVal = data.val() 
+        console.log(dataVal);
+        console.log(Object.keys(dataVal))
+        let dataArr = Object.keys(dataVal).map((key)=>{
+          let returnObj = dataVal[key];
+          returnObj.fullName = dataVal[key].firstName +" "+ dataVal[key].lastName;
+          returnObj.key = key;
+          return returnObj;
+        })
+        resolve(dataArr);
+       }).catch((err)=>{
+         reject(err);
+       })
+
+
+    })
+
   }
 
   getUserDetail(uid){
-     return firebase.database().ref(`/userProfile/${uid}`).once('value')
+    return new Promise((resolve, reject)=>{
+       firebase.database().ref(`/userProfile/${uid}`).once('value').then((data)=>{
+        let dataVal = data.val();
+        dataVal.fullName = dataVal.firstName +" "+ dataVal.lastName;
+        dataVal.key = data.key;
+        console.log(dataVal);
+        resolve(dataVal)
+       }).catch((err)=>{
+         reject(err);
+       })
+
+    })
+
   }
 
   getUsernameList(uids){

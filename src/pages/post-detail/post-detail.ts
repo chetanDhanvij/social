@@ -38,8 +38,8 @@ export class PostDetailPage {
   gotoUser(uid){
     console.log(uid);
     this.userDataProvider.getUserDetail(uid).then((user)=>{
-      console.log(user.val());
-      this.navCtrl.push("UserDetailPage",{ user: user.val()})
+      // console.log(user.val());
+      // this.navCtrl.push("UserDetailPage",{ user: user.val()})
     })
 
   }
