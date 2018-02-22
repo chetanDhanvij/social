@@ -38,11 +38,11 @@ export class ProfilePage {
       this.profileImgURL = userProfileSnapshot.val().profileImgURL; 
       this.gender = userProfileSnapshot.val().gender; 
       console.log( "this.userProfile", this.userProfile);
-      try{
-        this.loading.dismiss();
-      }catch(e){
-        console.log(e)
-      }
+      // try{
+      //   this.loading.dismiss();
+      // }catch(e){
+      //   console.log(e)
+      // }
 
     });
   }
@@ -134,8 +134,8 @@ export class ProfilePage {
   }
 
   updateImg(){
-    this.loading = this.loadingCtrl.create();
-    this.loading.present();
+    // this.loading = this.loadingCtrl.create();
+    // this.loading.present();
     this.profileProvider.updateImg().then((isSuccessfull)=>{
 
         console.log(this.userProfile);

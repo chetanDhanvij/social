@@ -1,5 +1,6 @@
 
 import { Injectable } from '@angular/core';
+import {ModalController} from 'ionic-angular';
 import * as moment from 'moment';
 import firebase from 'firebase';
 
@@ -11,8 +12,10 @@ import firebase from 'firebase';
 */
 @Injectable()
 export class AdvertisementProvider {
-  addRef
-  constructor() {
+  addRef:any;
+  addData:any[];
+  addIndex:number = 0;
+  constructor(		public modalCtrl: ModalController,) {
     console.log('Hello AdvertisementProvider Provider');
     this.addRef = firebase.database().ref(`/advertisement/`);
   }
@@ -72,6 +75,9 @@ export class AdvertisementProvider {
     })
   }
 
+  deleteAdd(addKey){
+    return firebase.database().ref(`/advertisement/${addKey}`).remove()
+  }
 
   getAdd(){
     console.log(this.addRef);
@@ -101,5 +107,36 @@ export class AdvertisementProvider {
     })
 
   }
+
+  initAdvertisement(){
+    this.getAdd().then((adds:any[])=>{
+      console.log(adds);
+      this.addData = adds;
+      this.setupAdvertisement()
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+
+  setupAdvertisement(){
+    setTimeout(()=>{
+      this.openAddModal();
+    },1000)
+  }
+  openAddModal() {
+    console.log(this.addIndex);
+    console.log(this.addData)
+    // if(this.addData.length > 0){
+    //   let addModal = this.modalCtrl.create("FullPageAddPage",{data:this.addData[this.addIndex]});
+    //     addModal.onDidDismiss(data => {
+    //       this.addIndex++;
+    //       if(this.addIndex >= this.addData.length){
+    //         this.addIndex = 0;
+    //       }
+    //       this.setupAdvertisement();
+    //     });
+    //     addModal.present();
+    // }
+	}
 
 }

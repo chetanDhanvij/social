@@ -1,7 +1,10 @@
 page-user-detail {
+    .header-md::after {
+        height: 0px !important;
+    }
     .profile-image{
         padding-top: 41px;
-        // background: radial-gradient(#F4B350 100px ,#F9690E 150px );
+        background: color($colors,primary);
         img{
             height: 200px;
             width: 200px;
@@ -12,8 +15,12 @@ page-user-detail {
         p{
             text-align: center;
             font-size: 35px;
-            color: color($colors,secondary);
+            color: color($colors,light);
         }
+    }
+
+    ion-content{
+        background: #dfe6e9 !important;
     }
 
 }

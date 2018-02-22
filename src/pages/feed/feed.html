@@ -15,7 +15,7 @@
 
 <ion-content>
   <section class="status-card" *ngFor="let post of posts">
-    <post [post]="post" [showlikes]="false" (onShare)="getPost()"></post>
+    <post [currentUid]="currentUid" [post]="post" [showlikes]="false" (onShare)="getPost()"></post>
     <!-- <div *ngIf="post.content.type == 'text'">
       <ion-item-divider sticky no-lines>
         <ion-avatar item-start>

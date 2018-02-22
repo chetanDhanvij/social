@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { AdvertisementProvider } from '../../providers/advertisement/advertisement'
 
 /**
@@ -18,43 +18,41 @@ export class AdvertisementPage {
   advertisements: any[];
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
+              private alertCtrl: AlertController,
               private advertisementProvider: AdvertisementProvider) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AdvertisementPage');
     this.getAdd();
-    this.advertisements = [
-      {
-        id:1,
-        text:"text 1",
-        link:"https://ionicframework.com/docs/components/#thumbnail-list",
-        image: "assets/imgs/logo/SampleLogo.png"
-      },
-      {
-        id:2,
-        text:"text 1",
-        link:"https://ionicframework.com/docs/components/#thumbnail-list",
-        image: "assets/imgs/logo/SampleLogo.png"
-      },
-      {
-        id:3,
-        text:"text 1",
-        link:"https://ionicframework.com/docs/components/#thumbnail-list",
-        image: "assets/imgs/logo/SampleLogo.png"
-      },
-      {
-        id:4,
-        text:"text 1",
-        link:"https://ionicframework.com/docs/components/#thumbnail-list",
-        image: "assets/imgs/logo/SampleLogo.png"
-      }
-    ]
   }
 
 
-  delete(addId){
-    console.log(addId);
+  delete(add){
+    console.log(add);
+        let confirm = this.alertCtrl.create({
+          title: 'Delete',
+          message: 'Do you want to delete the post?',
+          buttons: [
+            {
+              text: 'No',
+              handler: () => {
+                console.log('Disagree clicked');
+              }
+            },
+            {
+              text: 'Yes',
+              handler: () => {
+                console.log('Agree clicked');
+                console.log("delete")
+                this.advertisementProvider.deleteAdd(add.key).then(()=>{
+                  this.getAdd();
+                })
+              }
+            }
+          ]
+        });
+        confirm.present();
   }
 
   gotoNewAdd(){
@@ -68,6 +66,10 @@ export class AdvertisementPage {
     }).catch((err)=>{
       console.log(err);
     })
+  }
+
+  openAddModal(){
+    this.advertisementProvider.openAddModal();
   }
 
 }

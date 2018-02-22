@@ -16,6 +16,8 @@ import { UserDataProvider } from '../../providers/user-data/user-data';
 export class PostComponent {
 
   @Input('post') post;
+  @Input('currentUid') currentUid;
+  
   @Input('showlikes') showlikes: boolean;
   @Output() onShare = new EventEmitter();
 
@@ -128,6 +130,35 @@ export class PostComponent {
       console.log(user);
       this.navCtrl.push("UserDetailPage",{ user: user})
     })
+
+  }
+
+  deletePost(post){
+    if(this.currentUid == post.uid){
+      let confirm = this.alertCtrl.create({
+        title: 'Delete',
+        message: 'Do you want to delete the post?',
+        buttons: [
+          {
+            text: 'No',
+            handler: () => {
+              console.log('Disagree clicked');
+            }
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              console.log('Agree clicked');
+              console.log("delete")
+              this.feedProvider.deletePost(post.key).then(()=>{
+                this.onShare.emit()
+              })
+            }
+          }
+        ]
+      });
+      confirm.present();
+    }
 
   }
 

@@ -14,7 +14,8 @@
 
 
 <ion-content padding>
-  <ion-list>
+  
+    <button ion-button  (click)="openAddModal()">openAddModal</button>
     <button ion-button  (click)="gotoNewAdd()">Post a new advertisement</button>
     <ion-item  *ngFor="let add of advertisements">
       <ion-thumbnail item-start>
@@ -22,7 +23,7 @@
       </ion-thumbnail>
       <h2>{{add.text}}</h2>
       <p>{{add.link}}</p>
-      <button ion-button clear item-end (click)="delete(add.id)">Delete</button>
+      <button ion-button clear item-end (click)="delete(add)">Delete</button>
     </ion-item>
-  </ion-list>
+
 </ion-content>

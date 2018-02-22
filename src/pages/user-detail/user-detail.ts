@@ -62,4 +62,8 @@ export class UserDetailPage {
     })
   }
 
+  gotoProfile(){
+    this.navCtrl.push("ProfilePage");
+  }
+
 }

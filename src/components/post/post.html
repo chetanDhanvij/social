@@ -1,14 +1,14 @@
 <!-- Generated template for the PostComponent component -->
 <div>
 <section class="status-card">
-    <ion-item-divider sticky no-lines (click)="gotoUser(post.uid)">
+    <ion-item-divider sticky no-lines>
         <ion-avatar item-start>
           <img class="no-resize" [src]="post.profileImgURL || 'assets/imgs/logo/profile.png'">
         </ion-avatar>
-        <h2 class="post-username">{{post.userName}}
+        <h2 class="post-username"> <span class="username" (click)="gotoUser(post.uid)">{{post.userName}}</span>
           <span *ngIf="post?.isShared"> shared 
             <span *ngIf="post.originalUid == post.uid">his own post </span>
-            <span *ngIf="post.originalUid != post.uid">{{post.originalUserName}}'s post </span> 
+            <span *ngIf="post.originalUid != post.uid" (click)="gotoUser(post.originalUid)">{{post.originalUserName}}'s post </span> 
           </span>
         </h2>
         <p>{{post.createdAt | formatDate}}</p>

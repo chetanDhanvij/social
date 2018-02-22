@@ -6,7 +6,8 @@ import { UserDataProvider } from '../../providers/user-data/user-data'
 import { ImageSelectorProvider } from '../../providers/image-selector/image-selector'
 
 import { DataSnapshot } from '@firebase/database';
-import { ProfileProvider } from '../../providers/profile/profile'
+import { ProfileProvider } from '../../providers/profile/profile';
+import { AdvertisementProvider } from '../../providers/advertisement/advertisement'
 
 
 /**
@@ -35,7 +36,8 @@ export class FeedPage {
               private imageSelectorProvider: ImageSelectorProvider,
               private alertCtrl: AlertController,
               public events: Events,
-              private profileProvider: ProfileProvider) {
+              private profileProvider: ProfileProvider,
+              private advertisementProvider: AdvertisementProvider) {
   }
 
   ionViewDidLoad() {
@@ -62,6 +64,7 @@ export class FeedPage {
 
     console.log("this.profileProvider.getCurrentUser()",this.profileProvider.getCurrentUser())
     this.currentUid = this.profileProvider.getCurrentUser();
+    this.advertisementProvider.initAdvertisement();
   }
 
   goToPost(type, fab: FabContainer){
