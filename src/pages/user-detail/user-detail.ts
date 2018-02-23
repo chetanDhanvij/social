@@ -20,7 +20,7 @@ export class UserDetailPage {
   user:any = {};
   userID:string;
   view:string = "PROFILE";
-  posts
+  posts;
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               public feedProvider: FeedProvider,
@@ -64,6 +64,16 @@ export class UserDetailPage {
 
   gotoProfile(){
     this.navCtrl.push("ProfilePage");
+  }
+
+  gotoAdvertise(){
+    console.log(this.userID, this.user.key, this.userID == this.user.key)
+    if(this.userID == this.user.key){
+      this.navCtrl.push("AdvertisementPage");
+    }else{
+      alert("Not allowed");
+    }
+
   }
 
 }

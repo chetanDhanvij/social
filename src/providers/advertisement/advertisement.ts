@@ -121,22 +121,31 @@ export class AdvertisementProvider {
   setupAdvertisement(){
     setTimeout(()=>{
       this.openAddModal();
-    },1000)
+    },10*60*1000)
   }
   openAddModal() {
     console.log(this.addIndex);
     console.log(this.addData)
-    // if(this.addData.length > 0){
-    //   let addModal = this.modalCtrl.create("FullPageAddPage",{data:this.addData[this.addIndex]});
-    //     addModal.onDidDismiss(data => {
-    //       this.addIndex++;
-    //       if(this.addIndex >= this.addData.length){
-    //         this.addIndex = 0;
-    //       }
-    //       this.setupAdvertisement();
-    //     });
-    //     addModal.present();
-    // }
-	}
+    if(this.addData.length > 0){
+      let addModal = this.modalCtrl.create("FullPageAddPage",{data:this.addData[this.addIndex]});
+        addModal.onDidDismiss(data => {
+          this.addIndex++;
+          if(this.addIndex >= this.addData.length){
+            this.addIndex = 0;
+          }
+          this.setupAdvertisement();
+        });
+        addModal.present();
+    }
+  }
+  
+  view(add){
+
+      let addModal = this.modalCtrl.create("FullPageAddPage",{data:add});
+        addModal.onDidDismiss(data => {
+        });
+        addModal.present();
+
+  }
 
 }

@@ -23,6 +23,11 @@
       {{user?.gender}}
     </ion-item>
   </section>
+  <ion-list>
+    <button ion-item *ngIf="userID == user?.key"  (click)="gotoAdvertise()">
+      Advertisement
+    </button>  
+  </ion-list>
   <ion-list-header *ngIf="posts?.length > 0">
     Posts
   </ion-list-header>

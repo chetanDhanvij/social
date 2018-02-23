@@ -27,7 +27,9 @@ export class AdvertisementPage {
     this.getAdd();
   }
 
-
+  view(add){
+    this.advertisementProvider.view(add);
+  }
   delete(add){
     console.log(add);
         let confirm = this.alertCtrl.create({
@@ -66,10 +68,6 @@ export class AdvertisementPage {
     }).catch((err)=>{
       console.log(err);
     })
-  }
-
-  openAddModal(){
-    this.advertisementProvider.openAddModal();
   }
 
 }
