@@ -45,7 +45,6 @@ export class UserDataProvider {
         let dataVal = data.val();
         dataVal.fullName = dataVal.firstName +" "+ dataVal.lastName;
         dataVal.key = data.key;
-        console.log(dataVal);
         resolve(dataVal)
        }).catch((err)=>{
          reject(err);

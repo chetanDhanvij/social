@@ -121,7 +121,7 @@ export class AdvertisementProvider {
   setupAdvertisement(){
     setTimeout(()=>{
       this.openAddModal();
-    },10*60*1000)
+    },5*60*1000)
   }
   openAddModal() {
     console.log(this.addIndex);

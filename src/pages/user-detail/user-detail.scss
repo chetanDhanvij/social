@@ -12,10 +12,14 @@ page-user-detail {
             margin: auto;
             border-radius: 50%;
         }
-        p{
+        ion-item-divider{
             text-align: center;
             font-size: 35px;
-            color: color($colors,light);
+            ion-label{
+                color: color($colors,light) !important;
+            }
+
+            background: color($colors,primary);
         }
     }
 

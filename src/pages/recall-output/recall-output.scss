@@ -1,0 +1,18 @@
+page-recall-output {
+    ion-content{
+        div{
+            background: color($colors,primary);
+        }
+        
+    }
+    [logo-center]{
+        max-width: 54vw !important;
+    }
+    h1{
+        padding-top: 20px;
+        font-size: 30px;
+        color: color($colors,light);
+        // font-family: cursive;
+    }
+
+}

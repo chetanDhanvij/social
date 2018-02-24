@@ -82,12 +82,15 @@ export class FeedPage {
       for(let d of postData){
         console.log(d.uid)
         this.userDataProvider.getUserDetail(d.uid).then((userData: any)=>{
-          console.log("getUserDetailgetUserDetailgetUserDetailgetUserDetailgetUserDetail");
-          console.log(userData);
           let userDataVal = userData;
           d.userName = userDataVal.firstName + " " + userDataVal.lastName;
           d.profileImgURL = userDataVal.profileImgURL;
           // this.posts.push(d);
+          try{
+            this.refresher.complete();
+          }catch(e){
+          }
+
           this.content.scrollToTop();
   
         }).catch((err)=>{
@@ -199,6 +202,13 @@ export class FeedPage {
       confirm.present();
     }
 
+  }
+
+  refresher
+  doRefresh(refresher) {
+    this.refresher = refresher;
+    console.log('Begin async operation', refresher);
+    this.getPost()
   }
 
 }

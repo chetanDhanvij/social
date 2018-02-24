@@ -2,4 +2,27 @@ page-feed {
     ion-content{
         background: #dfe6e9 !important;
     }
+    ion-header{
+        .label-md {
+            margin: 0px !important;
+            margin-top: 5px !important;
+        }
+    }
+
+
+    .logo-header{
+        img{
+            width: 40px;
+            height: auto;
+        }
+        h1{
+            display: inline;
+            font-weight: 900;
+            color: color($colors,secondary) !important;
+            position: relative;
+            top: -12px;
+            font-style: inherit;
+            // font-family: cursive;
+        }
+    }
 }

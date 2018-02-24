@@ -12,7 +12,7 @@
           </span>
         </h2>
         <p>{{post.createdAt | formatDate}}</p>
-        <button ion-button clear item-end icon-only color="dark" *ngIf="currentUid == post.uid" (click)="deletePost(post)">
+        <button color="secondary" ion-button clear item-end icon-only color="dark" *ngIf="currentUid == post.uid" (click)="deletePost(post)">
             <ion-icon name="trash"></ion-icon>
         </button>
       </ion-item-divider>

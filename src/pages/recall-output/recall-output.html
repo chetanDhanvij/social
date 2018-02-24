@@ -1,0 +1,22 @@
+<!--
+  Generated template for the RecallOutputPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-content padding>
+  <img src="assets/app/update.png" logo-center>
+  <h1>
+    {{this.text}}
+  </h1>
+
+</ion-content>
+
+<ion-footer *ngIf="showCancel || showUpdate">
+    <ion-grid>
+      <ion-row>
+        <ion-col><button *ngIf="showCancel" ion-button full clear (click)="closeModal()">Cancel</button></ion-col>
+        <ion-col><button *ngIf="showUpdate" ion-button full  (click)="gotoPlayStore()">Update</button></ion-col>
+      </ion-row>
+    </ion-grid>  
+</ion-footer>

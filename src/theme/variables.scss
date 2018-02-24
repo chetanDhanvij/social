@@ -34,15 +34,15 @@ $app-direction: ltr;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #F9690E,
-  secondary:  #013243,
+  primary:    #FF8C00,
+  secondary:  #336E7B,
   danger:     #f53d3d,
   light:      #f4f4f4,
   dark:       #222
 );
 
 $posts-themes: (
-  primary:    #F9690E,
+  primary:    #f8c300,
   secondary:  #013243,
   danger:     #f53d3d,
   light:      #f4f4f4,
@@ -62,7 +62,8 @@ $posts-themes: (
 // Material Design only Sass variables can go here
 
 // $tabs-md-tab-min-height:30px;
-
+$modal-inset-width: 100%;
+$modal-inset-height-large: 100%;
 
 // App Windows Variables
 // --------------------------------------------------

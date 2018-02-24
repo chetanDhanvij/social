@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar color="primary">
-      <ion-buttons end>
+      <ion-buttons end *ngIf="userID == user?.key">
         <button ion-button (click)="gotoProfile()">
           Edit
         </button>
@@ -9,9 +9,12 @@
 </ion-header>
 
 <ion-content>
-  <section class="profile-image" (click)="updateImg()">
+  <section class="profile-image">
     <img [src]="user?.profileImgURL || 'assets/imgs/logo/profile.png'" />
-    <p>{{user?.fullName}}</p>
+    <!-- <p>{{user?.fullName}}</p> -->
+    <ion-item-divider sticky no-lines>
+        {{user?.fullName}}
+    </ion-item-divider>
     <ion-item>
       <ion-icon color="primary" name="mail" item-start></ion-icon>
       {{user?.email}}
@@ -23,11 +26,6 @@
       {{user?.gender}}
     </ion-item>
   </section>
-  <ion-list>
-    <button ion-item *ngIf="userID == user?.key"  (click)="gotoAdvertise()">
-      Advertisement
-    </button>  
-  </ion-list>
   <ion-list-header *ngIf="posts?.length > 0">
     Posts
   </ion-list-header>
