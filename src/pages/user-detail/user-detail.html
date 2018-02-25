@@ -1,6 +1,9 @@
 <ion-header>
   <ion-navbar color="primary">
       <ion-buttons end *ngIf="userID == user?.key">
+        <button ion-button (click)="gotoSupport()">
+          Support
+        </button>
         <button ion-button (click)="gotoProfile()">
           Edit
         </button>
@@ -9,21 +12,39 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <section class="profile-image">
     <img [src]="user?.profileImgURL || 'assets/imgs/logo/profile.png'" />
     <!-- <p>{{user?.fullName}}</p> -->
     <ion-item-divider sticky no-lines>
         {{user?.fullName}}
     </ion-item-divider>
-    <ion-item>
-      <ion-icon color="primary" name="mail" item-start></ion-icon>
-      {{user?.email}}
+    <ion-item *ngIf="user?.education">
+      <ion-icon color="secondary" name="md-briefcase" item-start></ion-icon>
+      {{user?.education}}
     </ion-item>
     <ion-item>
-      <ion-icon color="primary" *ngIf="user?.gender == 'MALE'" name="male" item-start></ion-icon>
-      <ion-icon color="primary" *ngIf="user?.gender == 'FEMALE'"name="female" item-start></ion-icon>
-      <ion-icon color="primary" *ngIf="user?.gender == 'OTHER'"name="md-person" item-start></ion-icon>
+      <ion-icon color="secondary" name="mail" item-start></ion-icon>
+      {{user?.email}}
+    </ion-item>
+    <ion-item *ngIf="user?.mobile">
+      <ion-icon color="secondary" name="md-call" item-start></ion-icon>
+      {{user?.mobile}}
+    </ion-item>
+    <ion-item>
+      <ion-icon color="secondary" *ngIf="user?.gender == 'MALE'" name="male" item-start></ion-icon>
+      <ion-icon color="secondary" *ngIf="user?.gender == 'FEMALE'"name="female" item-start></ion-icon>
+      <ion-icon color="secondary" *ngIf="user?.gender == 'OTHER'"name="md-person" item-start></ion-icon>
       {{user?.gender}}
+    </ion-item>
+    <ion-item *ngIf="user?.subcaste">
+      <ion-label color="secondary" item-start> Subcaste: {{user?.subcaste}} </ion-label>
+    </ion-item>
+    <ion-item *ngIf="user?.city">
+      <ion-icon color="secondary" name="md-map" item-start></ion-icon>
+      {{user?.city}}
     </ion-item>
   </section>
   <ion-list-header *ngIf="posts?.length > 0">

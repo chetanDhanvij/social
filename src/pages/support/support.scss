@@ -1,0 +1,22 @@
+page-support {
+    ion-content{
+        div{
+            background:#dfe6e9;
+        }
+        
+    }
+    [logo-center]{
+        max-width: 54vw !important;
+    }
+    h1{
+        padding-top: 20px;
+        font-size: 25px;
+        color: color($colors,dark);
+        // font-family: cursive;
+    }
+
+    .secondary{
+        color: color($colors,primary);
+    }
+
+}

@@ -29,7 +29,12 @@ export class UserDetailPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad UserDetailPage', this.profileProvider.getCurrentUser());
+    console.log('ionViewDidLoad UserDetailPage');
+
+    this.pageInit()
+  }
+
+  pageInit(){
     this.user = this.navParams.get("user");
     console.log("uiduiduiduiduiduid",this.user)
     this.userID = this.profileProvider.getCurrentUser();
@@ -39,11 +44,20 @@ export class UserDetailPage {
         console.log(user);
         this.user = user;
         this.getPostForUser(this.userID);
+        try{
+          this.refresher.complete();
+        }catch(e){
+        }
       })
     }else{
       this.getPostForUser(this.user.key);
+      try{
+        this.refresher.complete();
+      }catch(e){
+      }
     }
   }
+
 
   goToChat(){
     this.navCtrl.push("ChatPage",{user: this.user});
@@ -75,6 +89,17 @@ export class UserDetailPage {
       alert("Not allowed");
     }
 
+  }
+
+  refresher
+  doRefresh(refresher) {
+    this.refresher = refresher;
+    console.log('Begin async operation', refresher);
+    this.pageInit();
+  }
+
+  gotoSupport(){
+    this.navCtrl.push("SupportPage");
   }
 
 }

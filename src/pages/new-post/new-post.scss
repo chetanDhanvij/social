@@ -1,4 +1,10 @@
 page-new-post {
+  ion-item{
+    padding: 0px !important;
+    .item-inner{
+      padding: 0px !important;
+    }
+  }
     ion-textarea.post {
         padding: 1rem;
         height: calc( 100vh - 56px - 56px ) !important;

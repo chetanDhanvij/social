@@ -31,6 +31,19 @@ export class ProfileProvider {
     return this.currentUser.uid
   }
 
+  updateEducation(education: string): Promise<any> {
+    return this.userProfile.update({ education });
+  }
+  updateSubcaste(subcaste: string): Promise<any> {
+    return this.userProfile.update({ subcaste });
+  }
+  updateMobile(mobile: string): Promise<any> {
+    return this.userProfile.update({ mobile });
+  }
+  updateCity(city: string): Promise<any> {
+    return this.userProfile.update({ city });
+  }
+
   updateName(firstName: string, lastName: string): Promise<any> {
     return this.userProfile.update({ firstName, lastName });
   }
@@ -51,12 +64,12 @@ export class ProfileProvider {
     return this.userProfile.update({ gender });
   }
 
-  initialData(firstName: string, lastName: string, dob: string, gender: string) {
+  initialData(firstName: string, lastName: string, dob: string, gender: string, education: string, subcaste: string, mobile: string, city:string) {
     return new Promise((resolve, reject) => {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
           let _userProfile = firebase.database().ref(`/userProfile/${user.uid}`);
-          _userProfile.update({ firstName, lastName, dob, gender }).then(data => resolve(data)).catch((err) => reject(err))
+          _userProfile.update({ firstName, lastName, dob, gender, education, subcaste, mobile, city }).then(data => resolve(data)).catch((err) => reject(err))
         }
       });
 

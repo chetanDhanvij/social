@@ -45,7 +45,11 @@ export class UserInitialDetailPage {
       dob: [
         '',
         Validators.compose([Validators.required])
-      ]
+      ],
+      education: [''],
+      subcaste: [''],
+      mobile: [''],
+      city: [''],
     });
   }
 
@@ -84,7 +88,11 @@ export class UserInitialDetailPage {
     this.profileProvider.initialData( this.userForm.value.firstName,
                                       this.userForm.value.lastName,
                                       this.userForm.value.dob,
-                                      this.userForm.value.gender).then(()=>{
+                                      this.userForm.value.gender,
+                                      this.userForm.value.education,
+                                      this.userForm.value.subcaste,
+                                      this.userForm.value.mobile,
+                                      this.userForm.value.city).then(()=>{
                                         this.loading.dismiss().then(()=>{
                                           this.navCtrl.setRoot("TabsPage");
                                         })

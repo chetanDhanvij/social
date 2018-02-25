@@ -81,6 +81,95 @@ export class ProfilePage {
     alert.present();
   }
 
+  updateEducation(): void {
+    const alert: Alert = this.alertCtrl.create({
+      inputs: [
+        {
+          name: 'education',
+          placeholder: 'Education',
+          value: this.userProfile.education
+        }
+      ],
+      buttons: [
+        { text: 'Cancel' },
+        {
+          text: 'Save',
+          handler: data => {
+            this.profileProvider.updateEducation(data.education);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  updateMobile(): void {
+    const alert: Alert = this.alertCtrl.create({
+      inputs: [
+        {
+          name: 'mobile',
+          placeholder: 'Mobile',
+          value: this.userProfile.mobile,
+          type: 'tel'
+        }
+      ],
+      buttons: [
+        { text: 'Cancel' },
+        {
+          text: 'Save',
+          handler: data => {
+            this.profileProvider.updateMobile(data.mobile);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  updateSubcaste(): void {
+    const alert: Alert = this.alertCtrl.create({
+      inputs: [
+        {
+          name: 'subcaste',
+          placeholder: 'Subcaste',
+          value: this.userProfile.subcaste
+        }
+      ],
+      buttons: [
+        { text: 'Cancel' },
+        {
+          text: 'Save',
+          handler: data => {
+            this.profileProvider.updateSubcaste(data.subcaste);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  updateCity(): void {
+    const alert: Alert = this.alertCtrl.create({
+      inputs: [
+        {
+          name: 'city',
+          placeholder: 'City',
+          value: this.userProfile.city
+        }
+      ],
+      buttons: [
+        { text: 'Cancel' },
+        {
+          text: 'Save',
+          handler: data => {
+            this.profileProvider.updateCity(data.city);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
   updateDOB(dob: string): void {
     this.profileProvider.updateDOB(dob);
   }

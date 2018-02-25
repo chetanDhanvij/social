@@ -1,5 +1,4 @@
 <ion-content background-gradient>
-  <img src="assets/imgs/logo/SampleLogo.png" logo-center>
   <section>
     <form [formGroup]="userForm" (submit)="signupUser()" novalidate>
       <ion-item background-transparent>
@@ -43,6 +42,31 @@
         <span *ngIf="!userForm.controls.dob.valid
           && userForm.controls.dob.touched">Select a valid date</span>
       </p>
+
+      <ion-item background-transparent>
+        <ion-label floating>Education / Work (Optional)</ion-label>
+        <ion-input formControlName="education" type="text" [class.invalid]="!userForm.controls.education.valid && blur">
+        </ion-input>
+      </ion-item>
+
+      <ion-item background-transparent>
+        <ion-label floating>Subcaste (Optional)</ion-label>
+        <ion-input formControlName="subcaste" type="text" [class.invalid]="!userForm.controls.subcaste.valid && blur">
+        </ion-input>
+      </ion-item>
+
+      <ion-item background-transparent>
+        <ion-label floating>Mobile (Optional)</ion-label>
+        <ion-input formControlName="mobile" type="tel" [class.invalid]="!userForm.controls.mobile.valid && blur">
+        </ion-input>
+      </ion-item>
+
+      <ion-item background-transparent>
+        <ion-label floating>City (Optional)</ion-label>
+        <ion-input formControlName="city" type="text" [class.invalid]="!userForm.controls.city.valid && blur">
+        </ion-input>
+      </ion-item>
+
 
       <button ion-button block type="submit" [disabled]="!userForm.valid"
         button-center color="dark">

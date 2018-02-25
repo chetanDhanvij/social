@@ -15,9 +15,19 @@
     <button ion-button clear item-end (click)="updateName()">Edit</button>
   </ion-item>
   <ion-item>
+    <h2>Education</h2>
+    <p> {{userProfile?.education}} </p>
+    <button ion-button clear item-end (click)="updateEducation()">Edit</button>
+  </ion-item>
+  <ion-item>
     <h2>Email</h2>
     <p> {{userProfile?.email}} </p>
     <button ion-button clear item-end (click)="updateEmail()">Edit</button>
+  </ion-item>
+  <ion-item>
+    <h2>Mobile</h2>
+    <p> {{userProfile?.mobile}} </p>
+    <button ion-button clear item-end (click)="updateMobile()">Edit</button>
   </ion-item>
   <ion-item>
     <ion-label class="dob-label">Date of Birth</ion-label>
@@ -30,6 +40,16 @@
       <ion-option value="FEMALE">Female</ion-option>
       <ion-option value="OTHER">Other</ion-option>
     </ion-select>
+  </ion-item>
+  <ion-item>
+    <h2>Subcaste</h2>
+    <p> {{userProfile?.subcaste}} </p>
+    <button ion-button clear item-end (click)="updateSubcaste()">Edit</button>
+  </ion-item>
+  <ion-item>
+    <h2>City</h2>
+    <p> {{userProfile?.city}} </p>
+    <button ion-button clear item-end (click)="updateCity()">Edit</button>
   </ion-item>
 
   <button full clear ion-button (click)="updatePassword()">Change Password</button>

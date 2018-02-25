@@ -19,14 +19,16 @@
 
 
 <ion-content no-bounce>
-  <section *ngIf="postType == 'text'">
+  <ion-item *ngIf="postType == 'text'">
     <ion-textarea class="post" text-center type="text" placeholder='Type in here' [(ngModel)]="statusText" [ngStyle]="{'background':selectedColor}"></ion-textarea>
-  </section>
+  </ion-item>
 
   <section class="image-selection" *ngIf="postType == 'image'">
+    <ion-item>
+      <ion-textarea text-center type="text" placeholder='Photo discription' [(ngModel)]="imgText" ></ion-textarea>
+    </ion-item>
     <img *ngIf="imageDisplay != ''" [src]="imageDisplay" class="selected-image">
     <span *ngIf="imageDisplay == ''"> Please select an image </span>
-    <ion-textarea text-center type="text" placeholder='Photo discription' [(ngModel)]="imgText" ></ion-textarea>
   </section>
 
   <!-- <section *ngIf="postType == 'video'">
