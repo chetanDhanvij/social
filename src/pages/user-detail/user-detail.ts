@@ -31,16 +31,17 @@ export class UserDetailPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad UserDetailPage', this.profileProvider.getCurrentUser());
     this.user = this.navParams.get("user");
+    console.log("uiduiduiduiduiduid",this.user)
     this.userID = this.profileProvider.getCurrentUser();
     if(this.user == undefined){
       console.log("uiduiduiduiduiduid",this.userID)
       this.userDataProvider.getUserDetail(this.userID).then((user)=>{
         console.log(user);
         this.user = user;
-        this.getPostForUser();
+        this.getPostForUser(this.userID);
       })
     }else{
-      this.getPostForUser();
+      this.getPostForUser(this.user.key);
     }
   }
 
@@ -48,9 +49,9 @@ export class UserDetailPage {
     this.navCtrl.push("ChatPage",{user: this.user});
   }
 
-  getPostForUser(){
+  getPostForUser(uid){
     console.log(this.user);
-    this.feedProvider.getPostForUser(this.userID).then((data: any)=>{
+    this.feedProvider.getPostForUser(uid).then((data: any)=>{
       console.log(data);
       for(let d of data){
           d.userName = this.user.firstName + " " + this.user.lastName;

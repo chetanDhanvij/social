@@ -1,0 +1,11 @@
+{
+     "android": {
+        "release": {
+            "keystore": "socialdevelopers.keystore",
+            "storePassword": "developers@20",
+            "alias": "socialdevelopers",
+            "password" : "developers@20",
+            "keystoreType": ""
+        }
+    }
+}
