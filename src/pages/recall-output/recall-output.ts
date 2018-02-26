@@ -47,7 +47,7 @@ export class RecallOutputPage {
   }
 
   gotoPlayStore(){
-    this.iab.create("https://play.google.com/store/apps/details?id=in.startv.hotstar&hl=en", "_system");
+    this.iab.create("https://play.google.com/store/apps/details?id=com.social.mikumbi", "_system");
   }
 
 }
