@@ -50,7 +50,7 @@
   <ion-list-header *ngIf="posts?.length > 0">
     Posts
   </ion-list-header>
-  <section class="status-card" *ngFor="let post of posts">
+  <section class="status-card" *ngFor="let post of posts | reverse">
       <post [post]="post" [showlikes]="false"></post>
   </section>
 
