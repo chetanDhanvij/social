@@ -8,6 +8,7 @@ import { Unsubscribe } from '@firebase/util';
 import { GeneralProvider } from '../providers/general/general';
 import { RecallProvider } from '../providers/recall/recall';
 import { Subscription } from 'rxjs';
+import { ChatProvider } from '../providers/chat/chat'
 
 @Component({
   templateUrl: 'app.html'
@@ -19,10 +20,12 @@ export class MyApp {
               statusBar: StatusBar, 
               splashScreen: SplashScreen,
               private general: GeneralProvider,
-              private recallProvider: RecallProvider) {
+              private recallProvider: RecallProvider,
+              private chatProvider: ChatProvider) {
     platform.ready().then(() => {
       firebase.initializeApp(firebaseConfig);
       this.recallProvider.init();
+      this.chatProvider.init();
 
       const unsubscribe: Unsubscribe = firebase
       .auth()

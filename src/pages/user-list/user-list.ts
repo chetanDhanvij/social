@@ -48,4 +48,9 @@ export class UserListPage {
     this.navCtrl.push("UserDetailPage",{ user: user})
   }
 
+  gotoChat(user){
+    console.log(user);
+    this.navCtrl.push("ChatPage",{ user: user})
+  }
+
 }

@@ -18,6 +18,9 @@ import { AdvertisementProvider } from '../providers/advertisement/advertisement'
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { RecallProvider } from '../providers/recall/recall';
 import { AppVersion } from '@ionic-native/app-version';
+import { ChatProvider } from '../providers/chat/chat';
+import { SQLite } from '@ionic-native/sqlite';
+import { SqlChatProvider } from '../providers/sql-chat/sql-chat';
 
 
 
@@ -50,7 +53,10 @@ import { AppVersion } from '@ionic-native/app-version';
     AdvertisementProvider,
     InAppBrowser,
     RecallProvider,
-    AppVersion
+    AppVersion,
+    ChatProvider,
+    SQLite,
+    SqlChatProvider
   ]
 })
 export class AppModule {}

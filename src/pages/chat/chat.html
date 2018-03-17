@@ -26,7 +26,7 @@
     <ion-item>
 
         <ion-input type="text" [(ngModel)]="newMsg" name="newMsg"></ion-input>
-        <button ion-button color="primary"  type="submit" small item-end >send</button>
+        <button ion-button color="primary"  type="submit" small item-end (click)="sendMsg()" >send</button>
 
     </ion-item>
   </form>

@@ -21,13 +21,13 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let user of usersFiltered" (click)="gotoUser(user)">
+    <ion-item *ngFor="let user of usersFiltered">
       <ion-avatar item-start>
         <img [src]="user.profileImgURL ||  'assets/imgs/logo/profile.png'">
       </ion-avatar>
-      <h2>{{user.fullName}}</h2>
+      <h2  (click)="gotoUser(user)">{{user.fullName}}</h2>
       <p>{{user.gender}}</p>
-      <!-- <button ion-button outline item-end color="primary">Connect</button> -->
+      <button ion-button outline item-end color="primary" (click)="gotoChat(user)">Message</button>
     </ion-item>
   </ion-list>
 </ion-content>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { ChatProvider } from '../../providers/chat/chat';
 
 /**
  * Generated class for the ChatPage page.
@@ -14,13 +15,25 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'chat.html',
 })
 export class ChatPage {
-  user:any = {}
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  user:any = {};
+  newMsg: string;
+  constructor(public navCtrl: NavController, 
+              public navParams: NavParams,
+              private chatProvider: ChatProvider) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ChatPage');
     this.user = this.navParams.get("user");
+  }
+
+  sendMsg(){
+    this.chatProvider.sendMsg(this.user.key,{
+      type: "text",
+      text: this.newMsg
+    }).then(()=>{
+    }).catch(()=>{
+    })
   }
 
 }
