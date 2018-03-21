@@ -1,0 +1,14 @@
+page-add-comment {
+    .comment{
+        border-radius: 15px;
+        padding: 5px;
+        padding-left: 12px;
+        background: #deeae5;
+        height: 250px;
+    }
+    textarea.text-input {
+        display: block;
+        height: 100% !important;
+    }
+
+}

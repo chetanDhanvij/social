@@ -42,11 +42,11 @@ export class MyApp {
       setTimeout(()=>{
         splashScreen.hide();
       },500)
-      this.recallProvider.checkStatus()
-      this.onResumeSubscription = platform.resume.subscribe(() => {
-        // do something meaningful when the app is put in the foreground
-        this.recallProvider.checkStatus()
-     }); 
+    //   this.recallProvider.checkStatus()
+    //   this.onResumeSubscription = platform.resume.subscribe(() => {
+    //     // do something meaningful when the app is put in the foreground
+    //     this.recallProvider.checkStatus()
+    //  }); 
     });
   }
 

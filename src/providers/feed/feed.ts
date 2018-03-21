@@ -5,6 +5,7 @@ import { User } from '@firebase/auth-types';
 import { Reference, ThenableReference } from '@firebase/database-types';
 import * as moment from 'moment';
 import { UserDataProvider } from '../user-data/user-data';
+import { ReplaySubject } from "rxjs/ReplaySubject";
 
 /*
   Generated class for the FeedProvider provider.
@@ -16,8 +17,10 @@ import { UserDataProvider } from '../user-data/user-data';
 export class FeedProvider {
 
   currentUser:any;
-  postRef: Reference
+  postRef: Reference;
+  reloadPost: any;
   constructor(private userDataProvider: UserDataProvider) {
+    this.reloadPost = new ReplaySubject();
     firebase.auth().onAuthStateChanged(user => {
       this.currentUser = user;
       if(user){
@@ -26,7 +29,9 @@ export class FeedProvider {
     });
   }
 
-
+  reloadFeed(){
+    this.reloadPost.next();
+  }
   newPost(postData){
     return new Promise((resolve,reject)=>{
       let post: any = {};
@@ -173,6 +178,56 @@ export class FeedProvider {
     })
 
   }
+  nextStart: any = undefined;
+  endOfPost: boolean = false;
+  getPostNew(completeReload){
+    let batchSize = 40;
+    return new Promise((resolve, reject)=>{
+      if(completeReload){
+        this.nextStart = undefined;
+      }
+      let query;
+      if(this.nextStart != undefined){
+        query = this.postRef.orderByKey().limitToLast(batchSize).endAt(this.nextStart.key);
+      }else{
+        query = this.postRef.orderByKey().limitToLast(batchSize);
+      }
+      query.once("value").then((data)=>{
+
+
+        let dataVal = [];
+        let dataKey = [];
+        data.forEach((child)=> {
+            dataVal.push(child.val())
+            dataKey.push(child.key)
+        });
+        console.log("data:",dataKey);
+        let returnValue = []
+        returnValue = dataKey.map((d,i)=>{
+          let rV = dataVal[i]
+          rV.key = d
+          return rV
+        })
+        if(this.endOfPost && !completeReload){
+          returnValue = [];
+        }else{
+          this.nextStart = returnValue[0];
+          if(returnValue.length == batchSize){
+            returnValue = returnValue.reverse().slice(0,-1);
+          }else{
+            returnValue = returnValue.reverse();
+            this.endOfPost = true;
+          }
+        }
+
+        
+        resolve(returnValue);
+      }).catch((err)=>{
+        reject(err);
+      })
+    })
+
+  }
 
   getPostForUser(uid){
 
@@ -219,6 +274,20 @@ export class FeedProvider {
     }
   }
 
+  addComment(postKey,comment){
+    return new Promise((resolve,reject)=>{
+      if (this.currentUser) {
+        firebase.database().ref(`/publicPostCommentList/${postKey}`).push({uid: this.currentUser.uid, comment: comment}).then(()=>{
+          resolve()
+        })
+      }else{
+        reject();
+      }
+    })
+
+    
+  }
+
   getUserWhoLikedPost(postKey){
     return new Promise((resolve, reject)=>{
       firebase.database().ref(`/publicPostLikedList/${postKey}`).once('value',(userList)=>{
@@ -248,6 +317,46 @@ export class FeedProvider {
 
       })
     })
+  }
+
+  getComments(postKey){
+    return new Promise((resolve, reject)=>{
+      firebase.database().ref(`/publicPostCommentList/${postKey}`).once('value').then((data)=>{
+        let _commentList = [];
+        let commentKey = []
+        data.forEach((child)=> {
+           _commentList.push(child.val())
+           commentKey.push(child.key)
+        });
+
+        if(_commentList == null){
+          _commentList = [];
+        } 
+        console.log("_commentList",_commentList);
+        let userWhoComment = [];
+        let returnValue;
+        userWhoComment = _commentList.map((d)=>{
+          return d.uid
+        })
+
+        this.userDataProvider.getUserListforIds(userWhoComment).then((data)=>{
+          returnValue = data.map((d,i)=>{
+            let dVal = d.val()
+            return {name: dVal.firstName + " " + dVal.lastName, 
+                    uid: d.key, 
+                    key: commentKey[i],
+                    profileImgURL: dVal.profileImgURL,
+                    comment: _commentList[i].comment }
+          })
+          resolve(returnValue);
+        })
+
+      })
+    })
+  }
+
+  deleteComment(postKey,commentKey){
+    return firebase.database().ref(`/publicPostCommentList/${postKey}/${commentKey}`).remove()    
   }
 
 

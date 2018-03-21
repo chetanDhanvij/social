@@ -62,4 +62,12 @@ export class UserDataProvider {
     return Promise.all(promises)
 
  }
+ getUserListforIds(uids){
+  let promises = []
+  for(let uid of uids){
+    promises.push(firebase.database().ref(`/userProfile/${uid}`).once('value'))
+  }
+  return Promise.all(promises)
+
+}
 }

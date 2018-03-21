@@ -1,7 +1,8 @@
 import { Component,  ElementRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { FeedProvider } from '../../providers/feed/feed';
-import {  NavController, NavParams, AlertController, ToastController , LoadingController  } from 'ionic-angular';
+import {  NavController, NavParams, AlertController, ToastController , LoadingController, ModalController  } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
+
 
 /**
  * Generated class for the PostComponent component.
@@ -23,17 +24,21 @@ export class PostComponent {
 
   userLikedPost: any[] = [];
   userLiked: any;
+  comments: any[] = [];
+  viewType: string =  "Likes";
 
   constructor(private feedProvider: FeedProvider,
               public navCtrl: NavController,
               private alertCtrl: AlertController,
               private toastCtrl: ToastController,
               public userDataProvider: UserDataProvider,
-              private loadingController: LoadingController ) {
+              private loadingController: LoadingController,
+              private modalCtrl: ModalController, ) {
 
   } 
 
   ngAfterViewInit() {
+
     this.feedProvider.listenUserLikedPost().on("value",(likedPost: any)=>{
       if(likedPost.val() != undefined && likedPost.val() != null ){
         this.userLikedPost = likedPost.val();
@@ -47,6 +52,7 @@ export class PostComponent {
   }
   ngOnChanges(changes){
     this.getUserWhoLikedPost();
+    this.getComments();
   }
 
   likePost(postKey, postLikeCount, shouldLike){
@@ -55,13 +61,54 @@ export class PostComponent {
   }
 
   showPostDetail(post){
-    this.navCtrl.push("PostDetailPage",{post: post});
+    if(!this.showlikes){
+      this.navCtrl.push("PostDetailPage",{post: post});
+    }    
   }
 
   getUserWhoLikedPost(){
     this.feedProvider.getUserWhoLikedPost(this.post.key).then((user)=>{
       this.userLiked = user;
     })
+  }
+
+  getComments(){
+    this.feedProvider.getComments(this.post.key).then((user: any[])=>{
+      this.comments = user;
+    })
+  }
+
+  deleteComment(postKey,commentKey){
+
+      let confirm = this.alertCtrl.create({
+        title: 'Delete',
+        message: 'Do you want to delete the comment?',
+        buttons: [
+          {
+            text: 'No',
+            handler: () => {
+              console.log('Disagree clicked');
+            }
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              console.log('Agree clicked');
+              console.log("delete")
+              console.log(postKey,commentKey);
+              let loading = this.loadingController.create();
+              loading.present();
+              this.feedProvider.deleteComment(postKey,commentKey).then((user: any[])=>{
+                this.getComments();
+                this.feedProvider.reloadFeed();
+                loading.dismiss();
+              })
+            }
+          }
+        ]
+      });
+      confirm.present();
+
   }
 
 
@@ -122,6 +169,7 @@ export class PostComponent {
       toast.present();
       loading.dismiss();
       this.onShare.emit();
+      this.feedProvider.reloadFeed();
     })
   }
 
@@ -151,7 +199,11 @@ export class PostComponent {
               console.log('Agree clicked');
               console.log("delete")
               this.feedProvider.deletePost(post.key).then(()=>{
-                this.onShare.emit()
+                this.onShare.emit();
+                this.feedProvider.reloadFeed();
+                if(this.showlikes){
+                  this.navCtrl.pop();
+                }                
               })
             }
           }
@@ -159,6 +211,25 @@ export class PostComponent {
       });
       confirm.present();
     }
+
+  }
+
+  showCommentPrompt(post) {
+    let commentModal = this.modalCtrl.create("AddCommentPage");
+		commentModal.onDidDismiss(comment => {
+      console.log(comment)
+      if(comment != undefined){
+        let loading = this.loadingController.create();
+        loading.present();
+        this.feedProvider.addComment(post.key,comment).then(()=>{
+          this.getComments();
+          this.feedProvider.reloadFeed();
+          loading.dismiss();
+        })
+      }
+		});
+		commentModal.present();
+    
 
   }
 

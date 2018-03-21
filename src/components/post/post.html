@@ -12,7 +12,7 @@
           </span>
         </h2>
         <p>{{post.createdAt | formatDate}}</p>
-        <button color="secondary" ion-button clear item-end icon-only color="dark" *ngIf="currentUid == post.uid" (click)="deletePost(post)">
+        <button color="secondary" ion-button clear item-end icon-only color="secondary" *ngIf="currentUid == post.uid" (click)="deletePost(post)">
             <ion-icon name="trash"></ion-icon>
         </button>
       </ion-item-divider>
@@ -27,27 +27,62 @@
       <img class="post-img" [src]=" post.content?.image || 'assets/imgs/logo/placeholder.png'">
     </div>
   </div>
-  <span class="like-count" *ngIf="userLiked?.length>0">{{userLiked?.length}} Like<span *ngIf="userLiked?.length>1">s</span></span>
+  <div class="like-count"  (click)="showPostDetail(post)">
+    <span  *ngIf="userLiked?.length>0">{{userLiked?.length}} Like<span *ngIf="userLiked?.length>1">s</span></span>
+    <span  *ngIf="userLiked?.length>0 && comments?.length>0"> &bull; </span>
+    <span *ngIf="comments?.length>0"> {{comments?.length}} Comment<span *ngIf="comments?.length>1">s</span></span>
+  </div>
+
   <button class="button-like" ion-button icon-only round small [color]="(userLikedPost[post.key] === true?'primary':'light')"
     (click)="likePost(post.key,post.likeCount, userLikedPost[post.key] != true)">
     <ion-icon name="thumbs-up"></ion-icon>
+  </button>
+  <button class="button-comment" ion-button icon-only round small outline [color]="'secondary'" (click)="showCommentPrompt(post)">
+    <ion-icon name="text"></ion-icon>
   </button>
   <button class="button-share" ion-button icon-only round small outline [color]="'primary'" (click)="sharePost(post)">
     <ion-icon name="share"></ion-icon>
   </button>
 
+
 </section>
 <ion-list *ngIf="showlikes" >
-  <ion-list-header *ngIf="userLiked?.length>0">
-    People who liked the post:
-  </ion-list-header>
-  <ion-item-divider *ngFor="let user of userLiked" (click)="gotoUser(user.uid)">
-    <button  item-start class="button-like" ion-button icon-only round small [color]="'primary'">
-      <ion-icon name="thumbs-up"></ion-icon>
-    </button>
-    <h2 class="post-username">
-      {{user?.name}}
-    </h2>
-  </ion-item-divider>
+  <ion-segment [(ngModel)]="viewType">
+    <ion-segment-button value="Likes">
+      Likes
+    </ion-segment-button>
+    <ion-segment-button value="Comments">
+      Comments
+    </ion-segment-button>
+  </ion-segment>
+  <div *ngIf="viewType == 'Likes'">
+        <ion-item-divider *ngFor="let user of userLiked" (click)="gotoUser(user.uid)">
+          <button  item-start class="button-like" ion-button icon-only round small [color]="'primary'">
+            <ion-icon name="thumbs-up"></ion-icon>
+          </button>
+          <h2 class="post-username">
+            {{user?.name}}
+          </h2>
+        </ion-item-divider>
+  </div>
+  <div *ngIf="viewType == 'Comments'">
+        <ion-item no-lines text-wrap *ngFor="let user of comments; let i = index" >
+          <ion-avatar item-start (click)="gotoUser(user.uid)">
+            <img [src]="user?.profileImgURL ||  'assets/imgs/logo/profile.png'">
+          </ion-avatar>
+          <div class="comment-list">
+              <h2 class="post-username" (click)="gotoUser(user.uid)">
+                {{user?.name}}
+              </h2>
+              <p>
+                  {{user?.comment}}
+              </p>
+          </div>
+          <button color="secondary" ion-button clear item-end icon-only color="secondary" *ngIf="currentUid == post.uid" (click)="deleteComment(post.key,user.key)">
+              <ion-icon name="trash"></ion-icon>
+          </button>
+        </ion-item>
+  </div>
+
 </ion-list>
 </div>

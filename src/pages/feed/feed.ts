@@ -7,7 +7,7 @@ import { ImageSelectorProvider } from '../../providers/image-selector/image-sele
 
 import { DataSnapshot } from '@firebase/database';
 import { ProfileProvider } from '../../providers/profile/profile';
-import { AdvertisementProvider } from '../../providers/advertisement/advertisement'
+import { AdvertisementProvider } from '../../providers/advertisement/advertisement';
 
 
 /**
@@ -27,6 +27,7 @@ export class FeedPage {
   loading: Loading;
   userLikedPost: any[] = [];
   currentUid: string;
+  endOfPost: boolean = false;
   @ViewChild(Content) content: Content;
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -43,6 +44,9 @@ export class FeedPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad FeedPage');
     this.getPost();
+    this.feedProvider.reloadPost.subscribe(()=>{
+      this.getPost();
+    })
 
     this.feedProvider.listenUserLikedPost().on("value",(likedPost: any)=>{
       console.log("likedPostlikedPostlikedPostlikedPostlikedPostlikedPost")
@@ -72,13 +76,18 @@ export class FeedPage {
     this.navCtrl.push("NewPostPage",{type: type})
   }
 
-  getPost(){
+  getPost( completeReload: boolean = true){
     this.loading = this.loadingController.create();
     this.loading.present();
-    this.feedProvider.getPost().then((data: any)=>{
-
+    this.feedProvider.getPostNew(completeReload).then((data: any)=>{
+      if(data.length == 0){
+        this.endOfPost = true;
+      }
       let postData = data;
-      this.posts = postData;
+      if(completeReload){
+        this.posts = [];
+      }
+      this.posts = this.posts.concat(postData);
       for(let d of postData){
         console.log(d.uid)
         this.userDataProvider.getUserDetail(d.uid).then((userData: any)=>{
@@ -90,8 +99,10 @@ export class FeedPage {
             this.refresher.complete();
           }catch(e){
           }
-
-          this.content.scrollToTop();
+          if(completeReload == true){
+            this.content.scrollToTop();
+          }
+          
   
         }).catch((err)=>{
           console.log(err)
@@ -171,9 +182,6 @@ export class FeedPage {
   }
 
 
-  loadMore(){
-    console.log("load more")
-  }
 
   deletePost(post){
     if(this.currentUid == post.uid){
@@ -209,6 +217,10 @@ export class FeedPage {
     this.refresher = refresher;
     console.log('Begin async operation', refresher);
     this.getPost()
+  }
+
+  loadMore(){
+    this.getPost(false);
   }
 
 }

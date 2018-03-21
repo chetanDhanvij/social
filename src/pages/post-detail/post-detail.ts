@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FeedProvider } from '../../providers/feed/feed';
 import { UserDataProvider } from '../../providers/user-data/user-data';
+import { ProfileProvider } from '../../providers/profile/profile';
 
 
 /**
@@ -19,10 +20,12 @@ import { UserDataProvider } from '../../providers/user-data/user-data';
 export class PostDetailPage {
   post: any = {};
   userLiked: any = [];
+  currentUid: any;
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               public feedProvider: FeedProvider,
-              public userDataProvider: UserDataProvider) {
+              public userDataProvider: UserDataProvider,
+              public profileProvider: ProfileProvider) {
   }
 
   ionViewDidLoad() {
@@ -33,6 +36,7 @@ export class PostDetailPage {
       console.log(user);
       this.userLiked = user
     })
+    this.currentUid = this.profileProvider.getCurrentUser();
   }
 
   gotoUser(uid){
