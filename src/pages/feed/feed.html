@@ -18,62 +18,8 @@
     </ion-refresher>
   <section class="status-card" *ngFor="let post of posts">
     <post [currentUid]="currentUid" [post]="post" [showlikes]="false" (onShare)="getPost()"></post>
-    <!-- <div *ngIf="post.content.type == 'text'">
-      <ion-item-divider sticky no-lines>
-        <ion-avatar item-start>
-          <img class="no-resize" [src]="post.profileImgURL || 'assets/imgs/logo/profile.png'">
-        </ion-avatar>
-        <h2 class="post-username">{{post.userName}}
-          <span *ngIf="post.isShared"> shared 
-            <span *ngIf="post.originalUid == post.uid">his own post </span>
-            <span *ngIf="post.originalUid != post.uid">{{post.originalUserName}}'s post </span> 
-          </span>
-        </h2>
-        <p>{{post.createdAt | formatDate}}</p>
-        <button ion-button clear item-end icon-only color="dark" *ngIf="currentUid == post.uid" (click)="deletePost(post)">
-            <ion-icon name="trash"></ion-icon>
-        </button>
-      </ion-item-divider>
-      <div class="post-content" [ngStyle]="{'background': post.content.color}" (click)="showPostDetail(post)">
-        <p class="text">{{post.content.text}}</p>
-      </div>
-      <button class="button-like" ion-button icon-only round small [color]="(userLikedPost[post.key] === true?'primary':'light')"
-        (click)="likePost(post.key,post.likeCount, userLikedPost[post.key] != true)">
-        <ion-icon name="thumbs-up"></ion-icon>
-      </button>
-      <button class="button-share" ion-button icon-only round small outline [color]="'primary'" (click)="sharePost(post)">
-        <ion-icon name="share"></ion-icon>
-      </button>
-    </div>
-    <div *ngIf="post.content.type == 'image'">
-      <ion-item-divider sticky no-lines>
-        <ion-avatar item-start>
-          <img class="no-resize" [src]="post.profileImgURL || 'assets/imgs/logo/profile.png'">
-        </ion-avatar>
-        <h2 class="post-username">{{post.userName}}
-            <span *ngIf="post.isShared"> shared 
-                <span *ngIf="post.originalUid == post.uid">his own post </span>
-                <span *ngIf="post.originalUid != post.uid">{{post.originalUserName}}'s post </span> 
-              </span>
-        </h2>
-        <p>{{post.createdAt | formatDate}}</p>
-        <button ion-button clear item-end icon-only color="dark" *ngIf="currentUid == post.uid" (click)="deletePost(post)">
-            <ion-icon name="trash"></ion-icon>
-        </button>
-      </ion-item-divider>
-      <div (click)="showPostDetail(post)">
-        <p class="text-padding-left">{{post.content.text}}</p>
-        <img class="post-img" [src]=" post.content.image || 'assets/imgs/logo/placeholder.png'">
-      </div>
-      <button class="button-like" ion-button icon-only round small [color]="(userLikedPost[post.key] === true?'primary':'light')"
-        (click)="likePost(post.key,post.likeCount, userLikedPost[post.key] != true)">
-        <ion-icon name="thumbs-up"></ion-icon>
-      </button>
-      <button class="button-share" ion-button icon-only round small outline [color]="'primary'" (click)="sharePost(post)">
-        <ion-icon name="share"></ion-icon>
-      </button>
-    </div> -->
   </section>
+  <button class="load-more" *ngIf="(posts.length > 0) && !endOfPost" full clear ion-button color="dark" (click)="loadMore()">Load More</button>
   <ion-fab top right edge #fab>
     <button ion-fab color="secondary">
       <ion-icon name="add"></ion-icon>
