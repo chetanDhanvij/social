@@ -86,6 +86,7 @@ export class FeedPage {
       let postData = data;
       if(completeReload){
         this.posts = [];
+        this.endOfPost = false;
       }
       this.posts = this.posts.concat(postData);
       for(let d of postData){

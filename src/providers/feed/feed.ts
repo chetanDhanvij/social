@@ -181,7 +181,7 @@ export class FeedProvider {
   nextStart: any = undefined;
   endOfPost: boolean = false;
   getPostNew(completeReload){
-    let batchSize = 40;
+    let batchSize = 50;
     return new Promise((resolve, reject)=>{
       if(completeReload){
         this.nextStart = undefined;
@@ -208,6 +208,9 @@ export class FeedProvider {
           rV.key = d
           return rV
         })
+        if(completeReload){
+          this.endOfPost = false;
+        }
         if(this.endOfPost && !completeReload){
           returnValue = [];
         }else{
@@ -302,12 +305,15 @@ export class FeedProvider {
         userWhoLikeArray = userWhoLikeArray.filter((d)=>{
           return userWhoLike[d]
         })
-        this.userDataProvider.getUsernameList(userWhoLikeArray).then((data)=>{
-          for(let d of data){
-
-          }
+        this.userDataProvider.getUserListforIds(userWhoLikeArray).then((data)=>{
+          // returnValue = data.map((d,i)=>{
+          //   return {name: d.val(), uid: userWhoLikeArray[i]}
+          // })
           returnValue = data.map((d,i)=>{
-            return {name: d.val(), uid: userWhoLikeArray[i]}
+            let dVal = d.val()
+            return {name: dVal.firstName + " " + dVal.lastName, 
+                    uid: d.key, 
+                    profileImgURL: dVal.profileImgURL }
           })
 
 

@@ -19,7 +19,7 @@
   <section class="status-card" *ngFor="let post of posts">
     <post [currentUid]="currentUid" [post]="post" [showlikes]="false" (onShare)="getPost()"></post>
   </section>
-  <button *ngIf="(posts.length > 0) && !endOfPost" full clear ion-button color="dark" (click)="loadMore()">Load More</button>
+  <button class="load-more" *ngIf="(posts.length > 0) && !endOfPost" full clear ion-button color="dark" (click)="loadMore()">Load More</button>
   <ion-fab top right edge #fab>
     <button ion-fab color="secondary">
       <ion-icon name="add"></ion-icon>

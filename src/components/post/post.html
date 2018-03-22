@@ -57,9 +57,12 @@
   </ion-segment>
   <div *ngIf="viewType == 'Likes'">
         <ion-item-divider *ngFor="let user of userLiked" (click)="gotoUser(user.uid)">
-          <button  item-start class="button-like" ion-button icon-only round small [color]="'primary'">
+          <!-- <button  item-start class="button-like" ion-button icon-only round small [color]="'primary'">
             <ion-icon name="thumbs-up"></ion-icon>
-          </button>
+          </button> -->
+          <ion-avatar item-start (click)="gotoUser(user.uid)">
+              <img [src]="user?.profileImgURL ||  'assets/imgs/logo/profile.png'">
+            </ion-avatar>
           <h2 class="post-username">
             {{user?.name}}
           </h2>
@@ -78,7 +81,7 @@
                   {{user?.comment}}
               </p>
           </div>
-          <button color="secondary" ion-button clear item-end icon-only color="secondary" *ngIf="currentUid == post.uid" (click)="deleteComment(post.key,user.key)">
+          <button color="secondary" ion-button clear item-end icon-only color="secondary" *ngIf="(currentUid == user?.uid) || (currentUid == post.uid)" (click)="deleteComment(post.key,user.key)">
               <ion-icon name="trash"></ion-icon>
           </button>
         </ion-item>
