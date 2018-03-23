@@ -43,6 +43,7 @@ export class FeedPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad FeedPage');
+    this.navCtrl.push("FriendsPage");
     this.getPost();
     this.feedProvider.reloadPost.subscribe(()=>{
       this.getPost();

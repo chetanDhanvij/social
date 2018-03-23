@@ -18,6 +18,7 @@ import { AdvertisementProvider } from '../providers/advertisement/advertisement'
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { RecallProvider } from '../providers/recall/recall';
 import { AppVersion } from '@ionic-native/app-version';
+import { FriendsProvider } from '../providers/friends/friends';
 
 
 
@@ -50,7 +51,8 @@ import { AppVersion } from '@ionic-native/app-version';
     AdvertisementProvider,
     InAppBrowser,
     RecallProvider,
-    AppVersion
+    AppVersion,
+    FriendsProvider
   ]
 })
 export class AppModule {}

@@ -3,6 +3,7 @@ import { IonicPageModule } from 'ionic-angular';
 import { FeedPage } from './feed';
 import { PipesModule } from '../../pipes/pipes.module'; 
 import { ComponentsModule } from '../../components/components.module';
+import { DirectivesModule } from '../../directives/directives.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { ComponentsModule } from '../../components/components.module';
   imports: [
     IonicPageModule.forChild(FeedPage),
     PipesModule,
-    ComponentsModule
+    ComponentsModule,
+    DirectivesModule
   ],
 })
 export class FeedPageModule {}

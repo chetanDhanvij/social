@@ -1,0 +1,64 @@
+<ion-header>
+    <ion-navbar color="white">
+      <ion-title>{{title}}</ion-title>
+    </ion-navbar>
+  </ion-header>
+  <ion-content>
+      <ion-segment padding [(ngModel)]="tab" (ionChange)="segmentChanged($event)">
+        <ion-segment-button value="friends">
+          FRIENDS
+        </ion-segment-button>
+        <ion-segment-button value="requests">
+          REQUESTS <span *ngIf="friendRequestCount != 0">({{friendRequestCount}})</span>
+        </ion-segment-button>
+        <ion-segment-button value="search">
+          FIND NEW
+        </ion-segment-button>
+      </ion-segment>
+      <div [ngSwitch]="tab">
+        <div *ngSwitchCase="'friends'">
+            <!-- No friends to show -->
+          <div class="empty-list" *ngIf="friends && friends.length == 0">
+              <h1><ion-icon name="contacts"></ion-icon></h1>
+              <p>You don't have new friend yet</p>
+            </div>
+            <!-- Show list of friends -->
+            <ion-list class="avatar-list" *ngIf="friends && friends.length > 0">
+              <!-- <ion-searchbar [(ngModel)]="searchFriend" placeholder="Search for friend or username" showCancelButton="true" cancelButtonText="Done"></ion-searchbar> -->
+              <ion-item *ngFor="let friend of friends" no-lines (click)="message(friend.$key); $event.stopPropagation();">
+                <ion-avatar item-left>
+                  <img src="{{friend.img}}">
+                </ion-avatar>
+                <ion-note item-right *ngIf="friend.online == true">online</ion-note>
+                <h2>{{friend.name}}</h2>
+                <p>{{friend.description}}</p>
+              </ion-item>
+            </ion-list>
+        </div>
+  
+  
+  
+        <div *ngSwitchCase="'requests'">
+            <ion-grid>
+              <ion-row>
+                <ion-col *ngFor="let user of receivedRequest" col-6>
+                  <!-- <friend-card [data]="user" ></friend-card> -->
+                  <!-- {{ user | json}} -->
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+        </div>
+  
+        <div *ngSwitchCase="'search'">
+          <!-- <ion-grid>
+            <ion-row>
+              <ion-col *ngFor="let user of allUsers" col-6>
+                <friend-card [data]="allUsers" ></friend-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid> -->
+          <friend-card [data]="allUsers" ></friend-card>
+        </div>
+      </div>
+  
+  </ion-content>

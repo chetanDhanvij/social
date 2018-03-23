@@ -1,0 +1,23 @@
+<!-- Generated template for the FriendCardComponent component -->
+
+<ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let user of data" col-6>
+        <ion-card>  
+            <img [src]="user.profileImgURL ||  'assets/imgs/logo/profile.png'">
+            <ion-card-content>
+                <h1>{{user.firstName}} {{user.lastName}}</h1>
+                <h2>User Detail</h2>
+                <ion-row>
+                    <ion-col>
+                      <button ion-button block (click)="addFriend(user)" icon-left outline>
+                        Add Friend
+                      </button>
+                    </ion-col>
+                  </ion-row>      
+            </ion-card-content>  
+          </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+

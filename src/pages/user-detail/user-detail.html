@@ -47,6 +47,9 @@
       {{user?.city}}
     </ion-item>
   </section>
+  <ion-list-header (click)="gotoFriends()">
+      Friends
+    </ion-list-header>
   <ion-list-header *ngIf="posts?.length > 0">
     Posts
   </ion-list-header>

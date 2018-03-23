@@ -101,5 +101,8 @@ export class UserDetailPage {
   gotoSupport(){
     this.navCtrl.push("SupportPage");
   }
+  gotoFriends(){
+    this.navCtrl.push("FriendsPage");
+  }
 
 }
