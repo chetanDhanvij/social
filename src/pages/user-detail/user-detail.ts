@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FeedProvider } from '../../providers/feed/feed';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { UserDataProvider } from '../../providers/user-data/user-data'
+import { FriendsProvider } from '../../providers/friends/friends';
 
 /**
  * Generated class for the UserDetailPage page.
@@ -21,11 +22,13 @@ export class UserDetailPage {
   userID:string;
   view:string = "PROFILE";
   posts;
+  connectionType: string;
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               public feedProvider: FeedProvider,
               private profileProvider: ProfileProvider,
-              private userDataProvider: UserDataProvider) {
+              private userDataProvider: UserDataProvider,
+              private friendsProvider: FriendsProvider) {
   }
 
   ionViewDidLoad() {
@@ -44,6 +47,7 @@ export class UserDetailPage {
         console.log(user);
         this.user = user;
         this.getPostForUser(this.userID);
+        this.getConnectionType();
         try{
           this.refresher.complete();
         }catch(e){
@@ -51,6 +55,7 @@ export class UserDetailPage {
       })
     }else{
       this.getPostForUser(this.user.key);
+      this.getConnectionType();
       try{
         this.refresher.complete();
       }catch(e){
@@ -102,7 +107,14 @@ export class UserDetailPage {
     this.navCtrl.push("SupportPage");
   }
   gotoFriends(){
-    this.navCtrl.push("FriendsPage");
+    console.log(this.user)
+    this.navCtrl.push("FriendListPage",{user: this.user });
+  }
+  getConnectionType(){
+    this.friendsProvider.getConnectionType([this.user.key]).then((type)=>{
+      console.log("TYPEEEEEEEEEEEEEEEEEEEEEEEE", type)
+      this.connectionType = type[this.user.key];
+    })
   }
 
 }

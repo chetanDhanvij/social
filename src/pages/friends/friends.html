@@ -1,6 +1,9 @@
 <ion-header>
     <ion-navbar color="white">
       <ion-title>{{title}}</ion-title>
+      <button ion-button (click)="listen()">listen</button>
+      <button ion-button (click)="clear()">clear</button>
+      
     </ion-navbar>
   </ion-header>
   <ion-content>
@@ -17,23 +20,13 @@
       </ion-segment>
       <div [ngSwitch]="tab">
         <div *ngSwitchCase="'friends'">
-            <!-- No friends to show -->
-          <div class="empty-list" *ngIf="friends && friends.length == 0">
-              <h1><ion-icon name="contacts"></ion-icon></h1>
-              <p>You don't have new friend yet</p>
-            </div>
-            <!-- Show list of friends -->
-            <ion-list class="avatar-list" *ngIf="friends && friends.length > 0">
-              <!-- <ion-searchbar [(ngModel)]="searchFriend" placeholder="Search for friend or username" showCancelButton="true" cancelButtonText="Done"></ion-searchbar> -->
-              <ion-item *ngFor="let friend of friends" no-lines (click)="message(friend.$key); $event.stopPropagation();">
-                <ion-avatar item-left>
-                  <img src="{{friend.img}}">
-                </ion-avatar>
-                <ion-note item-right *ngIf="friend.online == true">online</ion-note>
-                <h2>{{friend.name}}</h2>
-                <p>{{friend.description}}</p>
-              </ion-item>
-            </ion-list>
+          <ion-grid>
+            <ion-row>
+              <ion-col *ngFor="let sentRequest  of sentRequests" col-6>
+                <friend-card viewType="card" [data]="sentRequest" connectionType="REQUEST_SENT" ></friend-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </div>
   
   
@@ -41,23 +34,21 @@
         <div *ngSwitchCase="'requests'">
             <ion-grid>
               <ion-row>
-                <ion-col *ngFor="let user of receivedRequest" col-6>
-                  <!-- <friend-card [data]="user" ></friend-card> -->
-                  <!-- {{ user | json}} -->
+                <ion-col *ngFor="let receivedRequest  of receivedRequests" col-6>
+                  <friend-card viewType="card" [data]="receivedRequest" connectionType="REQUEST_RECEIVED" ></friend-card>
                 </ion-col>
               </ion-row>
             </ion-grid>
         </div>
   
         <div *ngSwitchCase="'search'">
-          <!-- <ion-grid>
+          <ion-grid>
             <ion-row>
-              <ion-col *ngFor="let user of allUsers" col-6>
-                <friend-card [data]="allUsers" ></friend-card>
+              <ion-col *ngFor="let user of notConnected" col-6>
+                <friend-card viewType="card" [data]="user" connectionType="NOT_CONNECTED"  ></friend-card>
               </ion-col>
             </ion-row>
-          </ion-grid> -->
-          <friend-card [data]="allUsers" ></friend-card>
+          </ion-grid>
         </div>
       </div>
   

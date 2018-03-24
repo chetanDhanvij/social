@@ -19,7 +19,9 @@ export class FriendsPage {
   private tab: any;
   private title: any;
   private allUsers: any;
-  private receivedRequest: any;
+  private receivedRequests: any;
+  private sentRequests: any;
+  private notConnected: any;
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private userData: UserDataProvider,
@@ -45,21 +47,29 @@ export class FriendsPage {
   }
 
   getFriends(){
-
+    this.friendsProvider.getRequestsSent().then((requests)=>{
+      this.sentRequests = requests;
+    })
   }
   getFriendRequests(){
-    this.friendsProvider.getRequestsReceived().then((user)=>{
-      console.log(user)
-      this.receivedRequest = user;
+    this.friendsProvider.getRequestsReceived().then((requests)=>{
+      this.receivedRequests = requests;
     })
   }
   findNewFriends(){
-    this.userData.getUserList().then((dataArr: any[])=>{
-      this.allUsers = dataArr;
-      console.log(dataArr);
-    }).catch((err)=>{
-      console.log(err);
+    this.friendsProvider.getNotConnectedUser().then((uids)=>{
+      this.notConnected = uids;
     })
+  }
+
+  listen(){
+    this.friendsProvider.requestsSentSub.subscribe((data)=>{
+      console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",data,"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    })
+  }
+
+  clear(){
+    this.friendsProvider.clear()
   }
 
 

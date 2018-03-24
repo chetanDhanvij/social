@@ -40,10 +40,12 @@ export class FeedPage {
               private profileProvider: ProfileProvider,
               private advertisementProvider: AdvertisementProvider) {
   }
-
+  gotoFriends(){
+    this.navCtrl.push("FriendsPage");
+  }
   ionViewDidLoad() {
     console.log('ionViewDidLoad FeedPage');
-    this.navCtrl.push("FriendsPage");
+
     this.getPost();
     this.feedProvider.reloadPost.subscribe(()=>{
       this.getPost();

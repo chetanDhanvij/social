@@ -6,7 +6,7 @@
 -->
 <ion-header>
   <ion-navbar color="secondary">
-    <ion-title>User List</ion-title>
+    <ion-title (click)="getConnectionType()">User List</ion-title>
   </ion-navbar>
   <ion-toolbar color="secondary">
     <ion-searchbar [(ngModel)]="searchKey"
@@ -21,13 +21,6 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let user of usersFiltered" (click)="gotoUser(user)">
-      <ion-avatar item-start>
-        <img [src]="user.profileImgURL ||  'assets/imgs/logo/profile.png'">
-      </ion-avatar>
-      <h2>{{user.fullName}}</h2>
-      <p>{{user.gender}}</p>
-      <!-- <button ion-button outline item-end color="primary">Connect</button> -->
-    </ion-item>
+    <friend-card *ngFor="let user of usersFiltered" viewType="list" [userData]="user" [connectionType]="user?.connectionType"  ></friend-card>
   </ion-list>
 </ion-content>

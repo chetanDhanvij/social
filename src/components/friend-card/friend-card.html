@@ -1,23 +1,50 @@
 <!-- Generated template for the FriendCardComponent component -->
 
-<ion-grid>
-    <ion-row>
-      <ion-col *ngFor="let user of data" col-6>
-        <ion-card>  
-            <img [src]="user.profileImgURL ||  'assets/imgs/logo/profile.png'">
-            <ion-card-content>
-                <h1>{{user.firstName}} {{user.lastName}}</h1>
-                <h2>User Detail</h2>
-                <ion-row>
-                    <ion-col>
-                      <button ion-button block (click)="addFriend(user)" icon-left outline>
-                        Add Friend
-                      </button>
-                    </ion-col>
-                  </ion-row>      
-            </ion-card-content>  
-          </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
 
+<ion-card *ngIf="viewType=='card'" >  
+<img (click)="gotoUser(userData)" [src]="userData?.profileImgURL ||  'assets/imgs/logo/profile.png'">
+<ion-card-content>
+    <h1 (click)="gotoUser(userData)">{{userData?.firstName}} {{userData?.lastName}}</h1>
+    <h2 (click)="gotoUser(userData)">{{userData?.gender}}</h2>
+    <ion-row>
+        <ion-col *ngIf="connectionType == 'NOT_CONNECTED'" >
+          <button ion-button block (click)="addFriend(userData)" icon-left outline>
+            Add Friend
+          </button>
+        </ion-col>
+        <ion-col *ngIf="connectionType == 'REQUEST_SENT'">
+          <button ion-button block (click)="cancelFriendRequest(userData)" icon-left outline>
+            Cancel Request
+          </button>
+        </ion-col>
+        <ion-col *ngIf="connectionType == 'REQUEST_RECEIVED'">
+          <button ion-button block (click)="acceptFriendRequest(userData)" icon-left outline>
+             Accept Request
+          </button>
+        </ion-col>
+      </ion-row>
+      <ion-col *ngIf="connectionType == 'FRIENDS'">
+        <button ion-button block icon-left clear>
+          Friends
+        </button>
+      </ion-col>   
+      <ion-col *ngIf="connectionType == 'SELF'">
+        <button ion-button block icon-left clear>
+          You
+        </button>
+      </ion-col>      
+</ion-card-content>  
+</ion-card>
+
+<ion-item  *ngIf="viewType=='list'" >
+  <ion-avatar item-start (click)="gotoUser(userData)">
+    <img [src]="userData?.profileImgURL ||  'assets/imgs/logo/profile.png'">
+  </ion-avatar>
+  <h2 (click)="gotoUser(userData)">{{userData?.fullName}}</h2>
+  <p (click)="gotoUser(userData)">{{userData?.gender}}</p>
+  <button *ngIf="connectionType == 'NOT_CONNECTED'" ion-button outline item-end color="primary" (click)="addFriend(userData)">Add Friend</button>
+  <button *ngIf="connectionType == 'REQUEST_SENT'" ion-button outline item-end color="primary"  (click)="cancelFriendRequest(userData)">Cancel Request</button>
+  <button *ngIf="connectionType == 'REQUEST_RECEIVED'" ion-button outline item-end color="primary" (click)="acceptFriendRequest(userData)">Accept Request</button>
+  <button *ngIf="connectionType == 'FRIENDS'" ion-button clear item-end color="primary">Friends</button>
+  <button *ngIf="connectionType == 'SELF'" ion-button clear item-end color="primary">You</button>
+</ion-item>
