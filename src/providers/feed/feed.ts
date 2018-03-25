@@ -297,7 +297,7 @@ export class FeedProvider {
         let userWhoLike = userList.val();
         let userWhoLikeArray = [];
         try{
-          userWhoLikeArray = Object.keys(userWhoLike)
+          userWhoLikeArray = Object.keys(userWhoLike || {})
         }catch(e){ console.log(e)}
         
         let returnValue = []

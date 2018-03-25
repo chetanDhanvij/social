@@ -17,7 +17,7 @@ import { FriendsProvider } from "../../providers/friends/friends"
 export class TabsPage {
 
   tab1Root = "FeedPage";
-  tab2Root = "UserListPage";
+  tab2Root = "FriendRequestPage";
   tab3Root = "UserDetailPage";
   index = 4;
   friendRequest: any;

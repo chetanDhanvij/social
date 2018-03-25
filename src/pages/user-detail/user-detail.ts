@@ -117,4 +117,22 @@ export class UserDetailPage {
     })
   }
 
+  addFriend(){
+    this.friendsProvider.addFriend(this.user.key).then(()=>{
+      this.getConnectionType();
+    })
+  }
+
+  cancelFriendRequest(){
+    this.friendsProvider.cancelFriendRequest(this.user.key).then(()=>{
+      this.getConnectionType();
+    })
+  }
+
+  acceptFriendRequest(){
+    this.friendsProvider.acceptFriendRequest(this.user.key).then(()=>{
+      this.getConnectionType();
+    })
+  }
+
 }

@@ -15,12 +15,11 @@ import { Observable } from "rxjs/Observable";
 @Injectable()
 export class FriendsProvider {
 
-  subConnectionType=  new BehaviorSubject({});
+  subConnectionType =  new BehaviorSubject({});
+  hasConnectionType: boolean = false;
   constructor(private profileProvider: ProfileProvider,
               private userDataProvider: UserDataProvider) {
     console.log('Hello FriendsProvider Provider');
-    // this.requestsSentSub = new ReplaySubject();
-    // let currentUserUid = this.profileProvider.currentUser.uid;
   }
 
   listenRequestsReceived(){
@@ -29,7 +28,7 @@ export class FriendsProvider {
           let ref = firebase.database().ref(`/requests/${currentUserUid}/requestsReceived/`)
           ref.on('value',(data)=>{
             console.log(data, data.val(), data.key)
-            let returnValue = data.val();
+            let returnValue = data.val() || {};
             for(let rv of Object.keys(returnValue)){
               this.updateConnectionType(rv,"REQUEST_RECEIVED")
             }
@@ -42,11 +41,11 @@ export class FriendsProvider {
       };
   })
 
-
   }
   initConnectionType(){
     return new Promise((resolve, reject)=>{
       this.getAllConnectionType().then((type)=>{
+        this.hasConnectionType = true;
         this.subConnectionType.next(type);
         resolve(type)
       })
@@ -54,6 +53,90 @@ export class FriendsProvider {
 
   }
 
+  private getAllConnectionType(){
+    //resolve to one of 'NOT_CONNECTED' 'REQUEST_SENT' 'REQUEST_RECEIVED' 'SELF' 'FRIENDS'
+
+    return new Promise((resolve, reject)=>{
+      let currentUserUid: string = this.profileProvider.currentUser.uid;
+      let requestsReceived: string[];
+      let requestsSent: string[];
+      let friends: string[];
+      let returnObj: any = {};
+      this.userDataProvider.getUserList().then((user: any[])=>{
+        let uids = user.map(d => d.key)
+        this.getRequestsReceived().then((_requestReceived: any[])=>{
+          requestsReceived = _requestReceived.map((d)=>{
+            return d.uid
+          })
+          this.getRequestsSent().then((_requestsSent: any[])=>{
+            requestsSent = _requestsSent.map((d)=>{
+              return d.uid
+            })
+            this.getFriends().then((_friends: any[])=>{
+              friends = _friends.map((d)=>{
+                return d.uid
+              })
+  
+              //Logic begins here
+              console.log('logic begins herererere')
+              for(let uid of uids){
+                if(uid == currentUserUid){
+                  returnObj[uid] = "SELF"
+                }else if(requestsReceived.indexOf(uid)>-1){
+                  returnObj[uid] = "REQUEST_RECEIVED";
+                }else if(requestsSent.indexOf(uid)>-1){
+                  returnObj[uid] = "REQUEST_SENT";
+                }else if(friends.indexOf(uid)>-1){
+                  returnObj[uid] = "FRIENDS";
+                }else{
+                  returnObj[uid] = "NOT_CONNECTED";
+                }              
+              }
+  
+              resolve(returnObj);
+            })
+          })
+        })
+      })
+
+    })
+  }
+
+  // private updateAllConnectionType(types){
+  //   this.subConnectionType.next(types);
+  // }
+
+  private updateConnectionType(uid, type){
+    let connectionType = this.subConnectionType.value;
+    connectionType[uid] = type;
+    this.subConnectionType.next(connectionType);
+  }
+
+  getConnectionType(uids: string[]){
+    //resolve to one of 'NOT_CONNECTED' 'REQUEST_SENT' 'REQUEST_RECEIVED' 'SELF' 'FRIENDS'
+
+    return new Promise((resolve, reject)=>{
+      let _subConnectionType =  this.subConnectionType.value;
+      let returnFun = (type)=>{
+        console.log("type =====", type)
+          let returnObj = {}
+          for(let uid of uids){
+            returnObj[uid] = type[uid];
+          }
+          resolve(returnObj);
+      }
+      if(!this.hasConnectionType){
+        console.log("type == {} hence initializing")
+        this.initConnectionType().then((type)=>{
+          returnFun(type);
+        })
+      }else{
+        console.log("type != {} hence resolved ")
+        returnFun(_subConnectionType);
+      }
+    })
+  }
+  
   getRequestsReceived(){
     return new Promise((resolve, reject)=>{
       let currentUserUid = this.profileProvider.currentUser.uid;
@@ -132,6 +215,7 @@ export class FriendsProvider {
       })
     })
   }
+  
   getFriends(uid:any = undefined){
     return new Promise((resolve, reject)=>{
       if(uid == undefined){
@@ -154,126 +238,6 @@ export class FriendsProvider {
     })
   }
 
-  getAllConnectionType(){
-    //resolve to one of 'NOT_CONNECTED' 'REQUEST_SENT' 'REQUEST_RECEIVED' 'SELF' 'FRIENDS'
-
-    return new Promise((resolve, reject)=>{
-      let currentUserUid: string = this.profileProvider.currentUser.uid;
-      let requestsReceived: string[];
-      let requestsSent: string[];
-      let friends: string[];
-      let returnObj: any = {};
-      this.userDataProvider.getUserList().then((user: any[])=>{
-        let uids = user.map(d => d.key)
-        this.getRequestsReceived().then((_requestReceived: any[])=>{
-          requestsReceived = _requestReceived.map((d)=>{
-            return d.uid
-          })
-          this.getRequestsSent().then((_requestsSent: any[])=>{
-            requestsSent = _requestsSent.map((d)=>{
-              return d.uid
-            })
-            this.getFriends().then((_friends: any[])=>{
-              friends = _friends.map((d)=>{
-                return d.uid
-              })
-  
-              //Logic begins here
-              console.log('logic begins herererere')
-              for(let uid of uids){
-                if(uid == currentUserUid){
-                  returnObj[uid] = "SELF"
-                }else if(requestsReceived.indexOf(uid)>-1){
-                  returnObj[uid] = "REQUEST_RECEIVED";
-                }else if(requestsSent.indexOf(uid)>-1){
-                  returnObj[uid] = "REQUEST_SENT";
-                }else if(friends.indexOf(uid)>-1){
-                  returnObj[uid] = "FRIENDS";
-                }else{
-                  returnObj[uid] = "NOT_CONNECTED";
-                }              
-              }
-  
-              resolve(returnObj);
-            })
-          })
-        })
-      })
-
-    })
-  }
-  updateConnectionType(uid, type){
-    let connectionType = this.subConnectionType.value;
-    connectionType[uid] = type;
-    this.subConnectionType.next(connectionType);
-  }
-
-  getConnectionType(uids: string[]){
-    //resolve to one of 'NOT_CONNECTED' 'REQUEST_SENT' 'REQUEST_RECEIVED' 'SELF' 'FRIENDS'
-
-    return new Promise((resolve, reject)=>{
-    this.subConnectionType.subscribe((type)=>{
-      console.log("checking type",Object.keys(type).length, type, Object.keys(type).length==0)
-       if(Object.keys(type).length == 0){
-         console.log("type == {} hence initializing")
-         this.initConnectionType()
-       }else{
-        console.log("type =====", type)
-         let returnObj = {}
-         for(let uid of uids){
-           returnObj[uid] = type[uid];
-         }
-         this.subConnectionType.unsubscribe();
-         resolve(returnObj);
-       }
-      })
-    })
-  }
-  // getConnectionType(uids: string[]){
-  //   //resolve to one of 'NOT_CONNECTED' 'REQUEST_SENT' 'REQUEST_RECEIVED' 'SELF' 'FRIENDS'
-
-  //   return new Promise((resolve, reject)=>{
-  //     let currentUserUid: string = this.profileProvider.currentUser.uid;
-  //     let requestsReceived: string[];
-  //     let requestsSent: string[];
-  //     let friends: string[];
-  //     let returnObj: any = {};
-      
-  //     this.getRequestsReceived().then((_requestReceived: any[])=>{
-  //       requestsReceived = _requestReceived.map((d)=>{
-  //         return d.uid
-  //       })
-  //       this.getRequestsSent().then((_requestsSent: any[])=>{
-  //         requestsSent = _requestsSent.map((d)=>{
-  //           return d.uid
-  //         })
-  //         this.getFriends().then((_friends: any[])=>{
-  //           friends = _friends.map((d)=>{
-  //             return d.uid
-  //           })
-
-  //           //Logic begins here
-  //           console.log('logic begins herererere')
-  //           for(let uid of uids){
-  //             if(uid == currentUserUid){
-  //               returnObj[uid] = "SELF"
-  //             }else if(requestsReceived.indexOf(uid)>-1){
-  //               returnObj[uid] = "REQUEST_RECEIVED";
-  //             }else if(requestsSent.indexOf(uid)>-1){
-  //               returnObj[uid] = "REQUEST_SENT";
-  //             }else if(friends.indexOf(uid)>-1){
-  //               returnObj[uid] = "FRIENDS";
-  //             }else{
-  //               returnObj[uid] = "NOT_CONNECTED";
-  //             }              
-  //           }
-
-  //           resolve(returnObj);
-  //         })
-  //       })
-  //     })
-  //   })
-  // }
   addFriend(receiverUid){
     return new Promise((resolve, reject)=>{
       let currentUserUid = this.profileProvider.currentUser.uid;
@@ -293,6 +257,7 @@ export class FriendsProvider {
       });
     })    
   }
+
   cancelFriendRequest(receiverUid){
     return new Promise((resolve, reject)=>{
       console.log(receiverUid);

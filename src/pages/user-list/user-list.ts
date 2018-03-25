@@ -20,6 +20,7 @@ export class UserListPage {
   usersFiltered: any[];
   searchKey: string;
   viewType: string;
+  mySubscription: any;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -51,16 +52,18 @@ export class UserListPage {
     })
   }
   listenConnectionType(){
-    this.friendsProvider.subConnectionType.subscribe((type)=>{
-      if(Object.keys(type).length == 0){
+    this.mySubscription = this.friendsProvider.subConnectionType.subscribe((type)=>{
+      if(!this.friendsProvider.hasConnectionType){
         console.log("type == {} hence initializing")
         this.friendsProvider.initConnectionType()
       }else{     
         console.log("TYPEEEEEEEEEEEEEEEEEEEEEEEE", type)
         this.users = this.users.map((d)=>{
-        d.connectionType = type[d.key];
-        return d
-      })}
+          d.connectionType = type[d.key];
+          return d
+        })
+        this.viewTypeChanged(this.viewType)
+      }
     })
   }
   onInput(ev){
@@ -85,13 +88,7 @@ export class UserListPage {
     this.searchKey = "";
   }
 
-  init(){
-    this.friendsProvider.initConnectionType()
+  ngOnDestroy() {
+      this.mySubscription.unsubscribe();
   }
-  sub(){
-    this.friendsProvider.subConnectionType.subscribe((types)=>{
-      console.log("typestypestypes",types)
-    })
-  }
-
 }

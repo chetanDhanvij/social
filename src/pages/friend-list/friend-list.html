@@ -21,12 +21,9 @@
 
 
 <ion-content padding>
-{{user| json}}
-
 <ion-grid>
   <ion-row>
     <ion-col *ngFor="let friend of friends" col-6>
-        {{friend | json}}
       <friend-card  viewType="card" [userData]="friend" [connectionType]="friend.connectionType"  ></friend-card>
     </ion-col>
   </ion-row>

@@ -27,15 +27,15 @@
           <ion-col col *ngIf="connectionType != 'SELF' && this.connectionType != undefined">
             <button color="secondary" profile-button ion-button full clear>
               <!--'NOT_CONNECTED' 'REQUEST_SENT' 'REQUEST_RECEIVED' 'SELF' 'FRIENDS'-->
-              <div  *ngIf="connectionType == 'NOT_CONNECTED'">
+              <div  *ngIf="connectionType == 'NOT_CONNECTED'" (click)="addFriend()">
                   <ion-icon name="so-friendreq"></ion-icon><br>
                   <label>Add</label>
               </div>
-              <div  *ngIf="connectionType == 'REQUEST_SENT'">
+              <div  *ngIf="connectionType == 'REQUEST_SENT'" (click)="cancelFriendRequest()">
                   <ion-icon name="so-friendreq"></ion-icon><br>
                   <label>Cancel Request</label>
               </div>
-              <div  *ngIf="connectionType == 'REQUEST_RECEIVED'">
+              <div  *ngIf="connectionType == 'REQUEST_RECEIVED'" (click)="acceptFriendRequest()">
                   <ion-icon name="so-friendreq"></ion-icon><br>
                   <label>Accept Request</label>
               </div>
