@@ -37,14 +37,22 @@ export class FriendListPage {
       this.friends = friends;
       this.userDataProvider.getUserListforIds(this.friends.map(d => d.uid)).then((data)=>{
         this.friends = data.map((d,i)=>{
-          let dVal = d.val()
+          let returnValue:any = {};
+          let dVal = d.val();
+          returnValue = dVal;
+          returnValue.uid = d.key
+          returnValue.time = this.friends[i].time,
           console.log(dVal)
-          return { name: dVal.firstName + " " + dVal.lastName, 
-                   uid: d.key, 
-                   time: this.friends[i].time,
-                   profileImgURL: dVal.profileImgURL }
+          return returnValue
         })
 
+      })
+      this.friendsProvider.getConnectionType(this.friends.map(d => d.uid)).then((data)=>{
+        console.log("ADFSDFSDAFSDFSDFSDFSDF",this.friends,data);
+        this.friends = this.friends.map((d)=>{
+          d.connectionType = data[d.uid];
+          return d;
+        })
       })
     })
   }

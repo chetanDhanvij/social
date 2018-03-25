@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Tab } from 'ionic-angular';
+import { FriendsProvider } from "../../providers/friends/friends"
 
 /**
  * Generated class for the TabsPage page.
@@ -19,12 +20,22 @@ export class TabsPage {
   tab2Root = "UserListPage";
   tab3Root = "UserDetailPage";
   index = 4;
+  friendRequest: any;
+  friendRequestCount
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, 
+              public navParams: NavParams,
+              public friendsProvider: FriendsProvider) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad TabsPage');
+    let listener = this.friendsProvider.listenRequestsReceived();
+    listener.subscribe((data)=>{
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", data);
+      this.friendRequest = data || {};
+      this.friendRequestCount = Object.keys(this.friendRequest).length
+    })
   }
   tabSelected(tab: Tab) {
     this.index = tab.index;

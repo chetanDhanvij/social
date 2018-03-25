@@ -4,6 +4,8 @@ import firebase from 'firebase';
 import { Reference } from '@firebase/database-types';
 import { UserDataProvider } from '../user-data/user-data';
 import { ReplaySubject } from "rxjs/ReplaySubject";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { Observable } from "rxjs/Observable";
 /*
   Generated class for the FriendsProvider provider.
 
@@ -12,37 +14,44 @@ import { ReplaySubject } from "rxjs/ReplaySubject";
 */
 @Injectable()
 export class FriendsProvider {
-  requestsSentSub = new ReplaySubject()
+
+  subConnectionType=  new BehaviorSubject({});
   constructor(private profileProvider: ProfileProvider,
               private userDataProvider: UserDataProvider) {
     console.log('Hello FriendsProvider Provider');
     // this.requestsSentSub = new ReplaySubject();
-    let currentUserUid = this.profileProvider.currentUser.uid;
-    firebase.database().ref(`/requests/${currentUserUid}/requestsSent/`).on('child_added',(snapshot)=>{
-      console.log(snapshot.key, snapshot.val());
-      this.requestsSentSub.next(snapshot.val());
-    })
+    // let currentUserUid = this.profileProvider.currentUser.uid;
   }
 
-  clear(){
-    this.requestsSentSub = null;
-    this.requestsSentSub = new ReplaySubject();
+  listenRequestsReceived(){
+    return Observable.create(observer => {
+          let currentUserUid = this.profileProvider.currentUser.uid;
+          let ref = firebase.database().ref(`/requests/${currentUserUid}/requestsReceived/`)
+          ref.on('value',(data)=>{
+            console.log(data, data.val(), data.key)
+            let returnValue = data.val();
+            for(let rv of Object.keys(returnValue)){
+              this.updateConnectionType(rv,"REQUEST_RECEIVED")
+            }
+            observer.next(returnValue);
+          });
+
+      return () => {
+        console.log("OFFFFFFF")
+          ref.off()
+      };
+  })
+
+
   }
-
-
-
-  addFriend(receiverUid){
+  initConnectionType(){
     return new Promise((resolve, reject)=>{
-      let currentUserUid = this.profileProvider.currentUser.uid;
-      console.log(currentUserUid, receiverUid);
-      firebase.database().ref(`/requests/${currentUserUid}/requestsSent/${receiverUid}`).set({
-        time: firebase.database.ServerValue.TIMESTAMP
+      this.getAllConnectionType().then((type)=>{
+        this.subConnectionType.next(type);
+        resolve(type)
       })
-      firebase.database().ref(`/requests/${receiverUid}/requestsReceived/${currentUserUid}`).set({
-        time: firebase.database.ServerValue.TIMESTAMP,
-        seen: false
-      })
-    })    
+    })
+
   }
 
   getRequestsReceived(){
@@ -145,7 +154,7 @@ export class FriendsProvider {
     })
   }
 
-  getConnectionType(uids: string[]){
+  getAllConnectionType(){
     //resolve to one of 'NOT_CONNECTED' 'REQUEST_SENT' 'REQUEST_RECEIVED' 'SELF' 'FRIENDS'
 
     return new Promise((resolve, reject)=>{
@@ -154,48 +163,148 @@ export class FriendsProvider {
       let requestsSent: string[];
       let friends: string[];
       let returnObj: any = {};
-      
-      this.getRequestsReceived().then((_requestReceived: any[])=>{
-        requestsReceived = _requestReceived.map((d)=>{
-          return d.uid
-        })
-        this.getRequestsSent().then((_requestsSent: any[])=>{
-          requestsSent = _requestsSent.map((d)=>{
+      this.userDataProvider.getUserList().then((user: any[])=>{
+        let uids = user.map(d => d.key)
+        this.getRequestsReceived().then((_requestReceived: any[])=>{
+          requestsReceived = _requestReceived.map((d)=>{
             return d.uid
           })
-          this.getFriends().then((_friends: any[])=>{
-            friends = _friends.map((d)=>{
+          this.getRequestsSent().then((_requestsSent: any[])=>{
+            requestsSent = _requestsSent.map((d)=>{
               return d.uid
             })
-
-            //Logic begins here
-            console.log('logic begins herererere')
-            for(let uid of uids){
-              if(uid == currentUserUid){
-                returnObj[uid] = "SELF"
-              }else if(requestsReceived.indexOf(uid)>-1){
-                returnObj[uid] = "REQUEST_RECEIVED";
-              }else if(requestsSent.indexOf(uid)>-1){
-                returnObj[uid] = "REQUEST_SENT";
-              }else if(friends.indexOf(uid)>-1){
-                returnObj[uid] = "FRIENDS";
-              }else{
-                returnObj[uid] = "NOT_CONNECTED";
-              }              
-            }
-
-            resolve(returnObj);
+            this.getFriends().then((_friends: any[])=>{
+              friends = _friends.map((d)=>{
+                return d.uid
+              })
+  
+              //Logic begins here
+              console.log('logic begins herererere')
+              for(let uid of uids){
+                if(uid == currentUserUid){
+                  returnObj[uid] = "SELF"
+                }else if(requestsReceived.indexOf(uid)>-1){
+                  returnObj[uid] = "REQUEST_RECEIVED";
+                }else if(requestsSent.indexOf(uid)>-1){
+                  returnObj[uid] = "REQUEST_SENT";
+                }else if(friends.indexOf(uid)>-1){
+                  returnObj[uid] = "FRIENDS";
+                }else{
+                  returnObj[uid] = "NOT_CONNECTED";
+                }              
+              }
+  
+              resolve(returnObj);
+            })
           })
         })
       })
+
     })
   }
+  updateConnectionType(uid, type){
+    let connectionType = this.subConnectionType.value;
+    connectionType[uid] = type;
+    this.subConnectionType.next(connectionType);
+  }
 
+  getConnectionType(uids: string[]){
+    //resolve to one of 'NOT_CONNECTED' 'REQUEST_SENT' 'REQUEST_RECEIVED' 'SELF' 'FRIENDS'
+
+    return new Promise((resolve, reject)=>{
+    this.subConnectionType.subscribe((type)=>{
+      console.log("checking type",Object.keys(type).length, type, Object.keys(type).length==0)
+       if(Object.keys(type).length == 0){
+         console.log("type == {} hence initializing")
+         this.initConnectionType()
+       }else{
+        console.log("type =====", type)
+         let returnObj = {}
+         for(let uid of uids){
+           returnObj[uid] = type[uid];
+         }
+         this.subConnectionType.unsubscribe();
+         resolve(returnObj);
+       }
+      })
+    })
+  }
+  // getConnectionType(uids: string[]){
+  //   //resolve to one of 'NOT_CONNECTED' 'REQUEST_SENT' 'REQUEST_RECEIVED' 'SELF' 'FRIENDS'
+
+  //   return new Promise((resolve, reject)=>{
+  //     let currentUserUid: string = this.profileProvider.currentUser.uid;
+  //     let requestsReceived: string[];
+  //     let requestsSent: string[];
+  //     let friends: string[];
+  //     let returnObj: any = {};
+      
+  //     this.getRequestsReceived().then((_requestReceived: any[])=>{
+  //       requestsReceived = _requestReceived.map((d)=>{
+  //         return d.uid
+  //       })
+  //       this.getRequestsSent().then((_requestsSent: any[])=>{
+  //         requestsSent = _requestsSent.map((d)=>{
+  //           return d.uid
+  //         })
+  //         this.getFriends().then((_friends: any[])=>{
+  //           friends = _friends.map((d)=>{
+  //             return d.uid
+  //           })
+
+  //           //Logic begins here
+  //           console.log('logic begins herererere')
+  //           for(let uid of uids){
+  //             if(uid == currentUserUid){
+  //               returnObj[uid] = "SELF"
+  //             }else if(requestsReceived.indexOf(uid)>-1){
+  //               returnObj[uid] = "REQUEST_RECEIVED";
+  //             }else if(requestsSent.indexOf(uid)>-1){
+  //               returnObj[uid] = "REQUEST_SENT";
+  //             }else if(friends.indexOf(uid)>-1){
+  //               returnObj[uid] = "FRIENDS";
+  //             }else{
+  //               returnObj[uid] = "NOT_CONNECTED";
+  //             }              
+  //           }
+
+  //           resolve(returnObj);
+  //         })
+  //       })
+  //     })
+  //   })
+  // }
+  addFriend(receiverUid){
+    return new Promise((resolve, reject)=>{
+      let currentUserUid = this.profileProvider.currentUser.uid;
+      console.log(currentUserUid, receiverUid);
+      let promiseArray = [];
+      promiseArray[0] = firebase.database().ref(`/requests/${currentUserUid}/requestsSent/${receiverUid}`).set({
+        time: firebase.database.ServerValue.TIMESTAMP
+      })
+      promiseArray[1] = firebase.database().ref(`/requests/${receiverUid}/requestsReceived/${currentUserUid}`).set({
+        time: firebase.database.ServerValue.TIMESTAMP,
+        seen: false
+      })
+
+      Promise.all(promiseArray).then(()=>{
+        this.updateConnectionType(receiverUid,"REQUEST_SENT");
+          resolve();
+      });
+    })    
+  }
   cancelFriendRequest(receiverUid){
-    console.log(receiverUid);
-    let currentUserUid = this.profileProvider.currentUser.uid;
-    firebase.database().ref(`/requests/${currentUserUid}/requestsSent/${receiverUid}`).remove()
-    firebase.database().ref(`/requests/${receiverUid}/requestsReceived/${currentUserUid}`).remove()
+    return new Promise((resolve, reject)=>{
+      console.log(receiverUid);
+      let currentUserUid = this.profileProvider.currentUser.uid;
+      let promiseArray = [];
+      promiseArray[0] = firebase.database().ref(`/requests/${currentUserUid}/requestsSent/${receiverUid}`).remove();
+      promiseArray[1] = firebase.database().ref(`/requests/${receiverUid}/requestsReceived/${currentUserUid}`).remove();
+      Promise.all(promiseArray).then(()=>{
+        this.updateConnectionType(receiverUid,"NOT_CONNECTED");
+          resolve();
+      });
+    })
   }
 
   markFriendRequestAsSeen(receiverUid){
@@ -205,12 +314,19 @@ export class FriendsProvider {
   }
 
   acceptFriendRequest(receiverUid){
-    console.log(receiverUid);
-    let currentUserUid = this.profileProvider.currentUser.uid;
-    firebase.database().ref(`/friends/${currentUserUid}/${receiverUid}`).set({time: firebase.database.ServerValue.TIMESTAMP})
-    firebase.database().ref(`/friends/${receiverUid}/${currentUserUid}`).set({time: firebase.database.ServerValue.TIMESTAMP})
-    firebase.database().ref(`/requests/${currentUserUid}/requestsReceived/${receiverUid}`).remove()
-    firebase.database().ref(`/requests/${receiverUid}/requestsSent/${currentUserUid}`).remove()
+    return new Promise((resolve, reject)=>{
+      console.log(receiverUid);
+      let currentUserUid = this.profileProvider.currentUser.uid;
+      let promiseArray = [];
+      promiseArray[0] = firebase.database().ref(`/friends/${currentUserUid}/${receiverUid}`).set({time: firebase.database.ServerValue.TIMESTAMP});
+      promiseArray[1] = firebase.database().ref(`/friends/${receiverUid}/${currentUserUid}`).set({time: firebase.database.ServerValue.TIMESTAMP});
+      promiseArray[2] = firebase.database().ref(`/requests/${currentUserUid}/requestsReceived/${receiverUid}`).remove();
+      promiseArray[3] = firebase.database().ref(`/requests/${receiverUid}/requestsSent/${currentUserUid}`).remove();
+      Promise.all(promiseArray).then(()=>{
+        this.updateConnectionType(receiverUid,"FRIENDS");
+          resolve();
+      });
+    })
   }
 
 }

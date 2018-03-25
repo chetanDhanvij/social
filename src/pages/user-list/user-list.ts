@@ -19,6 +19,7 @@ export class UserListPage {
   users: any[];
   usersFiltered: any[];
   searchKey: string;
+  viewType: string;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -27,12 +28,14 @@ export class UserListPage {
   }
 
   ionViewDidLoad() {
+    this.viewType = "ALL"
     console.log('ionViewDidLoad UserListPage');
     this.userData.getUserList().then((dataArr: any[])=>{
       this.users = dataArr;
       this.usersFiltered = this.users;
       console.log(dataArr);
-      this.getConnectionType()
+      // this.getConnectionType();
+      this.listenConnectionType();
 
     }).catch((err)=>{
       console.log(err);
@@ -47,6 +50,19 @@ export class UserListPage {
       })
     })
   }
+  listenConnectionType(){
+    this.friendsProvider.subConnectionType.subscribe((type)=>{
+      if(Object.keys(type).length == 0){
+        console.log("type == {} hence initializing")
+        this.friendsProvider.initConnectionType()
+      }else{     
+        console.log("TYPEEEEEEEEEEEEEEEEEEEEEEEE", type)
+        this.users = this.users.map((d)=>{
+        d.connectionType = type[d.key];
+        return d
+      })}
+    })
+  }
   onInput(ev){
     console.log(ev);
     console.log(this.searchKey);
@@ -59,6 +75,23 @@ export class UserListPage {
   gotoUser(user){
     console.log(user);
     this.navCtrl.push("UserDetailPage",{ user: user})
+  }
+
+  viewTypeChanged(viewType){
+    console.log(viewType);
+    this.usersFiltered = this.users.filter((user)=>{
+      return (user.connectionType == viewType) || (viewType == "ALL");
+    })
+    this.searchKey = "";
+  }
+
+  init(){
+    this.friendsProvider.initConnectionType()
+  }
+  sub(){
+    this.friendsProvider.subConnectionType.subscribe((types)=>{
+      console.log("typestypestypes",types)
+    })
   }
 
 }

@@ -61,17 +61,4 @@ export class FriendsPage {
       this.notConnected = uids;
     })
   }
-
-  listen(){
-    this.friendsProvider.requestsSentSub.subscribe((data)=>{
-      console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",data,"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    })
-  }
-
-  clear(){
-    this.friendsProvider.clear()
-  }
-
-
-
 }

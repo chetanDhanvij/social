@@ -1,5 +1,5 @@
 <ion-tabs (ionChange)="tabSelected($event)" tabsHighlight="true">
   <ion-tab tabsHideOnSubPages="true"  [root]="tab1Root" [tabTitle]="(index == 0 || index == 4) ?'Home':''" tabIcon="ios-home"></ion-tab>
-  <ion-tab  tabsHideOnSubPages="true" [root]="tab2Root" [tabTitle]="(index == 1 || index == 4) ?'People':''" tabIcon="ios-people"></ion-tab>
+  <ion-tab  tabsHideOnSubPages="true" [root]="tab2Root" [tabTitle]="(index == 1 || index == 4) ?'People':''" tabIcon="ios-people" [tabBadge]="friendRequestCount || ''"></ion-tab>
   <ion-tab tabsHideOnSubPages="true" [root]="tab3Root" [tabTitle]="(index == 2  || index == 4)?'Profile':''" tabIcon="ios-person"></ion-tab>
 </ion-tabs>

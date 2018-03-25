@@ -6,16 +6,27 @@
 -->
 <ion-header>
   <ion-navbar color="secondary">
-    <ion-title (click)="getConnectionType()">User List</ion-title>
+      <ion-item no-lines  background-transparent class="text-white">
+        <ion-label>People</ion-label>
+        <ion-select [(ngModel)]="viewType" (ionChange)="viewTypeChanged(viewType)">
+          <!--'NOT_CONNECTED' 'REQUEST_SENT' 'REQUEST_RECEIVED' 'SELF' 'FRIENDS'-->
+          <ion-option value="ALL">All</ion-option>
+          <ion-option value="NOT_CONNECTED">New</ion-option>
+          <ion-option value="FRIENDS">Friends</ion-option>
+          <ion-option value="REQUEST_RECEIVED">Friend Request</ion-option>
+          <ion-option value="REQUEST_SENT">Sent Request</ion-option>
+        </ion-select>
+      </ion-item>
   </ion-navbar>
   <ion-toolbar color="secondary">
     <ion-searchbar [(ngModel)]="searchKey"
-                   animated="true"
-                   (ionInput)="onInput($event)">
+                    animated="true"
+                    (ionInput)="onInput($event)">
     </ion-searchbar>
   </ion-toolbar>
 
-
+<button ion-button (click)="init()"> init</button>
+<button ion-button (click)="sub()"> sub</button>
 </ion-header>
 
 

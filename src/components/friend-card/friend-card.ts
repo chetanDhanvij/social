@@ -24,7 +24,6 @@ export class FriendCardComponent {
   constructor(private friendsProvider: FriendsProvider,
               private userDataProvider: UserDataProvider,
               public navCtrl: NavController,) {
-    console.log('Hello FriendCardComponent Component');
     this.text = 'Hello World';
   }
 
@@ -37,7 +36,6 @@ export class FriendCardComponent {
   ngOnInit(){
   }
   ngOnChanges(){
-    console.log("ngOnChanges",this.uid, this.userData, this.connectionType)
     if(this.uid != undefined){
       this.userDataProvider.getUserDetail(this.uid).then((data)=>{
         this.userData = data;

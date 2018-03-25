@@ -1,3 +1,29 @@
 page-user-list {
+    .scroll-content {
+        touch-action: pan-x pan-y !important;
+        * {
+            touch-action: pan-x pan-y !important;
+        }
+    }
+    .header-scroll{
+        // width: 100%;
+        border: 1px solid white;
+        height: 45px;
+    }
+    ion-segment-button{
+        width: 400px !important;
+    }
 
+    .sec-search{
+        width: calc( 100% - 75px );
+        height: 100%;
+        border: 1px solid white;
+        display: inline-block;
+    }
+    .sec-drop{
+        width: 70px;
+        height: 100%;
+        border: 1px solid white;
+        display: inline-block;
+    }
 }
