@@ -41,7 +41,7 @@ export class FriendCardComponent {
         this.userData = data;
       })
     }else if(this.userData != undefined){
-
+      this.userData.fullName = this.userData.firstName +" "+ this.userData.lastName;
     }else if(this.data != undefined){
       this.checkConnectionType()
     }

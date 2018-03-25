@@ -1,7 +1,8 @@
 friend-card {
     ion-card{
-        // min-width: 50vw !important;
-        // width: 50vw !important;
+        width: 100% !important;
+        margin: 0px !important;
+        border: 1px solid color($colors,"secondary");
         img{
             width: 100%;
             height: 40vw;

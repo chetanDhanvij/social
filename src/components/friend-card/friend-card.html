@@ -6,33 +6,21 @@
 <ion-card-content>
     <h1 (click)="gotoUser(userData)">{{userData?.firstName}} {{userData?.lastName}}</h1>
     <h2 (click)="gotoUser(userData)">{{userData?.gender}}</h2>
-    <ion-row>
-        <ion-col *ngIf="connectionType == 'NOT_CONNECTED'" >
-          <button ion-button block (click)="addFriend(userData)" icon-left outline>
-            Add Friend
-          </button>
-        </ion-col>
-        <ion-col *ngIf="connectionType == 'REQUEST_SENT'">
-          <button ion-button block (click)="cancelFriendRequest(userData)" icon-left outline>
-            Cancel Request
-          </button>
-        </ion-col>
-        <ion-col *ngIf="connectionType == 'REQUEST_RECEIVED'">
-          <button ion-button block (click)="acceptFriendRequest(userData)" icon-left outline>
-             Accept Request
-          </button>
-        </ion-col>
-      </ion-row>
-      <ion-col *ngIf="connectionType == 'FRIENDS'">
-        <button ion-button block icon-left clear>
-          Friends
-        </button>
-      </ion-col>   
-      <ion-col *ngIf="connectionType == 'SELF'">
-        <button ion-button block icon-left clear>
-          You
-        </button>
-      </ion-col>      
+    <button *ngIf="connectionType == 'NOT_CONNECTED'" ion-button block (click)="addFriend(userData)" icon-left outline>
+      Add Friend
+    </button>
+    <button *ngIf="connectionType == 'REQUEST_SENT'" ion-button block (click)="cancelFriendRequest(userData)" icon-left outline>
+      Cancel Request
+    </button>
+    <button *ngIf="connectionType == 'REQUEST_RECEIVED'" ion-button block (click)="acceptFriendRequest(userData)" icon-left outline>
+        Accept Request
+    </button>
+    <button *ngIf="connectionType == 'FRIENDS'" ion-button block icon-left clear>
+      Friends
+    </button>
+    <button *ngIf="connectionType == 'SELF'" ion-button block icon-left clear>
+      You
+    </button>    
 </ion-card-content>  
 </ion-card>
 

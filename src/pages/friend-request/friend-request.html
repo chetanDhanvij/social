@@ -21,4 +21,9 @@
   <ion-list>
     <friend-card *ngFor="let user of usersFiltered" viewType="list" [userData]="user" [connectionType]="user?.connectionType"  ></friend-card>
   </ion-list>
+  <h1 class="no-request" *ngIf="this.users?.length == 0">You don't have new friend request</h1>
+
+  <button ion-button block (click)="gotoUserList()" button-center  color="secondary">
+    Find New Friends
+  </button>
 </ion-content>

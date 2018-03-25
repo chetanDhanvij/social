@@ -97,6 +97,9 @@ export class FriendRequestPage {
     console.log(user);
     this.navCtrl.push("UserDetailPage",{ user: user})
   }
+  gotoUserList(){
+    this.navCtrl.push("UserListPage",{type: "NOT_CONNECTED"}) 
+  }
 
   ngOnDestroy() {
       this.mySubscription.unsubscribe();

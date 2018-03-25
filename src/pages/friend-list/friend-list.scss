@@ -6,4 +6,14 @@ page-friend-list {
         }
 
     }
+    ion-col{
+        padding: 5px !important;
+        margin: 0px !important;
+    }
+    .toolbar-md{
+        padding: 0px !important;
+    }
+    .header-md::after{
+        display: none !important;
+    }
 }

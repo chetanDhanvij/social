@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar color="primary" >
-      <ion-item background-transparent class="header" no-padding>
+      <ion-item no-lines background-transparent class="header" no-padding>
         <ion-avatar item-start>
           <img [src]="user?.profileImgURL ||  'assets/imgs/logo/profile.png'">
         </ion-avatar>
@@ -20,7 +20,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
 <ion-grid>
   <ion-row>
     <ion-col *ngFor="let friend of friends" col-6>

@@ -29,7 +29,8 @@ export class UserListPage {
   }
 
   ionViewDidLoad() {
-    this.viewType = "ALL"
+    this.viewType = "ALL";
+    this.viewType = this.navParams.get("type")
     console.log('ionViewDidLoad UserListPage');
     this.userData.getUserList().then((dataArr: any[])=>{
       this.users = dataArr;
