@@ -8,6 +8,9 @@ import { ImageSelectorProvider } from '../../providers/image-selector/image-sele
 import { DataSnapshot } from '@firebase/database';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { AdvertisementProvider } from '../../providers/advertisement/advertisement';
+import { FriendsProvider } from '../../providers/friends/friends'
+
+
 
 
 /**
@@ -28,6 +31,11 @@ export class FeedPage {
   userLikedPost: any[] = [];
   currentUid: string;
   endOfPost: boolean = false;
+  mySubscription: any;
+
+  friendUser: any = [];
+  friendUserAll: any = [];
+  friendUserShow: any = [];
   @ViewChild(Content) content: Content;
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -38,7 +46,8 @@ export class FeedPage {
               private alertCtrl: AlertController,
               public events: Events,
               private profileProvider: ProfileProvider,
-              private advertisementProvider: AdvertisementProvider) {
+              private advertisementProvider: AdvertisementProvider,
+              private friendsProvider: FriendsProvider) {
   }
   gotoFriends(){
     this.navCtrl.push("FriendsPage");
@@ -72,6 +81,48 @@ export class FeedPage {
     console.log("this.profileProvider.getCurrentUser()",this.profileProvider.getCurrentUser())
     this.currentUid = this.profileProvider.getCurrentUser();
     this.advertisementProvider.initAdvertisement();
+
+    this.userDataProvider.getUserList().then((dataArr: any[])=>{
+      this.friendUserAll = dataArr;
+      console.log(dataArr);
+      // this.getConnectionType();
+      this.listenConnectionType();
+
+    }).catch((err)=>{
+      console.log(err);
+    })
+  }
+
+  listenConnectionType(){
+    this.mySubscription = this.friendsProvider.subConnectionType.subscribe((type)=>{
+      if(!this.friendsProvider.hasConnectionType){
+        console.log("type == {} hence initializing")
+        this.friendsProvider.initConnectionType()
+      }else{     
+        console.log("TYPEEEEEEEEEEEEEEEEEEEEEEEE", type)
+        this.friendUserAll = this.friendUserAll.map((d)=>{
+          d.connectionType = type[d.key];
+          return d
+        })
+
+        this.friendUser = this.friendUserAll.filter((user)=>{
+          return (user.connectionType == "NOT_CONNECTED");
+        })
+        this.randomizeFriendRequest()
+      }
+    })
+  }
+
+  randomizeFriendRequest(){
+    if(this.friendUser.length == 0) return
+    var arr = [];
+    this.friendUserShow = [];
+    while(arr.length < Math.min(10,this.friendUser.length)){
+        var randomnumber = Math.floor(Math.random()*this.friendUser.length);
+        if(arr.indexOf(randomnumber) > -1) continue;
+        arr[arr.length] = randomnumber;
+        this.friendUserShow.push(this.friendUser[randomnumber])
+    }
   }
 
   goToPost(type, fab: FabContainer){
@@ -106,6 +157,7 @@ export class FeedPage {
           if(completeReload == true){
             this.content.scrollToTop();
           }
+          this.randomizeFriendRequest()
           
   
         }).catch((err)=>{
@@ -114,7 +166,7 @@ export class FeedPage {
       }
       setTimeout(()=>{
           this.loading.dismiss();
-      },500)
+      },10)
 
 
 
@@ -225,6 +277,14 @@ export class FeedPage {
 
   loadMore(){
     this.getPost(false);
+  }
+
+  slideChanged(){
+    console.log("Slide change")
+  }
+
+  gotoNewFriends(){
+    this.navCtrl.push("UserListPage",{type: "NOT_CONNECTED"}) 
   }
 
 }

@@ -1,4 +1,23 @@
 page-feed {
+    .friend-header{
+        font-size: 16px;
+        text-align: center;
+        color: gray;
+    }
+    .swiper-slide img{
+        width: 100% !important;
+        height: 200px !important;
+    }
+    ion-slides{
+        height: auto !important;
+        ion-slide{
+            margin: 10px !important;
+            .more{
+                margin: 20px;
+                margin-top: 70% !important;
+            }
+        }
+    }
     ion-content{
         background: #dfe6e9 !important;
     }

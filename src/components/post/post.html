@@ -1,7 +1,7 @@
 <!-- Generated template for the PostComponent component -->
 <div>
 <section class="status-card">
-    <ion-item-divider sticky no-lines>
+    <ion-item-divider no-lines>
         <ion-avatar item-start>
           <img class="no-resize" [src]="post.profileImgURL || 'assets/imgs/logo/profile.png'">
         </ion-avatar>
@@ -11,7 +11,7 @@
             <span *ngIf="post.originalUid != post.uid" (click)="gotoUser(post.originalUid)">{{post.originalUserName}}'s post </span> 
           </span>
         </h2>
-        <p>{{post.createdAt | formatDate}}</p>
+        <p class="date-label">{{post.createdAt | formatDate}}</p>
         <button color="secondary" ion-button clear item-end icon-only color="secondary" *ngIf="currentUid == post.uid" (click)="deletePost(post)">
             <ion-icon name="trash"></ion-icon>
         </button>

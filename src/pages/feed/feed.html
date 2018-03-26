@@ -4,7 +4,7 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-header>
+<ion-header  #head>
     <ion-item class="logo-header" color="light" (click)="gotoFriends()">
       <img src="assets/app/symbol.png">
       <h1>Kunbi</h1>      
@@ -12,12 +12,27 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content hide-header [header]="head">
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-  <section class="status-card" *ngFor="let post of posts">
+  <section class="status-card" *ngFor="let post of posts; let i = index">
     <post [currentUid]="currentUid" [post]="post" [showlikes]="false" (onShare)="getPost()"></post>
+    <div *ngIf="(i%2 == 0 && i != 0)">
+      <h1 class="friend-header">Find New Friends</h1>
+      <ion-slides *ngIf="friendUserShow.length>0" slidesPerView="2" #slides (ionSlideWillChange)="slideChanged()">
+        <ion-slide *ngFor="let friend of friendUserShow">
+          <friend-card viewType="card" [userData]="friend" [connectionType]="friend?.connectionType"  ></friend-card>
+        </ion-slide>
+        <ion-slide>
+          <button class="more" ion-button block outline (click)="gotoNewFriends()">
+            Find More
+          </button>
+        </ion-slide>
+        <ion-slide>
+        </ion-slide>
+      </ion-slides>
+    </div>
   </section>
   <button class="load-more" *ngIf="(posts.length > 0) && !endOfPost" full clear ion-button color="dark" (click)="loadMore()">Load More</button>
   <ion-fab top right edge #fab>
