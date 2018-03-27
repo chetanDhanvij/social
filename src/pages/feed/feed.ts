@@ -27,7 +27,7 @@ import { FriendsProvider } from '../../providers/friends/friends'
 })
 export class FeedPage {
   posts: any= [];
-  loading: Loading;
+  loading: Loading = null;
   userLikedPost: any[] = [];
   currentUid: string;
   endOfPost: boolean = false;
@@ -131,8 +131,10 @@ export class FeedPage {
   }
 
   getPost( completeReload: boolean = true){
-    this.loading = this.loadingController.create();
-    this.loading.present();
+    if(this.loading == null){
+      this.loading = this.loadingController.create();
+      this.loading.present();
+    }
     this.feedProvider.getPostNew(completeReload).then((data: any)=>{
       if(data.length == 0){
         this.endOfPost = true;
@@ -164,9 +166,14 @@ export class FeedPage {
           console.log(err)
         })
       }
-      setTimeout(()=>{
+      try{
+        if(this.loading){
           this.loading.dismiss();
-      },10)
+          this.loading = null;
+        }
+      }catch(e){
+        console.log(e)
+      }
 
 
 
@@ -285,6 +292,10 @@ export class FeedPage {
 
   gotoNewFriends(){
     this.navCtrl.push("UserListPage",{type: "NOT_CONNECTED"}) 
+  }
+
+  uploadVideo(){
+    this.navCtrl.push('MediaUploadPage');
   }
 
 }

@@ -160,6 +160,18 @@ export class PostComponent {
         originalKey: postToshare.key,
         originalUserName: postToshare.userName
       }
+    }else if(postToshare.content.type == 'video'){
+      console.log(postToshare);
+      post ={
+        isShared: true,
+        type: postToshare.content.type,
+        text: postToshare.content.text,
+        url: postToshare.content.url,
+        originalUid: postToshare.uid,
+        originalKey: postToshare.key,
+        originalUserName: postToshare.userName,
+        mediaType: postToshare.content.mediaType
+      }
     }
     this.feedProvider.newPost(post).then(()=>{
       let toast = this.toastCtrl.create({
@@ -167,7 +179,12 @@ export class PostComponent {
         duration: 2000
       });
       toast.present();
-      loading.dismiss();
+      try{
+        loading.dismiss();
+      }catch(e){
+        console.log(e);
+      }
+      
       this.onShare.emit();
       this.feedProvider.reloadFeed();
     })
@@ -231,6 +248,18 @@ export class PostComponent {
 		commentModal.present();
     
 
+  }
+
+
+  videoStart(ev){
+    let videos: any = document.getElementsByClassName('videos');
+    for(let video of videos){
+      console.log(video);
+      if(video != ev.srcElement)
+      video.pause();
+    }
+    // ev.srcElement.play();
+    console.log("Video started", ev)
   }
 
 

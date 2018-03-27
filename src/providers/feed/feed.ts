@@ -48,6 +48,13 @@ export class FeedProvider {
             text: postData.text,
             image: postData.image
           }
+        }else if(postData.type == 'video'){
+          post ={
+            type: postData.type,
+            text: postData.text,
+            mediaType: postData.mediaType,
+            url: postData.url
+          }
         }    
         if (this.currentUser) {
           let timestamp = firebase.database.ServerValue.TIMESTAMP
@@ -138,6 +145,38 @@ export class FeedProvider {
                   })
                 });
               })
+            })
+          }
+        }else if(postData.type == 'video'){
+          post ={
+            type: postData.type,
+            text: postData.text,
+            mediaType: postData.mediaType,
+            url: postData.url
+          }
+          console.log("testing",post);
+
+          if (this.currentUser) {
+            let timestamp = firebase.database.ServerValue.TIMESTAMP
+            let postObj: any = {
+              uid: this.currentUser.uid,
+              content: post,
+              createdAt: timestamp
+            }
+              postObj.isShared = false;
+
+            const promise = this.postRef.push(postObj);
+            const key = promise.key
+      
+            promise.then(() => {
+              const postRef = this.postRef.child(`/${key}`)
+              postRef.once('value').then((snapshot) => {
+
+                timestamp = snapshot.val().createdAt * -1
+                postRef.update({ createdAt: timestamp  }).then(()=>{
+                  resolve();
+                })
+              });
             })
           }
         }

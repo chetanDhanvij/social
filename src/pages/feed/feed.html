@@ -5,9 +5,9 @@
   Ionic pages and navigation.
 -->
 <ion-header  #head>
-    <ion-item class="logo-header" color="light" (click)="gotoFriends()">
+    <ion-item class="logo-header" color="light">
       <img src="assets/app/symbol.png">
-      <h1>Kunbi</h1>      
+      <h1>Kunbi</h1>  
     </ion-item>
 </ion-header>
 
@@ -45,6 +45,9 @@
       </button>
       <button ion-fab color="dark" (click)="goToPost('image', fab)">
         <ion-icon name="camera"></ion-icon>
+      </button>
+      <button ion-fab color="danger" (click)="uploadVideo()">
+        <ion-icon name="logo-youtube"></ion-icon>
       </button>
     </ion-fab-list>
   </ion-fab>

@@ -18,13 +18,19 @@
       </ion-item-divider>
   <div *ngIf="post.content?.type == 'text'">
     <div class="post-content" [ngStyle]="{'background': post.content?.color}" (click)="showPostDetail(post)">
-      <p class="text">{{post.content?.text}}</p>
+      <p class="pre-warp" class="text">{{post.content?.text}}</p>
     </div>
   </div>
   <div *ngIf="post.content?.type == 'image'">
     <div (click)="showPostDetail(post)">
-      <p class="text-padding-left">{{post.content?.text}}</p>
+      <p class="text-padding-left pre-warp">{{post.content?.text}}</p>
       <img class="post-img" [src]=" post.content?.image || 'assets/imgs/logo/placeholder.png'">
+    </div>
+  </div>
+  <div *ngIf="post.content?.type == 'video'">
+    <div>
+        <p class="text-padding-left pre-warp">{{post.content?.text}}</p>
+        <video class="videos" (play)="videoStart($event)" [src]=" post.content?.url" controls></video>
     </div>
   </div>
   <div class="like-count"  (click)="showPostDetail(post)">
@@ -77,7 +83,7 @@
               <h2 class="post-username" (click)="gotoUser(user.uid)">
                 {{user?.name}}
               </h2>
-              <p>
+              <p class="pre-warp">
                   {{user?.comment}}
               </p>
           </div>
